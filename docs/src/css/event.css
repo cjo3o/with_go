@@ -1,0 +1,122 @@
+.wrap {
+    background-color: #ccc;
+    width: 100%;
+    height: 1024px;
+}
+
+.content {
+    margin-top: 87px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: url(/p2-jim/src/images/promotion_bg.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+.content h1 {
+    color: white;
+    text-align: center;
+    font-size: 30px;
+    line-height: 250px;
+    opacity: 0;
+    animation: slideUp 1.2s forwards;
+}
+.sub-title{
+    text-align: center;
+    margin-bottom: 3rem;
+    line-height: 2rem;
+    font-size: 1rem;
+}
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+.section {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+    position: absolute;
+}
+.title{
+    text-align: center;
+    color: rgb(0, 102, 204);
+    font-weight: bold;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
+.section-text {
+    width: 1000px;
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: black;
+    font-size: 24px;
+}
+
+.event-board {
+    width: 80%;
+    margin: 50px auto;
+    text-align: center;
+}
+
+.event-board h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #222;
+}
+
+.event-list {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 60px;
+}
+
+.event-item {
+    width: 30%;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+}
+
+.event-item:hover {
+    transform: scale(1.05);
+}
+
+.event-item img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.event-text {
+    padding: 15px;
+    text-align: center;
+}
+
+.event-text h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.event-text p {
+    font-size: 14px;
+    color: #666;
+}

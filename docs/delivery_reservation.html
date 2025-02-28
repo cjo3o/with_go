@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="src/css/reset.css">
+    <link rel="stylesheet" href="src/css/keep_reservation.css">
+</head>
+
+<body>
+<div class="wrap">
+    <div class="header">
+
+    </div>
+    <div class="contents">
+        <div class="section1">
+            <h1>TRIP WITH EASE</h1>
+        </div>
+        <div class="start_location">
+            <div class="start_location_contents">
+                <span class="close">&times;</span>
+                <div class="start_location_contents_header">
+                    <h1>보관 장소 선택</h1>
+                </div>
+                <div class="start_location_contents_body">
+                    <div class="card">
+                        <label for="seoul">
+                            <div class="card_title">
+                                <input type="radio" name="start_location" id="seoul"/>
+                                <h3>서울역</h3>
+                            </div>
+                            <div class="card_body">
+                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 22:00</p>
+                                <p>1번 출구에서 2번출구 방향</p>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="card">
+                        <label for="hongdae">
+                            <div class="card_title">
+                                <input type="radio" name="start_location" id="hongdae"/>
+                                <h3>홍대입구</h3>
+                            </div>
+                            <div class="card_body">
+                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 22:00</p>
+                                <p>2호선 지하1층 공항철도 연결통로 내</p>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="card">
+                        <label for="myeongdong">
+                            <div class="card_title">
+                                <input type="radio" name="start_location" id="myeongdong"/>
+                                <h3>명동</h3>
+                            </div>
+                            <div class="card_body">
+                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 22:00</p>
+                                <p>명동역 1,9,10번 출구 내</p>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="card">
+                        <label for="gimpo">
+                            <div class="card_title">
+                                <input type="radio" name="start_location" id="gimpo"/>
+                                <h3>김포공항</h3>
+                            </div>
+                            <div class="card_body">
+                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 22:00</p>
+                                <p>5호선 김포공항 지하1층 게이트 방향</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div class="submit_select">
+                    <button class="select_location">선택완료</button>
+                </div>
+            </div>
+        </div>
+        <div class="arrive_location">
+            <div class="arrive_location_contents">
+                <span class="close">&times;</span>
+                <div class="arrive_location_contents_header">
+                    <h1>보관 장소 선택</h1>
+                </div>
+                <div class="arrive_location_contents_body">
+                    <div class="card">
+                        <label for="seoul">
+                            <div class="card_title">
+                                <input type="radio" name="arrive_location" id="seoul"/>
+                                <h3>서울역</h3>
+                            </div>
+                            <div class="card_body">
+                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 22:00</p>
+                                <p>1번 출구에서 2번출구 방향</p>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="card">
+                        <label for="hongdae">
+                            <div class="card_title">
+                                <input type="radio" name="arrive_location" id="hongdae"/>
+                                <h3>홍대입구</h3>
+                            </div>
+                            <div class="card_body">
+                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 22:00</p>
+                                <p>2호선 지하1층 공항철도 연결통로 내</p>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="card">
+                        <label for="myeongdong">
+                            <div class="card_title">
+                                <input type="radio" name="arrive_location" id="myeongdong"/>
+                                <h3>명동</h3>
+                            </div>
+                            <div class="card_body">
+                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 22:00</p>
+                                <p>명동역 1,9,10번 출구 내</p>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="card">
+                        <label for="gimpo">
+                            <div class="card_title">
+                                <input type="radio" name="arrive_location" id="gimpo"/>
+                                <h3>김포공항</h3>
+                            </div>
+                            <div class="card_body">
+                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 22:00</p>
+                                <p>5호선 김포공항 지하1층 게이트 방향</p>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div class="submit_select">
+                    <button class="select_location">선택완료</button>
+                </div>
+            </div>
+        </div>
+        <div class="keep_reservation_contents_container">
+            <div class="keep_reservation_contents">
+                <div class="keep_reservation_contents_text">
+                    <h1>빠르고 간편한 배송 예약</h1>
+                    <p>내가 원하는 시간과 장소에서, 편리하게 배송을 받아보세요.</p>
+                </div>
+                <div class="keep_reservation_contents_main">
+                    <div class="keep_reservation_contents_main_date">
+                        <div class="keep_reservation_contents_main_title">
+                            <p>배송 일자</p>
+                        </div>
+                        <div class="keep_reservation_contents_main_box">
+                            <div class="keep_reservation_contents_main_box_input-box">
+                                <div class="input-box_content">
+                                    <input type="date" name="" id="date" placeholder="보관 일자">
+                                </div>
+                            </div>
+                            <div class="keep_reservation_contents_main_box_input-box"
+                                 style="border-bottom: solid 1px black; padding-left: 1rem; line-height: 64px;">
+                                <p style="width: 100%; text-align: center">※ 익일 배송수량은 10개까지 가능합니다.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="keep_reservation_contents_main_date">
+                        <div class="keep_reservation_contents_main_title">
+                            <p>배송 장소</p>
+                        </div>
+                        <div class="keep_reservation_contents_main_box">
+                            <div class="keep_reservation_contents_main_box_input-box">
+                                <div class="input-box_title">
+                                    출발지
+                                </div>
+                                <div class="input-box_content">
+                                    <input type="text" name="" id="start" placeholder="출발지"
+                                           onclick="openSelectLocation()" readonly>
+                                </div>
+                            </div>
+                            <div class="keep_reservation_contents_main_box_input-box">
+                                <div class="input-box_title">
+                                    도착지
+                                </div>
+                                <div class="input-box_content">
+                                    <input type="text" name="" id="arrive" placeholder="도착지"
+                                           onclick="openSelectLocation()" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="keep_reservation_contents_main_user">
+                        <div class="keep_reservation_contents_main_title">
+                            <p>고객정보</p>
+                        </div>
+                        <div class="keep_reservation_contents_main_box">
+                            <div class="keep_reservation_contents_main_box_input-box">
+                                <div class="input-box_title">
+                                    이름
+                                </div>
+                                <div class="input-box_content">
+                                    <input type="text" name="" id="name" placeholder="이름을 입력해주세요.">
+                                </div>
+                            </div>
+                            <div class="keep_reservation_contents_main_box_input-box">
+                                <div class="input-box_title">
+                                    전화번호
+                                </div>
+                                <div class="input-box_content">
+                                    <input type="text" name="" id="phone" placeholder="전화번호를 입력해주세요.">
+                                </div>
+                            </div>
+                            <div class="keep_reservation_contents_main_box_input-box">
+                                <div class="input-box_title">
+                                    국가
+                                </div>
+                                <div class="input-box_content">
+                                    <select name="" id="country">
+                                        <option>국가를 선택해주세요.</option>
+                                        <option>대한민국</option>
+                                        <option>중국</option>
+                                        <option>일본</option>
+                                        <option>미국</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="keep_reservation_contents_main_box_input-box">
+                                <div class="input-box_title">
+                                    이메일
+                                </div>
+                                <div class="input-box_content">
+                                    <input type="text" name="" id="mail" placeholder="이메일을 입력해주세요.">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="agreement_container">
+                        <div class="agreement">
+                            <input type="checkbox" name="" id="agree"/>
+                            <label for="agree">
+                                이용약관에 동의합니다.
+                            </label>
+                        </div>
+                        <a href="#">
+                            [ 이용약관 보기 ]
+                        </a>
+                    </div>
+                    <div class="keep_reservation_contents_main_luggage_infor">
+                        <div class="keep_reservation_contents_main_title">
+                            <p>요금안내</p>
+                        </div>
+                        <div class="keep_reservation_contents_main_luggage">
+                            <div class="luggage_box_container">
+                                <div class="luggage_box">
+                                    <div class="luggage_box_img">
+                                        <img src="src/images/small.svg" alt="소형">
+                                    </div>
+                                    <div class="luggage_box_content">
+                                        <h2>소형</h2>
+                                    </div>
+                                </div>
+                                <div class="luggage" data-price="1000">
+                                    <button class="m" onclick="minus(this)">-</button>
+                                    <input type="text" name="" id="small" value="0" readonly>
+                                    <button class="p" onclick="plus(this)">+</button>
+                                </div>
+                            </div>
+                            <div class="luggage_box_container">
+                                <div class="luggage_box">
+                                    <div class="luggage_box_img">
+                                        <img src="src/images/medium.svg" alt="중형">
+                                    </div>
+                                    <div class="luggage_box_content">
+                                        <h2>중형</h2>
+                                    </div>
+                                </div>
+                                <div class="luggage" data-price="3000">
+                                    <button class="m" onclick="minus(this)">-</button>
+                                    <input type="text" name="" id="medium" value="0" readonly>
+                                    <button class="p" onclick="plus(this)">+</button>
+                                </div>
+                            </div>
+                            <div class="luggage_box_container">
+                                <div class="luggage_box">
+                                    <div class="luggage_box_img">
+                                        <img src="src/images/large.svg" alt="대형">
+                                    </div>
+                                    <div class="luggage_box_content">
+                                        <h2>대형</h2>
+                                    </div>
+                                </div>
+                                <div class="luggage" data-price="5000">
+                                    <button class="m" onclick="minus(this)">-</button>
+                                    <input type="text" name="" id="large" value="0" readonly>
+                                    <button class="p" onclick="plus(this)">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="keep_reservation_contents_main_payment">
+                        <div class="payment_infor">
+                            <h1>예상가격 <h3>(VAT포함)</h3></h1>
+                            <h2>KRW <span id="total_price">0</span></h2>
+                        </div>
+                        <div class="keep_reserve_btn">
+                            <button>
+                                보관 예약
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+
+        </div>
+    </div>
+    <script src="dropdown.js"></script>
+    <script src="delivery_reserve.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,90 @@
+.wrap {
+    background-color: #ccc;
+    width: 100%;
+    height: 1024px;
+}
+
+.content {
+    margin-top: 87px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: url(/p2-jim/src/images/review_bg.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+.content h1 {
+    color: white;
+    text-align: center;
+    font-size: 30px;
+    line-height: 250px;
+    opacity: 0;
+    animation: slideUp 1.2s forwards;
+}
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+.content h3 {
+    color: white;
+}
+.section {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background-color: white;
+    position: absolute;
+}
+.section-text {
+    width: 1000px;
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    font-size: 24px;
+}
+.section-text  > h3 {
+    margin-bottom: 15px;
+    color: rgb(0,102,204);
+}
+.section-text > p {
+    font-size: 15px;
+    margin-bottom: 15px;
+}
+.notice-item > h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+.notice-item > p {
+    font-size: 15px;
+    line-height: 20px;
+}
+.notice-item > img{
+    width: 40px;
+    height: auto;
+}
+
+.notice-list {
+    padding: 30px;
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    min-height: 400px;
+    width: 50%;
+    margin: 30px auto;
+
+    /*margin-top: 30px;*/
+}

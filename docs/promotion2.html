@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="src/css/reset.css">
+    <link rel="stylesheet" href="src/css/promotion2.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const eventList = document.querySelector(".event-list");
+            events.forEach(event => {
+                const eventItem = document.createElement("div");
+                eventItem.classList.add("event-item");
+                eventItem.innerHTML = `
+            <img src="${event.img}" alt="${event.title}">
+            <div class="event-text">
+                <h3>${event.title}</h3>
+                <p>${event.date}</p>
+            </div>
+        `;
+                eventList.appendChild(eventItem);
+            });
+        });
+        document.addEventListener("DOMContentLoaded", function () {
+            const tabs = document.querySelectorAll(".tab_btn ul li a");
+            const contents = document.querySelectorAll(".tab_content");
+
+            tabs[0].classList.add("on");
+            contents[0].classList.add("active");
+            contents[0].style.opacity = "1";
+
+            tabs.forEach(tab => {
+                tab.addEventListener("click", function (e) {
+                    e.preventDefault();
+
+                    tabs.forEach(t => t.classList.remove("on"));
+                    this.classList.add("on");
+
+                    contents.forEach(content => {
+                        content.classList.remove("active");
+                        content.style.opacity = "0.3";
+                    });
+
+                    const targetContent = document.querySelector(`#${this.dataset.tab}`);
+                    if (targetContent) {
+                        targetContent.classList.add("active");
+                        targetContent.style.opacity = "1";
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<div class="header"></div>
+<div class="header-image"><h3>SAVE MORE WITH GO</h3></div>
+<div id="container">
+    <h1 class="title">한정 프로모션, 다양한 혜택</h1>
+    <p class="sub-title">빠르게 예약할수록 더 큰 혜택! 지금 확인하세요.</p>
+    <div class="tab_btn">
+        <ul>
+            <li><a href="#" title="공연티켓 &입장권 판매 탭으로 이동" class="on" data-tab="tab1">공연티켓 & 입장권 판매</a>
+            </li>
+            <li><a href="#" title="관광시설 및 행사 이벤트 입장권 판매 탭으로 이동" data-tab="tab2">관광시설 및 행사 이벤트 입장권 판매</a>
+            </li>
+            <li><a href="#" title="호텔 & 게스트하우스 예약 탭으로 이동" data-tab="tab3">호텔 & 게스트하우스 예약</a></li>
+            <li><a href="#" title="픽업& 샌딩 및 투어 예약 탭으로 이동" data-tab="tab4">픽업 & 샌딩 및 투어 예약</a></li>
+        </ul>
+    </div>
+    <div class="tab-box">
+        <div class="tab_content active" id="tab1">
+            <h3>
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                     stroke-linejoin="round">
+                    <path d="M6 2h12"></path>
+                    <path d="M6 22h12"></path>
+                    <path d="M6 2c0 4 6 6 6 10s-6 6-6 10"></path>
+                    <path d="M18 2c0 4-6 6-6 10s6 6 6 10"></path>
+                </svg>
+            </h3>
+            <p>페이지 준비중 입니다 1</p>
+        </div>
+        <div class="tab_content" id="tab2">
+            <h3>
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                     stroke-linejoin="round">
+                    <path d="M6 2h12"></path>
+                    <path d="M6 22h12"></path>
+                    <path d="M6 2c0 4 6 6 6 10s-6 6-6 10"></path>
+                    <path d="M18 2c0 4-6 6-6 10s6 6 6 10"></path>
+                </svg>
+            </h3>
+            <p>페이지 준비중 입니다 2</p>
+        </div>
+        <div class="tab_content" id="tab3">
+            <h3>
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                     stroke-linejoin="round">
+                    <path d="M6 2h12"></path>
+                    <path d="M6 22h12"></path>
+                    <path d="M6 2c0 4 6 6 6 10s-6 6-6 10"></path>
+                    <path d="M18 2c0 4-6 6-6 10s6 6 6 10"></path>
+                </svg>
+            </h3>
+            <p>페이지 준비중 입니다 3</p>
+        </div>
+        <div class="tab_content" id="tab4">
+            <h3>
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                     stroke-linejoin="round">
+                    <path d="M6 2h12"></path>
+                    <path d="M6 22h12"></path>
+                    <path d="M6 2c0 4 6 6 6 10s-6 6-6 10"></path>
+                    <path d="M18 2c0 4-6 6-6 10s6 6 6 10"></path>
+                </svg>
+            </h3>
+            <p>페이지 준비중 입니다 4</p>
+        </div>
+    </div>
+</div> <!--container-->
+<div class="footer"></div>
+<script src="dropdown.js"></script>
+</body>
+</html>
