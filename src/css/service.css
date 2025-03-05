@@ -200,7 +200,6 @@ th:first-child, td:first-child {
 }
 .map iframe{
     width: 50%;
-    display: none;
 }
 .on {
     display: block;
