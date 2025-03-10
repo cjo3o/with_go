@@ -1,4 +1,3 @@
-
 let $totalPrice = document.querySelector('#total_price');
 
 const $close = document.querySelectorAll('.close');
@@ -11,28 +10,21 @@ const $date = document.querySelector('#date');
 const $arrive = document.querySelector('#arrive');
 const $name = document.querySelector('#name');
 const $phone = document.querySelector('#phone');
-let bag_type = '';
-let count = 0;
+const small = document.querySelector('#small');
+const medium = document.querySelector('#medium');
+const large = document.querySelector('#large');
+const agree = document.querySelector('#agree');
 
 function minus(a) {
     if (a.parentNode.children[1].value > 0) {
         a.parentNode.children[1].value--;
-        count--;
-        console.log(count);
         $totalPrice.innerText = Number($totalPrice.innerText) - Number(a.parentNode.getAttribute('data-price'));
     }
 }
 
 function plus(a) {
     a.parentNode.children[1].value++;
-    count++;
-    console.log(count);
     $totalPrice.innerText = Number($totalPrice.innerText) + Number(a.parentNode.getAttribute('data-price'));
-    if (bag_type.length === 0 ) {
-        bag_type = a.parentNode.children[1].name;
-        console.log(bag_type);
-    }
-
 }
 
 function openModal() {
@@ -43,7 +35,6 @@ function openModal() {
 function closeModal() {
     for (let i = 0; i < 2; i++) {
         const modal = $close[i].parentNode.parentNode;
-        console.log(modal);
         modal.style.display = 'none';
     }
 
@@ -54,7 +45,6 @@ function openSelectLocation() {
         $start_location.classList.add('fade_in');
         $start_location_contents.classList.add('up');
         $start_location.style.display = 'flex';
-        console.log($start_location);
     }
 }
 
@@ -63,34 +53,50 @@ async function  deliverySubmit() {
     for (let i = 0; i < arr.length; i++) {
         if (arr[i].value === '') {
             alert(`${arr[i].name}을(를) 입력해주세요.`);
-            // arr[i].focus();
+            // Swal.fire({
+            //     icon: "error",
+            //     title: "알림",
+            //     text: `${arr[i].name}을(를) 입력해주세요!`,
+            // });
             window.scrollTo({top:arr[i].offsetTop, behavior: 'smooth'});
             return;
         }
     }
+
+    if (agree.checked === false) {
+        alert('이용약관을 확인해주세요.');
+        window.scrollTo({top:agree.offsetTop, behavior: 'smooth'});
+        return;
+    }
+
     if (Number($totalPrice.innerText) === 0) {
         alert('짐 개수를 선택해주세요.');
     }
     else {
         const res = await supabase.from('delivery').insert([
-            {name: $name.value, phone: $phone.value, delivery_date: $date.value, delivery_start: $start.value, delivery_arrive: $arrive.value, bag_type, count, price: Number($totalPrice.innerText)}
+            {name: $name.value, phone: $phone.value, delivery_date: $date.value, delivery_start: $start.value, delivery_arrive: $arrive.value, small: small.value, medium: medium.value, large: large.value, price: Number($totalPrice.innerText)}
         ]).select();
-        console.log('삽입');
-        console.log(res.data);
 
         if (res.status === 409) {
             alert('사용중인 전화번호입니다.');
             window.scrollTo({top:$phone.offsetTop, behavior: 'smooth'});
+            return;
+        }
+
+        if (res.status === 201) {
+            await Swal.fire({
+                title: "배송예약이 완료되었습니다!",
+                icon: "success",
+                draggable: true
+            })
         }
     }
-
+    window.location.href="index.html";
 }
 
 $select_location.addEventListener('click', function (){
     if(!!document.querySelector('input[name="start_location"]:checked')){
-        console.log(document.querySelector('input[name="start_location"]:checked').parentNode.children[1].innerText);
         $start.value = document.querySelector('input[name="start_location"]:checked').parentNode.children[1].innerText;
-        console.log($start.value + "입니다.");
 
         closeModal();
     }
@@ -98,4 +104,3 @@ $select_location.addEventListener('click', function (){
         alert("장소를 선택해주세요.")
     }
 });
-

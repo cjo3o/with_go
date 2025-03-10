@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
         const supabaseUrl = "https://zgrjjnifqoactpuqolao.supabase.co";
@@ -345,7 +348,7 @@
                                 </div>
                                 <div class="luggage" data-price="1000">
                                     <button class="m" onclick="minus(this)">-</button>
-                                    <input type="text" name="소형"  value="0" readonly>
+                                    <input type="text" id="small" name="소형"  value="0" readonly>
                                     <button class="p" onclick="plus(this)">+</button>
                                 </div>
                             </div>
@@ -360,7 +363,7 @@
                                 </div>
                                 <div class="luggage" data-price="3000">
                                     <button class="m" onclick="minus(this)">-</button>
-                                    <input type="text" name="중형" value="0" readonly>
+                                    <input type="text" id="medium" name="중형" value="0" readonly>
                                     <button class="p" onclick="plus(this)">+</button>
                                 </div>
                             </div>
@@ -388,7 +391,7 @@
                         </div>
                         <div class="keep_reserve_btn">
                             <button onclick="deliverySubmit()">
-                                보관 예약
+                                배송 예약
                             </button>
                         </div>
                     </div>
