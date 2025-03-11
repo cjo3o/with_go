@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>review_write</title>
+    <link rel="stylesheet" href="src/css/reset.css">
+    <link rel="stylesheet" href="review_write.css">
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const eventList = document.querySelector(".event-list");
+
+
+            events.forEach(event => {
+                const eventItem = document.createElement("div");
+                eventItem.classList.add("event-item");
+                eventItem.innerHTML = `
+            <img src="${event.img}" alt="${event.title}">
+            <div class="event-text">
+                <h3>${event.title}</h3>
+                <p>${event.date}</p>
+            </div>
+        `;
+                eventList.appendChild(eventItem);
+            });
+        });
+
+    </script>
+    <script>
+        const supabaseUrl = "https://xavwrlvvtoognyuletqy.supabase.co";
+        const supabasePassword = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhhdndybHZ2dG9vZ255dWxldHF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NzUwMzcsImV4cCI6MjA1NzE1MTAzN30.ri4N687J6SbaITHNbo2os3apqpKlnjLJaB45zFtQ5ao";
+
+        var supabase = window.supabase.createElement(supabaseUrl, supabasePassword);
+    </script>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="header">
+
+        </div>
+        <div class="content">
+            <h1>TRAVEL STORIES WITH GO</h1>
+        </div>
+        <div class="section">
+            <div class="section-text">
+                <div class="section-title">
+                    <h3>이용 후기</h3>
+                </div>
+
+                <div class="write">
+                    <div class="group">
+                        <label class="column">이름 <em>*</em></label>
+                        <div class="data"><input type="text" id="name" /><br /></div>
+                    </div>
+                    <div class="group">
+                        <label class="column">비밀번호 <em>*</em></label>
+                        <div class="data"><input type="password" id="password" maxlength="8" /><br /></div>
+                    </div>
+                    <div class="group">
+                        <label class="column">제목 <em>*</em></label>
+                        <div class="data"><input type="text" id="title"/><br /></div>
+                    </div>
+                    <div class="group">
+                        <label class="column">내용 <em>*</em></label>
+                        <div class="data"><textarea id="review_text" rows="10" cols="50"></textarea><br /></div>
+                    </div>
+                </div>
+
+                <div class="button">
+                    <a class="cancel" href="review.html">취소</a>
+                    <a class="input" href="">확인</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer">
+        </div>
+    </div>
+
+
+</body>
+<script src="dropdown.js"></script>
+
+</html>
+
+<script src="review_write.js"></script>
