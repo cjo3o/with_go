@@ -502,6 +502,26 @@
     line-height: 1.5;
 }
 
+.keep_reservation_infor_ul > li {
+    padding: 1rem 2rem;
+    border-bottom: 1px solid #ccc;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+
+th {
+    padding: 0.7rem 0 0.7rem 2rem;
+    border-bottom: 2px solid #ccc;
+}
+
+td {
+    padding: 0.5rem 0 0.5rem 2rem;
+    border-bottom: 1px solid #ccc;
+}
+
 @media (max-width: 1250px) {
     .keep_reservation_contents {
         width: 95%;

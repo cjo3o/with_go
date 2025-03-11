@@ -8,6 +8,7 @@ const $select_location = document.querySelector('.select_location');
 const $touModal_container = document.querySelector('.touModal_container');
 const $date = document.querySelector('#date');
 const $arrive = document.querySelector('#arrive');
+const $detail_adr = document.querySelector('#detail_adr');
 const $name = document.querySelector('#name');
 const $phone = document.querySelector('#phone');
 const small = document.querySelector('#small');
@@ -48,8 +49,17 @@ function openSelectLocation() {
     }
 }
 
+function searchAddress() {
+    new daum.Postcode({
+        oncomplete: function(data) {
+            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
+            $arrive.value = data.address;
+        }
+    }).open();
+}
+
 async function  deliverySubmit() {
-    const arr = [$date, $start, $arrive, $name, $phone];
+    const arr = [$date, $start, $arrive, $detail_adr, $name, $phone];
     for (let i = 0; i < arr.length; i++) {
         if (arr[i].value === '') {
             alert(`${arr[i].name}을(를) 입력해주세요.`);
@@ -74,7 +84,7 @@ async function  deliverySubmit() {
     }
     else {
         const res = await supabase.from('delivery').insert([
-            {name: $name.value, phone: $phone.value, delivery_date: $date.value, delivery_start: $start.value, delivery_arrive: $arrive.value, small: small.value, medium: medium.value, large: large.value, price: Number($totalPrice.innerText)}
+            {name: $name.value, phone: $phone.value, delivery_date: $date.value, delivery_start: $start.value, delivery_arrive: $arrive.value, detail_adr: $detail_adr.value, small: small.value, medium: medium.value, large: large.value, price: Number($totalPrice.innerText)}
         ]).select();
 
         if (res.status === 409) {
