@@ -11,20 +11,25 @@
         document.addEventListener("DOMContentLoaded", function () {
             const eventList = document.querySelector(".event-list");
 
-
             events.forEach(event => {
-                const eventItem = document.createElement("div");
-                eventItem.classList.add("event-item");
+                const eventItem = document.createElement("div"); // div 생성
+                eventItem.classList.add("event-item"); // "event-item" 클래스 추가
+
                 eventItem.innerHTML = `
-            <img src="${event.img}" alt="${event.title}">
-            <div class="event-text">
-                <h3>${event.title}</h3>
-                <p>${event.date}</p>
-            </div>
-        `;
-                eventList.appendChild(eventItem);
+        <img src="${event.img}" alt="${event.title}">
+        <div class="event-text">
+            <h3>${event.title}</h3>
+            <p>${event.date}</p>
+        </div>
+    `;
+
+                // ✅ 클릭하면 해당 공지사항 상세 페이지로 이동하도록 이벤트 추가
+                eventItem.addEventListener("click", () => {
+                    window.location.href = `notice-detail.html?id=${event.id}`;
+                });
+
+                eventList.appendChild(eventItem); // 이벤트 리스트에 추가
             });
-        });
     </script>
 </head>
 
@@ -66,7 +71,7 @@
 </div>
 <div class="notice-container">
     <div class="search-box">
-        <input type="text" placeholder="검색어를 입력해주세요."><img src="src/images/search_icon.png">
+        <input type="text" placeholder="검색어를 입력해주세요."><img src="src/icon/searche.png">
     </div>
 
     <table class="notice-table">
@@ -77,29 +82,14 @@
             <th>날짜</th>
         </tr>
         </thead>
-        <tbody id="notice-list">
-        <!-- 여기에 공지사항 데이터가 들어감 -->
-        <tr onclick="location.href='notice-detail.html'" id="1">
-            <td>1</td>
-            <td>[KTX특송] 3월 미운영 매장 공지</td>
-            <td>02-27</td>
-        </tr>
-        <tr>
-            <td>2</td>
-            <td>[보관함] 대구관광안내소 보관함 철거 안내</td>
-            <td>02-28</td>
-        </tr>
-        <tr>
-            <td>3</td>
-            <td>[짐배송] 가격 인상 안내</td>
-            <td>03-10</td>
-        </tr>
+        <tbody>
+
         </tbody>
     </table>
 </div>
 <div class="footer">
 </div>
-
+<script src="notification.js"></script>
 <script src="dropdown.js"></script>
 </body>
 
