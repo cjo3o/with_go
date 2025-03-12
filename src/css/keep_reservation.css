@@ -52,7 +52,8 @@
     width: 100%;
 }
 
-.keep_reservation_contents {
+.keep_reservation_contents,
+.keep_reservation_check_contents {
     overflow: hidden;
     width: 1250px;
     margin: 10rem auto;
@@ -80,7 +81,6 @@
 .keep_reservation_contents_main {
     overflow: hidden;
     width: 100%;
-    margin-top: 4rem;
     opacity: 0;
     transform: translateY(100%);
     animation: slideUp 1s forwards;
@@ -503,8 +503,14 @@
 }
 
 .keep_reservation_infor_ul > li {
-    padding: 1rem 2rem;
+    display: flex;
+    gap: 2.5rem;
+    padding: 1rem 3rem;
     border-bottom: 1px solid #ccc;
+}
+
+.keep_reservation_infor_ul > li > p {
+    width: 100px;
 }
 
 table {
@@ -513,12 +519,12 @@ table {
 
 
 th {
-    padding: 0.7rem 0 0.7rem 2rem;
+    padding: 0.7rem 3rem 0.7rem 3rem;
     border-bottom: 2px solid #ccc;
 }
 
 td {
-    padding: 0.5rem 0 0.5rem 2rem;
+    padding: 0.5rem 3rem 0.5rem 3rem;
     border-bottom: 1px solid #ccc;
 }
 

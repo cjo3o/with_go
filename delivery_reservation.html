@@ -244,7 +244,7 @@
             </div>
         </div>
         <div class="keep_reservation_contents_container">
-            <div class="keep_reservation_contents" style="display: none;">
+            <div class="keep_reservation_contents">
                 <div class="keep_reservation_contents_text">
                     <h1>빠르고 간편한 배송 예약</h1>
                     <p>내가 원하는 시간과 장소에서, 편리하게 배송을 받아보세요.</p>
@@ -415,7 +415,7 @@
                     </div>
                 </div>
             </div>
-            <div class="keep_reservation_contents">
+            <div class="keep_reservation_check_contents" style="display: none;">
                 <div class="keep_reservation_contents_text">
                     <h1>배송 예약확인</h1>
                     <p>물품 배송 정보 및 고객정보를 확인해 주세요.</p>
@@ -431,19 +431,18 @@
                             </div>
                         </div>
                         <div class="keep_reservation_contents_main_box">
-                            <div class="keep_reservation_check_contents">
+                            <div class="keep_reservation_contents_main">
                                 <ul class="keep_reservation_infor_ul">
-                                    <li>배송일자 :</li>
-                                    <li>배송 출발지 :</li>
-                                    <li>배송 도착지 :</li>
-                                    <li>상세주소 :</li>
+                                    <li><p>배송일자</p><span id="check_date">dd</span></li>
+                                    <li><p>배송 출발지</p><span id="check_start">dd</span></li>
+                                    <li><p>배송 도착지</p><span id="check_arrive">dd</span></li>
+                                    <li><p>상세주소</p><span id="check_detail_adr">dd</span></li>
                                 </ul>
                             </div>
-                            <div class="keep_reservation_check_contents">
+                            <div class="keep_reservation_contents_main">
                                 <ul class="keep_reservation_infor_ul">
-                                    <li>예약일자 :</li>
-                                    <li>이름 :</li>
-                                    <li>전화번호 :</li>
+                                    <li><p>이름</p><span id="check_name"></span></li>
+                                    <li><p>전화번호</p><span id="check_phone"></span></li>
                                 </ul>
                             </div>
                         </div>
@@ -461,34 +460,34 @@
                             <table>
                                 <thead>
                                 <tr>
-                                    <th style="text-align: start; width: 80%">물품 정보</th>
+                                    <th style="text-align: start; width: 70%">물품 정보</th>
                                     <th>수량</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td>소형</td>
-                                    <td style="text-align: center">0</td>
+                                    <td style="padding-left: 4rem">소형</td>
+                                    <td style="text-align: center" id="check_small">0</td>
                                 </tr>
                                 <tr>
-                                    <td>중형</td>
-                                    <td style="text-align: center">0</td>
+                                    <td style="padding-left: 4rem">중형</td>
+                                    <td style="text-align: center" id="check_medium">0</td>
                                 </tr>
                                 <tr>
-                                    <td>대형</td>
-                                    <td style="text-align: center">0</td>
+                                    <td style="padding-left: 4rem">대형</td>
+                                    <td style="text-align: center" id="check_large">0</td>
                                 </tr>
                                 </tbody>
                             </table>
-                            <div style="display: flex; justify-content: space-between; padding: 0.5rem 2rem">
+                            <div style="display: flex; justify-content: space-between; padding: 0.5rem 3rem">
                                 <p style="font-size: 1.1rem">결제 예상 금액</p>
-                                <p style="font-size: 1.1rem">KRW <span>0</span> 원</p>
+                                <p style="font-size: 1.1rem">KRW <span id="check_price">0</span> 원</p>
                             </div>
                         </div>
                     </div>
-                    <div class="keep_reserve_btn" style="margin-top: 4rem">
-                        <button>
-                            결재진행
+                    <div class="keep_reserve_btn" style="margin: 4rem 0">
+                        <button onclick="paymentSubmit()">
+                            결제진행
                         </button>
                     </div>
                 </div>
