@@ -201,6 +201,9 @@ th:first-child, td:first-child {
 .map iframe{
     width: 50%;
 }
+.on {
+    display: block;
+}
 .map-under{
     display: flex;
     justify-content: center;
