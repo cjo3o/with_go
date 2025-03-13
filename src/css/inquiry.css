@@ -31,9 +31,12 @@
 
 .cen_up {
     max-width: 1200px;
+    height: 35px;
+    margin: 24px auto;
 }
 
 .up_left {
+    line-height: 35px;
     float: left;
     color: #656565;
 }
@@ -57,11 +60,21 @@
     top : 10px;
     color: black;
 }
-
 table {
-    text-align: center;
+    border-collapse: collapse;
+    /* border-spacing: 0 15px ; */
+    
+}
+thead {
+    height: 19px;
+    padding: 20px 0;
+    border-bottom: 1px solid #656565;
+}
+th {
+    line-height: 1.7rem;
 }
 
-.center {
-    /* padding-top: 20px; */
-}
+
+
+
+
