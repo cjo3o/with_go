@@ -8,6 +8,14 @@
     <link rel="stylesheet" href="src/css/reservation.css">
     <link rel="stylesheet" href="src/css/keep.css">
     <link rel="stylesheet" href="src/css/check.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const supabaseUrl = "https://zgrjjnifqoactpuqolao.supabase.co";
+        const supabasePassword = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpncmpqbmlmcW9hY3RwdXFvbGFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNDc0NTgsImV4cCI6MjA1NjgyMzQ1OH0._Vl-6CRKdMjeDRyNoxlfect7sgusZ7L0N5OYu0a5hT0";
+
+        var supabase = window.supabase.createClient(supabaseUrl, supabasePassword);
+    </script>
 </head>
 
 <body>
@@ -113,7 +121,7 @@
             </div>
         </div>
         <div class="section2">
-            <div class="check_detail">
+            <div class="check_detail" onclick="closeDetail()">
                 <div class="check_detail_contents">
 
                 </div>
@@ -136,87 +144,18 @@
                             </div>
                         </div>
                         <div class="table_container">
-                            <div class="keep_table up">
-                                <table>
-                                    <thead>
-                                    <tr>
-                                        <th>수화물 번호</th>
-                                        <th>보관 일자</th>
-                                        <th>보관 장소</th>
-                                        <th>가격</th>
-                                        <th>상태</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>2025-02-13</td>
-                                        <td onclick="openDetail(this)">서울역</td>
-                                        <td>6000</td>
-                                        <td>보관중</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>2025-02-14</td>
-                                        <td onclick="openDetail(this)">홍대입구</td>
-                                        <td>9000</td>
-                                        <td>보관중</td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>2025-02-17</td>
-                                        <td onclick="openDetail(this)">명동</td>
-                                        <td>6000</td>
-                                        <td>보관완료</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
                             <div class="delivery_table">
-                                <table>
-                                    <thead>
-                                    <tr>
-                                        <th>수화물 번호</th>
-                                        <th>배송 일자</th>
-                                        <th>도착지</th>
-                                        <th>가격</th>
-                                        <th>상태</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td>4</td>
-                                        <td>2025-02-19</td>
-                                        <td onclick="openDetail(this)">홍대입구</td>
-                                        <td>2000</td>
-                                        <td>배송완료</td>
-                                    </tr>
-                                    <tr>
-                                        <td>5</td>
-                                        <td>2025-02-20</td>
-                                        <td onclick="openDetail(this)">서울역</td>
-                                        <td>16000</td>
-                                        <td>배송중</td>
-                                    </tr>
-                                    <tr>
-                                        <td>6</td>
-                                        <td>2025-02-23</td>
-                                        <td onclick="openDetail(this)">김포공항</td>
-                                        <td>5000</td>
-                                        <td>배송대기중</td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+
                             </div>
                         </div>
                         <div class="alert">
                             <h2>※조회할 내역이 존재하지 않습니다.※</h2>
                         </div>
-                        <p style="width: 1200px; margin: 0 auto; opacity: 0; transform: translateY(100%); animation: slideUp 0.5s forwards; animation-delay: 1.5s" class="click_infor">※ 보관장소를 클릭하시면 상세정보를 볼 수 있습니다.</p>
+<!--                        <p style="width: 1200px; margin: 0 auto; opacity: 0; transform: translateY(100%); animation: slideUp 0.5s forwards; animation-delay: 1.5s" class="click_infor">※ 보관장소를 클릭하시면 상세정보를 볼 수 있습니다.</p>-->
                     </div>
                     <div class="search_check">
-                        <input type="text" name="" id="search_checkBox" placeholder="수화물 번호를 입력하세요." value="">
-                        <button onclick="aa()">
+                        <input type="text" name="" id="search_reserveBox" placeholder="연락처를 입력해 주세요.">
+                        <button onclick="searchReserve()">
                             검색
                         </button>
                     </div>
