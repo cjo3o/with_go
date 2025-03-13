@@ -4,9 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>review</title>
+    <title>review_write</title>
     <link rel="stylesheet" href="src/css/reset.css">
-    <link rel="stylesheet" href="src/css/review.css">
+    <link rel="stylesheet" href="review_write.css">
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             const eventList = document.querySelector(".event-list");
@@ -49,23 +49,47 @@
                     <h3>이용자들의 솔직한 후기</h3>
                     <p>여러분의 소중한 경험도 함께 공유해주세요! 최고의 서비스는 함께 만들어갑니다.</p>
                 </div>
-                <!------------------------------------------------------------------>
-                <div class="review-list" id="review-list">
-                    <!-- 후기 카드가 여기에 표시됩니다 -->
+
+                <div class="write">
+                    <div class="group">
+                        <label class="column">이름 <em>*</em></label>
+                        <div class="data"><input type="text" id="name" /><br /></div>
+                    </div>
+                    <div class="group">
+                        <label class="column">비밀번호 <em>*</em></label>
+                        <div class="data"><input type="password" id="password" maxlength="8" /><br /></div>
+                    </div>
+                    <div class="group">
+                        <label class="column">제목 <em>*</em></label>
+                        <div class="data"><input type="text" id="title" /><br /></div>
+                    </div>
+                    <div class="group">
+                        <label class="column">내용 <em>*</em></label>
+                        <div class="data"><textarea id="review_text" rows="15" cols="50"></textarea><br /></div>
+                    </div>
+                    <div class="group">
+                        <label class="column">첨부파일</label>
+                        <div class="data upload_file">
+                            <label for="upload_file" class="custom-file-upload">파일 선택</label>
+                            <input type="file" id="upload_file" accept="image/*" />
+                            <span id="file_name">선택된 파일 없음</span>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="pagination" id="pagination"></div>
-
                 <div class="button">
-                    <a href="review_write.html" id="write-btn">글쓰기</a>
+                    <a class="cancel" href="review.html">취소</a>
+                    <a class="input" href="">확인</a>
                 </div>
             </div>
         </div>
         <div class="footer">
         </div>
     </div>
+
+
 </body>
 
 
 </html>
 <script src="dropdown.js"></script>
+<script src="review_write.js"></script>
