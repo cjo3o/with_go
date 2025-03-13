@@ -1,10 +1,23 @@
 let $totalPrice = document.querySelector('#total_price');
 
-const $close = document.querySelector('.close');
+const $close = document.querySelectorAll('.close');
 const $keep_location = document.querySelector('.keep_location');
 const $keep_location_contents = document.querySelector('.keep_location_contents');
 const $location = document.querySelector('#location');
 const $select_location = document.querySelector('.select_location');
+const $touModal_container = document.querySelector('.touModal_container');
+const $storage_reservation = document.querySelector('#storage_reservation');
+
+const $dateStart = document.querySelector('#date_start');
+const $dateEnd = document.querySelector('#date_end');
+const $mail = document.querySelector('#mail');
+const $country = document.querySelector('#country');
+const $name = document.querySelector('#name');
+const $phone = document.querySelector('#phone');
+const small = document.querySelector('#small');
+const medium = document.querySelector('#medium');
+const large = document.querySelector('#large');
+const agree = document.querySelector('#agree');
 
 function minus(a) {
     if (a.parentNode.children[1].value > 0) {
@@ -18,22 +31,89 @@ function plus(a) {
     $totalPrice.innerText = Number($totalPrice.innerText) + Number(a.parentNode.getAttribute('data-price'));
 }
 
-$close.addEventListener('click',function () {
-    $keep_location.classList.remove('fade_in');
-    $keep_location_contents.classList.remove('up');
-})
+function openModal() {
+    event.preventDefault();
+    $touModal_container.style.display = 'block';
+}
+
+function closeModal() {
+    for (let i = 0; i < 2; i++) {
+        const modal = $close[i].parentNode.parentNode;
+        modal.style.display = 'none';
+    }
+
+}
+
+async function storageSelect(){
+//     const res = await supabase.from('storage').insert([]).select()
+// }
+    const arr = [$dateStart, $dateEnd, $mail, $country, $name, $phone];
+    for (let i = 0; i < arr.length; i++) {
+        if (arr[i].value === '') {
+            alert(`${arr[i].name}을(를) 입력해주세요.`);
+            // Swal.fire({
+            //     icon: "error",
+            //     title: "알림",
+            //     text: `${arr[i].name}을(를) 입력해주세요!`,
+            // });
+            window.scrollTo({top:arr[i].offsetTop, behavior: 'smooth'});
+            return;
+        }
+    }
+
+    if (agree.checked === false) {
+        alert('이용약관을 확인해주세요.');
+        window.scrollTo({top:agree.offsetTop, behavior: 'smooth'});
+        return;
+    }
+
+    if (Number($totalPrice.innerText) === 0) {
+        alert('짐 개수를 선택해주세요.');
+    }
+    else {
+        const res = await supabase.from('storage').insert([
+            {name: $name.value, phone: $phone.value, storage_Start_date: $dateStart.value, storage_End_date: $dateEnd.value, mail: $mail.value, reservation_country: $country.value, small: small.value, medium: medium.value, large: large.value, price: Number($totalPrice.innerText)}
+        ]).select();
+
+        if (res.status === 409) {
+            alert('사용중인 전화번호입니다.');
+            window.scrollTo({top:$phone.offsetTop, behavior: 'smooth'});
+            return;
+        }
+
+        if (res.status === 201) {
+            await Swal.fire({
+                title: "배송예약이 완료되었습니다!",
+                icon: "success",
+                draggable: true
+            })
+        }
+    }
+    window.location.href="index.html";
+}
+
+// $close.addEventListener('click',function () {
+//     $keep_location.classList.remove('fade_in');
+//     $keep_location_contents.classList.remove('up');
+// })
 
 function openKeepLocation() {
-    $keep_location.classList.add('fade_in');
-    $keep_location_contents.classList.add('up');
+    if (!!$keep_location) {
+        $keep_location.classList.add('fade_in');
+        $keep_location_contents.classList.add('up');
+        $keep_location.style.display = 'flex';
+    }
 }
+
+
 
 $select_location.addEventListener('click', function (){
     if(!!document.querySelector('input[name="keep_location"]:checked')){
         $location.value = document.querySelector('input[name="keep_location"]:checked').parentNode.children[1].innerText;
 
-        $close.click();
-    }else{
+        closeModal();
+    }
+    else{
         alert("보관장소를 선택해주세요.")
     }
 });
