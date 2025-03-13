@@ -15,49 +15,60 @@
 
         </div>
         <div class="content">
-            <div class="write-header con">
-                <h1>가벼운 여행의 시작, 위드고</h1>
-            </div>
-            <div class="write">
-                <div class="write-title con">
+            <h1>가벼운 여행의 시작, 위드고</h1>
+        </div>
+        <div class="section">
+            <div class="section-text">
+                <div class="section-title">
                     <h1>1:1문의</h1>
                 </div>
-                <div class="write-body">
-                    <form class="form-all" >
-                        <div class="form-name" style="display:grid; grid-template-columns: 100px auto;">
-                            <label class="form-label">이름</label>
-                            <input type="text" name="" id="" class="form-input">
-                        </div>
-                        <div class="form-pw"style="display:grid; grid-template-columns: 100px auto;">
-                            <label class="form-label">비밀번호</label>
-                                <input type="password" name="" id="" class="form-input">
-                        </div>
-                        <div class="form-title"style="display:grid; grid-template-columns: 100px auto;">
-                            <label class="form-label">제목</label>
-                                <input type="text" name="" id="title" class="form-input">
-                        </div>
-                        <div class="form-secret"style="display:grid; grid-template-columns: 100px auto;">
-                            <label class="form-label">비밀글</label>
-                                <input type="checkbox" name="secret" id="secret" class="form-input">
-                        </div>
-                        <div class="form-detail"style="display:grid; grid-template-columns: 100px auto;">
-                            <label class="form-label">내용</label>
-                                <textarea name="" id="" rows="20" class="form-input"></textarea>
-                        </div>
-                        <div class="form-file">
-                            <label class="form-label">첨부파일</label>
-                        </div>
-                    </form>
-                </div>
-                <div class="write-footer">
 
+                <div class="write">
+                    <div class="group">
+                        <label class="column">이름 <em>*</em></label>
+                        <div class="data"><input type="text" id="name" /><br /></div>
+                    </div>
+                    <div class="group">
+                        <label class="column">비밀번호 <em>*</em></label>
+                        <div class="data"><input type="password" id="password" maxlength="8" /><br /></div>
+                    </div>
+                    <div class="group">
+                        <label class="column">제목 <em>*</em></label>
+                        <div class="data"><input type="text" id="title" /><br /></div>
+                    </div>
+                    <div class="group">
+                        <label class="column" style="width: 89px;">비밀글</label>
+                        <div class="toggle-container">
+                            <div class="toggle-container">
+                                <input type="checkbox" id="secret-toggle" class="toggle-checkbox" />
+                                <label for="secret-toggle" class="toggle-label">
+                                    <span class="off">사용안함</span>
+                                    <span class="on">사용함</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="group">
+                        <label class="column">내용 <em>*</em></label>
+                        <div class="data"><textarea id="review_text" rows="15" cols="50"></textarea><br /></div>
+                    </div>
+                    <div class="group">
+                        <label class="column">첨부파일</label>
+                    </div>
+                </div>
+
+                <div class="button">
+                    <a class="cancel" href="review.html">취소</a>
+                    <a class="input" href="">확인</a>
                 </div>
             </div>
         </div>
         <div class="footer">
-
         </div>
-        <script src="dropdown.js"></script>
+    </div>
+
+
 </body>
+<script src="dropdown.js"></script>
 
 </html>
