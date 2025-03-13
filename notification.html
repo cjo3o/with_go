@@ -11,21 +11,25 @@
         document.addEventListener("DOMContentLoaded", function () {
             const eventList = document.querySelector(".event-list");
 
-
             events.forEach(event => {
-                const eventItem = document.createElement("div");
-                eventItem.classList.add("event-item");
-                eventItem.innerHTML = `
-            <img src="${event.img}" alt="${event.title}">
-            <div class="event-text">
-                <h3>${event.title}</h3>
-                <p>${event.date}</p>
-            </div>
-        `;
-                eventList.appendChild(eventItem);
-            });
-        });
+                const eventItem = document.createElement("div"); // div 생성
+                eventItem.classList.add("event-item"); // "event-item" 클래스 추가
 
+                eventItem.innerHTML = `
+        <img src="${event.img}" alt="${event.title}">
+        <div class="event-text">
+            <h3>${event.title}</h3>
+            <p>${event.date}</p>
+        </div>
+    `;
+
+                // ✅ 클릭하면 해당 공지사항 상세 페이지로 이동하도록 이벤트 추가
+                eventItem.addEventListener("click", () => {
+                    window.location.href = `notice-detail.html?id=${event.id}`;
+                });
+
+                eventList.appendChild(eventItem); // 이벤트 리스트에 추가
+            });
     </script>
 </head>
 
@@ -37,39 +41,55 @@
     <div class="content">
         <h1>WITH GO, STAY INFORMED</h1>
     </div>
-    <div class="section">
-        <div class="section-text">
-            <h3>이용자들을 위한 안내사항</h3>
-            <p>안내 사항을 숙지하시고 원활한 이용 바랍니다</p>
-
-            <div class="notice-list">
-                <div class="notice-item">
-                    <img src="src/images/notice1.png">
-                    <h3>새로운 서비스 출시 안내</h3>
-                    <p>2025년 3월 1일부터 새로운 서비스가 시작됩니다.</p>
-                </div>
-                <br>
-                <div class="notice-item">
-                    <img src="src/images/notice2.png">
-                    <h3>시스템 점검 안내</h3>
-                    <p>2025년 2월 28일 2:00 AM부터 5:00 AM까지
-                        <br/>시스템 점검이 있습니다.</p>
-                </div>
-                <br>
-                <div class="notice-item">
-                    <img src="src/images/notice3.png">
-                    <h3>이벤트 참여 안내</h3>
-                    <p>2025년 3월 1일부터 다양한 이벤트가 진행됩니다.
-                        <br/> 많은 참여 부탁드립니다.</p>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="footer">
-
-        </div>
+</div>
+<div class="section">
+    <div class="section-text">
+        <h3>이용자들을 위한 안내사항</h3>
+        <p>안내 사항을 숙지하시고 원활한 이용 바랍니다</p>
     </div>
 </div>
+<div class="notice">
+    <div class="notice-item">
+        <img src="src/images/notice1.png">
+        <h3>새로운 서비스 출시 안내</h3>
+        <p>2025년 3월 1일부터<br>새로운 서비스가<br>시작됩니다.</p>
+    </div>
+
+    <div class="notice-item">
+        <img src="src/images/notice2.png">
+        <h3>시스템 점검 안내</h3>
+        <p>2025년 2월 28일<br>2:00AM 부터 5:00AM 까지
+            <br/>시스템 점검이 있습니다.</p>
+    </div>
+
+    <div class="notice-item">
+        <img src="src/images/notice3.png">
+        <h3>이벤트 참여 안내</h3>
+        <p>2025년 3월 1일부터<br>다양한 이벤트가 진행됩니다.
+            <br/> 많은 참여 부탁드립니다.</p>
+    </div>
+</div>
+<div class="notice-container">
+    <div class="search-box">
+        <input type="text" placeholder="검색어를 입력해주세요."><img src="src/icon/searche.png">
+    </div>
+
+    <table class="notice-table">
+        <thead>
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>날짜</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        </tbody>
+    </table>
+</div>
+<div class="footer">
+</div>
+<script src="notification.js"></script>
 <script src="dropdown.js"></script>
 </body>
 
