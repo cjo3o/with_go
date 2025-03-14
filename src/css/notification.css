@@ -150,6 +150,10 @@ body {
 .notice-table td:first-child {
     text-align: center;
 }
+.notice-table th:last-child,
+.notice-table td:last-child {
+    text-align: center;
+}
 
 .notice-table tr:hover {
     background-color: #f9f9f9;

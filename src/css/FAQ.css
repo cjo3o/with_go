@@ -3,7 +3,7 @@ body {
     min-height: 100vh;
     flex-direction: column;
     overflow-x: auto; /* 가로 스크롤 추가 */
-    white-space: nowrap; /* 줄바꿈 방지 */
+    white-space: normal; /* 줄바꿈 방지 */
     font-family: "KoPub Dotum", serif;
 }
 
@@ -80,6 +80,9 @@ body {
     font-size: 15px;
     color: rgb(39, 39, 39);
     font-weight: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
 }
 .answer.active {
     opacity: 1;  /* ✅ 보이게 만들기 */
