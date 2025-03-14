@@ -159,6 +159,7 @@ tbody > tr:hover {
     top: 0;
     left: 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
 }
@@ -182,6 +183,24 @@ tbody > tr:hover {
     transform: translateY(100%);
     opacity: 0;
     margin: 0 auto;
+}
+
+.cancelReserve {
+    background-color: #FF9900;
+    color: white;
+    padding: 0.8rem 2.3rem;
+    margin-top: 4rem;
+    font-size: 1.6rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 23px;
+    cursor: pointer;
+    transition: all 0.5s;
+}
+
+.cancelReserve:hover {
+    background-color: #ea8f00;
+    scale: 1.1;
 }
 
 .slide_up {
