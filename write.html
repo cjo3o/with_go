@@ -7,6 +7,12 @@
     <title>Document</title>
     <link rel="stylesheet" href="src/css/reset.css">
     <link rel="stylesheet" href="src/css/write.css">
+    <script>
+        const supabaseUrl = "https://xavwrlvvtoognyuletqy.supabase.co";
+        const supabasePassword = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhhdndybHZ2dG9vZ255dWxldHF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NzUwMzcsImV4cCI6MjA1NzE1MTAzN30.ri4N687J6SbaITHNbo2os3apqpKlnjLJaB45zFtQ5ao";
+
+        var supabase = window.supabase.createElement(supabaseUrl, supabasePassword);
+    </script>
 </head>
 
 <body>
@@ -15,13 +21,13 @@
 
         </div>
         <div class="content">
-            <h1>가벼운 여행의 시작, 위드고</h1>
+            <h1>WITH GO, STAY READY</h1>
         </div>
         <div class="section">
             <div class="section-text">
-                <div class="section-title">
+                <!-- <div class="section-title">
                     <h1>문의</h1>
-                </div>
+                </div> -->
 
                 <div class="write">
                     <div class="group">
@@ -49,6 +55,13 @@
                         </div>
                     </div>
                     <div class="group">
+                        <label class="column" style="width: 89px;">예약 종류 <em>*</em></label>
+                        <div class="radio-type" style="display: flex; align-items: center;">
+                            <input type="radio" name="type" id="type1" class="radio"><label for="type1">배송</label>
+                            <input type="radio" name="type" id="type2" class="radio" style="margin-left: 10px;"><label for="type2">보관</label>
+                        </div>
+                    </div>
+                    <div class="group">
                         <label class="column">내용 <em>*</em></label>
                         <div class="data"><textarea id="review_text" rows="15" cols="50"></textarea><br /></div>
                     </div>
@@ -58,8 +71,8 @@
                 </div>
 
                 <div class="button">
-                    <a class="cancel" href="review.html">취소</a>
-                    <a class="input" href="">확인</a>
+                    <a class="cancel" href="inquiry.html">취소</a>
+                    <button class="input">완료</button>
                 </div>
             </div>
         </div>

@@ -3,34 +3,62 @@
     box-sizing: border-box;
 }
 
-.wrap {
-    height: 600px;
-    background-color: aqua;
-}
-
 .con {
     min-width: 1200px;
+    text-align: center;
+}
+
+.con2 {
+    min-width: 945px;
     text-align: center;
 }
 
 .con_header {
     margin-top: 87px;
     height: 250px;
-    line-height: 250px;
-    background-color: blueviolet;
+    background-image: url(/src/images/review_bg.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
+
+.con_header h1 {
+    color: white;
+    font-size: 30px;
+    line-height: 250px;
+    animation: slideUp 1.2s forwards;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
 
 .con_title {
     margin: 60px auto;
 }
 
-.con_title > h1 {
-    font-weight: 600;
-    font-size: 42px;
+.con_title h3 {
+    margin-bottom: 10px;
+    font-size: 24px;
+    color: rgb(0, 102, 204);
+}
+
+
+.con_title p {
+    font-size: 15px;
 }
 
 .cen_up {
-    max-width: 1200px;
+    width: 945px;
     height: 35px;
     margin: 24px auto;
 }
@@ -54,27 +82,72 @@
     border: 1px solid #ccc;
 }
 
-.search_img{
+.search_img {
     position: absolute;
     right: 7px;
-    top : 10px;
+    top: 10px;
     color: black;
 }
+
+
+
 table {
+    margin: 0 auto;
     border-collapse: collapse;
     /* border-spacing: 0 15px ; */
-    
+
 }
+
 thead {
     height: 19px;
     padding: 20px 0;
     border-bottom: 1px solid #656565;
 }
+
 th {
     line-height: 1.7rem;
 }
 
+.cen_down {
+    margin: 20px 0; 
+}
 
+.cen_down > a {
+    text-decoration: none;
+}
+
+.down_write {
+    padding: 0 30px;
+    border-radius: 3px;
+    transition: all 0.2s ease-out;
+    color: #fff;
+    border: 1px solid;
+    height: 45px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.down_write {
+    background-color: #0066cc;
+    border-color: #0066cc;
+}
+
+.down_write:hover {
+    background-color: #3e454f;
+    border-color: #3e454f;
+}
+
+
+.cen_down {
+    width: 945px;
+    height: 35px;
+    margin: 24px auto 80px auto;
+}
+
+.down_right {
+    float: right;
+}
 
 
 
