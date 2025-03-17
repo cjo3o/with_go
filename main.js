@@ -3,10 +3,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const quickForm = document.getElementById("quick-form");
 
     toggleBtn.addEventListener("click", function () {
-        if (quickForm.style.left === "0px") {
-            quickForm.style.left = "-250px"; // 숨김 상태로 변경
-        } else {
-            quickForm.style.left = "0px"; // 보이도록 이동
-        }
+        let isVisible = quickForm.style.left === "0px"; // `0px` 비교 → `parseInt()`로 변환 가능
+        quickForm.style.left = isVisible ? "-250px" : "0px";
     });
 });

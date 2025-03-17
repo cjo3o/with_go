@@ -11,7 +11,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // 공지사항 테이블을 렌더링하는 함수
     function renderTable(filteredNotices) {
         noticeTable.innerHTML = ""; // 기존 리스트 초기화
-
         Object.keys(filteredNotices).forEach(id => {
             const row = document.createElement("tr");
             row.innerHTML = `
@@ -23,17 +22,15 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-    // 초기 공지사항 리스트 출력
-    renderTable(notices);
+    renderTable(notices); // 처음 로딩 시 데이터 표시
 
-    // 검색 기능 추가
     searchInput.addEventListener("input", function () {
-        const keyword = searchInput.value.trim().toLowerCase(); // 검색어 소문자로 변환
+        const keyword = searchInput.value.trim().toLowerCase();
         const filteredNotices = Object.fromEntries(
             Object.entries(notices).filter(([id, notice]) =>
                 notice.title.toLowerCase().includes(keyword) || notice.date.includes(keyword)
             )
         );
-        renderTable(filteredNotices); // 검색 결과 업데이트
+        renderTable(filteredNotices);
     });
 });

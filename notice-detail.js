@@ -3,8 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const urlParams = new URLSearchParams(window.location.search);
     let noticeId = urlParams.get("id") || "1"; // 기본값을 "1"로 설정
 
-    console.log("현재 공지사항 ID:", noticeId);
-
     // 공지사항 데이터 (JSON 형태로 저장)
     const notices = {
         "1": {
