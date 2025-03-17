@@ -4,9 +4,10 @@ const $search_check = document.querySelector('.search_check');
 const $view_table_container = document.querySelector('.view_table_container');
 const $delivery_table = document.querySelector('.delivery_table');
 const $search_reserveBox = document.querySelector('#search_reserveBox');
+const $cancelBtn = document.querySelector('.cancelBtn');
 
 async function searchReserve() {
-    const res = await supabase.from('delivery').select('re_num, delivery_date, name, phone, delivery_start, delivery_arrive, small, medium, large, price').eq('phone', $search_reserveBox.value);
+    const res = await supabase.from('delivery').select('re_num, delivery_date, name, phone, delivery_start, delivery_arrive, small, medium, large, price').eq('phone', $search_reserveBox.value).order('delivery_date', {ascending: false});
     let rows = '';
 
     console.log(res.status);
@@ -97,11 +98,13 @@ function openDetail(trTag) {
                            `;
     $check_detail.classList.add('fade_in');
     $check_detail_contents.classList.add('slide_up');
+    $cancelBtn.classList.add('slide_up');
 }
 
 function closeDetail() {
     $check_detail.classList.remove('fade_in');
     $check_detail_contents.classList.remove('slide_up');
+    $cancelBtn.classList.remove('slide_up');
 }
 
 async function cancelReserve(re_num) {

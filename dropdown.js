@@ -7,6 +7,9 @@ document.addEventListener("DOMContentLoaded", function() {
             const $menu = document.querySelector('.menu');
             const $sub_menu_container = document.querySelector('.sub_menu_container');
             const $sub_menu = document.querySelector('.sub_menu');
+            const $header_check = document.querySelector('#header_check');
+            const $header_acc = document.querySelector('#header_acc');
+            const $header_keep = document.querySelector('#header_keep');
             //
             // const $menu_img = document.querySelector('.menu_img');
             // const $sub_menu_modal_container = document.querySelector('.sub_menu_modal_container');
@@ -41,6 +44,12 @@ document.addEventListener("DOMContentLoaded", function() {
             //     $sub_menu_modal.classList.add('slide2');
             //
             // })
+
+            $header_check.addEventListener('click', async function () {
+                const $check_container = document.querySelector('.check_container');
+                event.preventDefault();
+                window.scrollTo({top: $check_container.offsetTop, behavior: 'smooth'});
+            })
         });
 
     fetch("footer.html")

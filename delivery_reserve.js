@@ -126,11 +126,21 @@ async function paymentSubmit() {
             price: Number($totalPrice.innerText)
         }
     ]).select();
+
+
     await Swal.fire({
         title: "예약이 완료되었습니다!",
+        text: `예약취소시 예약번호가 필요합니다!`,
         icon: "success",
         draggable: true
     })
+
+    await Swal.fire({
+        text: `예약번호 : ${res.data[0].re_num}`,
+        icon: "success",
+        draggable: true
+    })
+
     location.href = 'index.html';
 }
 
