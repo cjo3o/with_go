@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     fetch("header.html")
         .then(response => response.text())
         .then(data => {
@@ -45,11 +45,17 @@ document.addEventListener("DOMContentLoaded", function() {
             //
             // })
 
-            $header_check.addEventListener('click', async function () {
+
+            $header_check.addEventListener('click', function (event) {
                 const $check_container = document.querySelector('.check_container');
                 event.preventDefault();
-                window.scrollTo({top: $check_container.offsetTop, behavior: 'smooth'});
-            })
+                if ($check_container) {
+                    window.scrollTo({top: $check_container.offsetTop, behavior: 'smooth'});
+                } else {
+                    location.href = 'reservation.html';
+                }
+            });
+
         });
 
     fetch("footer.html")
