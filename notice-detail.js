@@ -1,3 +1,40 @@
+const supabaseUrl = "https://wunmezoxjspgtstkpgwv.supabase.co";  // 여기에 실제 Supabase URL 입력!
+const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind1bm1lem94anNwZ3RzdGtwZ3d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0MjUwMTgsImV4cCI6MjA1NTAwMTAxOH0.MoL5es2vyhmm-WyRx585rgd6he-zn5I3YopLrdHQ4cc"; // 여기에 실제 Supabase anon 키 입력!
+
+const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+
+async function getNoticeDetail(id) {
+    let { data, error } = await supabase
+        .from("withgo_notifications")
+        .select("*") // 상세 보기니까 모든 정보 가져옴!
+        .eq("id", id)
+        .single();
+
+    if (error) {
+        console.error("공지사항 상세 불러오기 실패:", error);
+    } else {
+        console.log("📌 공지사항 상세:", data);
+        return data;
+    }
+}
+
+document.addEventListener("DOMContentLoaded", async function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const noticeId = urlParams.get("id"); // URL에서 공지 ID 가져오기
+
+    if (!noticeId) {
+        document.getElementById("notice-content").innerHTML = "<p>공지사항이 없습니다.</p>";
+        return;
+    }
+
+    const notice = await getNoticeDetail(noticeId);
+    if (notice) {
+        document.getElementById("notice-title").textContent = notice.title;
+        document.getElementById("notice-date").textContent = new Date(notice.created_at).toLocaleDateString();
+        document.getElementById("notice-text").innerHTML = notice.content;
+    }
+});
+
 document.addEventListener("DOMContentLoaded", function () {
     // URL에서 공지사항 ID 가져오기
     const urlParams = new URLSearchParams(window.location.search);

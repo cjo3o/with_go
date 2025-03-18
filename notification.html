@@ -11,26 +11,35 @@
         document.addEventListener("DOMContentLoaded", function () {
             const eventList = document.querySelector(".event-list");
 
+            if (!eventList) {
+                console.error("📌 오류: `.event-list` 요소를 찾을 수 없습니다!");
+                return;
+            }
+
+            if (!window.events || events.length === 0) {
+                console.error("📌 오류: `events` 배열이 정의되지 않았거나 비어있습니다!");
+                return;
+            }
+
             events.forEach(event => {
-                const eventItem = document.createElement("div"); // div 생성
-                eventItem.classList.add("event-item"); // "event-item" 클래스 추가
+                const eventItem = document.createElement("div");
+                eventItem.classList.add("event-item");
 
                 eventItem.innerHTML = `
-        <img src="${event.img}" alt="${event.title}">
-        <div class="event-text">
-            <h3>${event.title}</h3>
-            <p>${event.date}</p>
-        </div>
-    `;
+                <img src="${event.img}" alt="${event.title}">
+                <div class="event-text">
+                    <h3>${event.title}</h3>
+                    <p>${event.date}</p>
+                </div>
+            `;
 
-                // ✅ 클릭하면 해당 공지사항 상세 페이지로 이동하도록 이벤트 추가
                 eventItem.addEventListener("click", () => {
                     window.location.href = `notice-detail.html?id=${event.id}`;
                 });
 
-                eventList.appendChild(eventItem); // 이벤트 리스트에 추가
+                eventList.appendChild(eventItem);
             });
-
+        });
     </script>
 </head>
 
@@ -87,11 +96,14 @@
 
         </tbody>
     </table>
+    <ul id="notice-list"></ul>
+
 </div>
 <div class="footer">
 </div>
-<script src="notification.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="dropdown.js"></script>
+<script src="notification.js"></script>
 </body>
 
 </html>

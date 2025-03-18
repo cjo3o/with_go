@@ -1,3 +1,8 @@
+const supabaseUrl = "https://wunmezoxjspgtstkpgwv.supabase.co";  // 여기에 실제 Supabase URL 입력!
+const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind1bm1lem94anNwZ3RzdGtwZ3d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0MjUwMTgsImV4cCI6MjA1NTAwMTAxOH0.MoL5es2vyhmm-WyRx585rgd6he-zn5I3YopLrdHQ4cc"; // 여기에 실제 Supabase anon 키 입력!
+
+const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
+
 document.addEventListener("DOMContentLoaded", function () {
     // ✅ 기본적으로 첫 번째 페이지 보이기
     loadFAQ();
