@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     fetch("header.html")
         .then(response => response.text())
         .then(data => {
@@ -7,6 +7,10 @@ document.addEventListener("DOMContentLoaded", function() {
             const $menu = document.querySelector('.menu');
             const $sub_menu_container = document.querySelector('.sub_menu_container');
             const $sub_menu = document.querySelector('.sub_menu');
+            const $header_check = document.querySelector('#header_check');
+            const $header_acc = document.querySelector('#header_acc');
+            const $header_keep = document.querySelector('#header_keep');
+            const $select_login = document.querySelector('.select_login');
             //
             // const $menu_img = document.querySelector('.menu_img');
             // const $sub_menu_modal_container = document.querySelector('.sub_menu_modal_container');
@@ -41,6 +45,38 @@ document.addEventListener("DOMContentLoaded", function() {
             //     $sub_menu_modal.classList.add('slide2');
             //
             // })
+
+
+            $header_check.addEventListener('click', function (event) {
+                const $check_container = document.querySelector('.check_container');
+                event.preventDefault();
+                if ($check_container) {
+                    window.scrollTo({top: $check_container.offsetTop, behavior: 'smooth'});
+                } else {
+                    location.href = 'reservation.html';
+                }
+            });
+
+            document.querySelector('.login').addEventListener('mouseover', function () {
+                document.querySelector('.kakao_login').classList.add('down');
+            });
+
+            document.querySelector('.login').addEventListener('mouseout', function () {
+                document.querySelector('.kakao_login').classList.remove('down');
+            });
+
+            document.querySelector('.kakao_login').addEventListener('click', async function () {
+                await supabase.auth.signInWithOAuth({
+                    provider: 'kakao'
+                })
+                alert('로그인');
+            });
+
+            document.querySelector('.logout').addEventListener('click', async function () {
+                await supabase.auth.signOut();
+                alert('로그아웃');
+            })
+
         });
 
     fetch("footer.html")

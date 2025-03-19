@@ -115,16 +115,12 @@
   border-radius: 40px;
   padding: 3rem 1rem 3.5rem 1rem;
   cursor: pointer;
-  /*border: solid 2px #787878;*/
-  box-shadow: 0 0 5px #474747;
   transition: all 0.5s;
 
 }
 
 .reservation_infor_contents:hover {
-  box-shadow: 0 0 10px #000;
   transform: translateY(-10px);
-
 }
 
 .reservation_infor_contents:hover > .reservation_infor_contents_btn {

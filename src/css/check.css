@@ -185,6 +185,15 @@ tbody > tr:hover {
     margin: 0 auto;
 }
 
+.cancelBtn {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transform: translateY(100%);
+    opacity: 0;
+}
+
 .cancelReserve {
     background-color: #FF9900;
     color: white;

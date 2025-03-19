@@ -99,6 +99,8 @@ ul, li {
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
+    cursor: pointer;
 }
 
 .select_login {
@@ -109,9 +111,33 @@ ul, li {
     font-weight: bold;
 }
 
-.select_login:hover {
+.login:hover > .select_login {
     font-weight: bolder;
     color: #ffb74c;
+}
+
+.kakao_login {
+    margin-top: 2px;
+    opacity: 0;
+    overflow: hidden;
+    background-color: #0066CC;
+    color: #ffb74c;
+    position: absolute;
+    top: 87px;
+    padding: 0.5rem;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.kakao_login:hover {
+    background-color: #0060c5;
+    color: #ffebc8;
+}
+
+.down {
+    opacity: 1;
 }
 
 .sub_menu_container {
