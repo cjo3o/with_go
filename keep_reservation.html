@@ -8,12 +8,12 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<!--    <script>-->
-<!--        const supabaseUrl = "https://hgjwdtncrblyqqolxccl.supabase.co";-->
-<!--        const supabasePassword = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhnandkdG5jcmJseXFxb2x4Y2NsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0MjUwOTksImV4cCI6MjA1NTAwMTA5OX0.EDd3z4V0e_PiGmj9LgKHQslIeUQVDEXr3X-yTwt6ORE";-->
+    <script>
+        const supabaseUrl = "https://zgrjjnifqoactpuqolao.supabase.co";
+        const supabasePassword = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpncmpqbmlmcW9hY3RwdXFvbGFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNDc0NTgsImV4cCI6MjA1NjgyMzQ1OH0._Vl-6CRKdMjeDRyNoxlfect7sgusZ7L0N5OYu0a5hT0";
 
-<!--        var supabase = window.supabase.createClient(supabaseUrl, supabasePassword);-->
-<!--    </script>-->
+        var supabase = window.supabase.createClient(supabaseUrl, supabasePassword);
+    </script>
 
     <link rel="stylesheet" href="src/css/reset.css">
     <link rel="stylesheet" href="src/css/keep_reservation.css">
@@ -34,7 +34,7 @@
                 <div class="keep_location_contents_header">
                     <h1>보관 장소 선택</h1>
                 </div>
-                <div class="keep_location_contents_body">
+                <div class="keep_location_contents_body" id="location">
                     <div class="card">
                         <label for="seoul">
                             <div class="card_title">
@@ -188,13 +188,15 @@
                         <div class="keep_reservation_contents_main_box">
                             <div class="keep_reservation_contents_main_box_input-box">
                                 <div class="input-box_content">
-                                    <input type="date" id="date_start" placeholder="기간 선택">
-                                    <input type="date" id="date_end" placeholder="기간 선택">
+                                    맡길 날짜 : <input type="date" id="date_start" placeholder="맡길 날짜" style="width: 40%"></br>
+                                    찾을 날짜 : <input type="date" id="date_end" placeholder="찾을 날짜" style="width: 40%">
+<!--                                    <input type="text" id="date_start" placeholder="맡길 날짜" style="width: 40%">-->
+<!--                                    <input type="text" id="date_end" placeholder="찾을 날짜" style="width: 40%">-->
                                 </div>
                             </div>
                             <div class="keep_reservation_contents_main_box_input-box">
                                 <div class="input-box_content">
-                                    <input type="text" name="" id="location" placeholder="보관 장소"
+                                    <input type="text" name="" id="location_a" placeholder="보관 장소"
                                            onclick="openKeepLocation()" value="" readonly>
                                 </div>
                             </div>
@@ -320,6 +322,83 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+    <div class="keep_reservation_check_contents" style="display: none;">
+        <div class="keep_reservation_contents_text">
+            <h1>배송 예약확인</h1>
+            <p>물품 배송 정보 및 고객정보를 확인해 주세요.</p>
+        </div>
+        <div class="keep_reservation_contents_main">
+            <div class="keep_reservation_contents_main_date">
+                <div class="keep_reservation_contents_main_title_box">
+                    <div class="keep_reservation_contents_main_title">
+                        <p>예약정보</p>
+                    </div>
+                    <div class="keep_reservation_contents_main_title">
+                        <p>고객정보</p>
+                    </div>
+                </div>
+                <div class="keep_reservation_contents_main_box">
+                    <div class="keep_reservation_contents_main">
+                        <ul class="keep_reservation_infor_ul">
+                            <li><p>보관일자일자</p><span id="check_start_date">dd</span> ~ <span id="check_end_date">dd</span></li>
+                            <li><p>보관 장소</p><span id="check_location">dd</span></li>
+                            <li><p>이메일</p><span id="check_detail_adr">dd</span></li>
+                        </ul>
+                    </div>
+                    <div class="keep_reservation_contents_main">
+                        <ul class="keep_reservation_infor_ul">
+                            <li><p>이름</p><span id="check_name"></span></li>
+                            <li><p>전화번호</p><span id="check_phone"></span></li>
+                            <li><p>국가</p><span id="check_country"></span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="keep_reservation_contents_main_luggage_infor" style="margin-top: 7rem">
+                <div class="keep_reservation_contents_main_title_box">
+                    <div class="keep_reservation_contents_main_title">
+                        <p>물품정보</p>
+                    </div>
+                    <div class="keep_reservation_contents_main_title">
+                        <p>가격정보</p>
+                    </div>
+                </div>
+                <div class="keep_reservation_contents_main_box">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th style="text-align: start; width: 70%">물품 정보</th>
+                            <th>수량</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td style="padding-left: 4rem">소형</td>
+                            <td style="text-align: center" id="check_small">0</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-left: 4rem">중형</td>
+                            <td style="text-align: center" id="check_medium">0</td>
+                        </tr>
+                        <tr>
+                            <td style="padding-left: 4rem">대형</td>
+                            <td style="text-align: center" id="check_large">0</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div style="display: flex; justify-content: space-between; padding: 0.5rem 3rem">
+                        <p style="font-size: 1.1rem">결제 예상 금액</p>
+                        <p style="font-size: 1.1rem">KRW <span id="check_price">0</span> 원</p>
+                    </div>
+                </div>
+            </div>
+            <div class="keep_reserve_btn" style="margin: 4rem 0">
+                <button onclick="paymentSubmit()">
+                    결제진행
+                </button>
             </div>
         </div>
     </div>

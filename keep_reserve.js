@@ -11,6 +11,7 @@ const $storage_reservation = document.querySelector('#storage_reservation');
 const $dateStart = document.querySelector('#date_start');
 const $dateEnd = document.querySelector('#date_end');
 const $mail = document.querySelector('#mail');
+const $location_a = document.querySelector('#location_a');
 const $country = document.querySelector('#country');
 const $name = document.querySelector('#name');
 const $phone = document.querySelector('#phone');
@@ -18,6 +19,20 @@ const small = document.querySelector('#small');
 const medium = document.querySelector('#medium');
 const large = document.querySelector('#large');
 const agree = document.querySelector('#agree');
+
+const $check_start_date = document.querySelector('#check_start_date');
+const $check_end_date = document.querySelector('#check_end_date');
+const $check_country = document.querySelector('#check_country');
+const $check_location = document.querySelector('#check_location');
+const $check_detail_adr = document.querySelector('#check_detail_adr');
+const $check_name = document.querySelector('#check_name');
+const $check_phone = document.querySelector('#check_phone');
+const $keep_reservation_contents = document.querySelector('.keep_reservation_contents');
+const $keep_reservation_check_contents = document.querySelector('.keep_reservation_check_contents');
+const $check_small = document.querySelector('#check_small');
+const $check_medium = document.querySelector('#check_medium');
+const $check_large = document.querySelector('#check_large');
+const $check_price = document.querySelector('#check_price');
 
 function minus(a) {
     if (a.parentNode.children[1].value > 0) {
@@ -44,10 +59,8 @@ function closeModal() {
 
 }
 
-async function storageSelect(){
-//     const res = await supabase.from('storage').insert([]).select()
-// }
-    const arr = [$dateStart, $dateEnd, $mail, $country, $name, $phone];
+async function storageSelect() {
+    const arr = [$dateStart, $dateEnd, $mail, $location, $country, $name, $phone];
     for (let i = 0; i < arr.length; i++) {
         if (arr[i].value === '') {
             alert(`${arr[i].name}을(를) 입력해주세요.`);
@@ -56,45 +69,71 @@ async function storageSelect(){
             //     title: "알림",
             //     text: `${arr[i].name}을(를) 입력해주세요!`,
             // });
-            window.scrollTo({top:arr[i].offsetTop, behavior: 'smooth'});
+            window.scrollTo({top: arr[i].offsetTop, behavior: 'smooth'});
             return;
         }
     }
 
     if (agree.checked === false) {
         alert('이용약관을 확인해주세요.');
-        window.scrollTo({top:agree.offsetTop, behavior: 'smooth'});
+        window.scrollTo({top: agree.offsetTop, behavior: 'smooth'});
         return;
     }
 
     if (Number($totalPrice.innerText) === 0) {
         alert('짐 개수를 선택해주세요.');
-    }
-    else {
-        const res = await supabase.from('storage').insert([
-            {name: $name.value, phone: $phone.value, storage_Start_date: $dateStart.value, storage_End_date: $dateEnd.value, mail: $mail.value, reservation_country: $country.value, small: small.value, medium: medium.value, large: large.value, price: Number($totalPrice.innerText)}
-        ]).select();
-
-        if (res.status === 409) {
-            alert('사용중인 전화번호입니다.');
-            window.scrollTo({top:$phone.offsetTop, behavior: 'smooth'});
-            return;
+    } else {
+        const brr = [$check_start_date, $check_end_date, $check_location, $check_detail_adr, $check_name, $check_phone, $check_country];
+        for (let i = 0; i < brr.length; i++) {
+            brr[i].innerHTML = arr[i].value;
         }
 
-        if (res.status === 201) {
-            await Swal.fire({
-                title: "배송예약이 완료되었습니다!",
-                icon: "success",
-                draggable: true
-            })
-        }
+        $check_name.innerHTML = $name.value;
+        $check_phone.innerHTML = $phone.value;
+        $check_country.innerHTML = $country.value;
+        $check_detail_adr.innerHTML = $mail.value;
+        $check_location.innerHTML = $location_a.value;
+        $check_small.innerHTML = small.value;
+        $check_medium.innerHTML = medium.value;
+        $check_large.innerHTML = large.value;
+        $check_price.innerHTML = Number($totalPrice.innerText);
+        $keep_reservation_contents.style.display = 'none';
+        $keep_reservation_check_contents.style.display = 'block';
+
+        window.scrollTo({top: 0, behavior: 'smooth'});
+
     }
-    window.location.href="index.html";
+}
+
+async function paymentSubmit() {
+    const res = await supabase.from('storage').insert([
+        {
+            name: $name.value,
+            phone: $phone.value,
+            storage_start_date: $dateStart.value,
+            storage_end_date: $dateEnd.value,
+            location: $location_a.value,
+            mail: $mail.value,
+            reservation_country: $country.value,
+            small: small.value,
+            medium: medium.value,
+            large: large.value,
+            price: Number($totalPrice.innerText)
+        }
+    ]).select();
+    console.log(res);
+    await Swal.fire({
+        title: "배송예약이 완료되었습니다!",
+        icon: "success",
+        draggable: true
+    })
+    location.href = 'index.html';
 }
 
 // $close.addEventListener('click',function () {
 //     $keep_location.classList.remove('fade_in');
 //     $keep_location_contents.classList.remove('up');
+//     $keep_location.style.display = 'block';
 // })
 
 function openKeepLocation() {
@@ -106,14 +145,82 @@ function openKeepLocation() {
 }
 
 
-
-$select_location.addEventListener('click', function (){
-    if(!!document.querySelector('input[name="keep_location"]:checked')){
-        $location.value = document.querySelector('input[name="keep_location"]:checked').parentNode.children[1].innerText;
+$select_location.addEventListener('click', function () {
+    if (!!document.querySelector('input[name="keep_location"]:checked')) {
+        $location_a.value = document.querySelector('input[name="keep_location"]:checked').parentNode.children[1].innerText;
 
         closeModal();
-    }
-    else{
+    } else {
         alert("보관장소를 선택해주세요.")
     }
 });
+
+const startDatePicker = document.getElementById('date_start');
+const endDatePicker = document.getElementById('date_end');
+
+// 시작 날짜 선택 제한 설정
+startDatePicker.addEventListener('change', function () {
+    const selectedDate = new Date(this.value);
+    const today = new Date();
+
+    if (selectedDate < today) {
+        const todayFormatted = today.toISOString().split('T')[0];
+        this.value = todayFormatted;
+    }
+});
+
+const today = new Date();
+const todayFormatted = today.toISOString().split('T')[0];
+startDatePicker.setAttribute('min', todayFormatted);
+
+// 종료 날짜 선택 제한 설정 (시작 날짜 이후만 선택 가능하도록)
+endDatePicker.addEventListener('change', function () {
+    const startDate = new Date(startDatePicker.value);
+    const selectedDate = new Date(this.value);
+
+    if (selectedDate < startDate) {
+        this.value = startDatePicker.value;
+    }
+});
+
+endDatePicker.setAttribute('min', startDatePicker.value);
+
+// 시작 날짜가 변경될 때 종료 날짜의 min 속성 업데이트
+startDatePicker.addEventListener('change', function () {
+    endDatePicker.setAttribute('min', this.value);
+    // 종료 날짜가 시작 날짜보다 이전으로 설정된 경우, 종료 날짜를 시작 날짜로 업데이트
+    if (new Date(endDatePicker.value) < new Date(this.value)) {
+        endDatePicker.value = this.value;
+    }
+});
+
+// const startDatePicker = document.getElementById('date_start');
+// const endDatePicker = document.getElementById('date_end');
+//
+// startDatePicker.addEventListener('focus', function () {
+//     if (this.value === 'YYYY-MM-DD') {
+//         this.value = '';
+//         this.style.color = 'black';
+//     }
+// });
+//
+// startDatePicker.addEventListener('blur', function () {
+//     if (this.value === '') {
+//         this.value = 'YYYY-MM-DD';
+//         this.style.color = 'gray';
+//     }
+// });
+//
+// endDatePicker.addEventListener('focus', function () {
+//     if (this.value === 'YYYY-MM-DD') {
+//         this.value = '';
+//         this.style.color = 'black';
+//     }
+// });
+//
+// endDatePicker.addEventListener('blur', function () {
+//     if (this.value === '') {
+//         this.value = 'YYYY-MM-DD';
+//         this.style.color = 'gray';
+//     }
+// });
