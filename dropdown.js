@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", function () {
             const $header_check = document.querySelector('#header_check');
             const $header_acc = document.querySelector('#header_acc');
             const $header_keep = document.querySelector('#header_keep');
+            const $select_login = document.querySelector('.select_login');
             //
             // const $menu_img = document.querySelector('.menu_img');
             // const $sub_menu_modal_container = document.querySelector('.sub_menu_modal_container');
@@ -55,6 +56,26 @@ document.addEventListener("DOMContentLoaded", function () {
                     location.href = 'reservation.html';
                 }
             });
+
+            document.querySelector('.login').addEventListener('mouseover', function () {
+                document.querySelector('.kakao_login').classList.add('down');
+            });
+
+            document.querySelector('.login').addEventListener('mouseout', function () {
+                document.querySelector('.kakao_login').classList.remove('down');
+            });
+
+            document.querySelector('.kakao_login').addEventListener('click', async function () {
+                await supabase.auth.signInWithOAuth({
+                    provider: 'kakao'
+                })
+                alert('로그인');
+            });
+
+            document.querySelector('.logout').addEventListener('click', async function () {
+                await supabase.auth.signOut();
+                alert('로그아웃');
+            })
 
         });
 
