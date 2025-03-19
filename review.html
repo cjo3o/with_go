@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>review</title>
     <link rel="stylesheet" href="src/css/reset.css">
     <link rel="stylesheet" href="src/css/review.css">
     <script>
@@ -27,6 +27,12 @@
         });
 
     </script>
+    <script>
+        const supabaseUrl = "https://xavwrlvvtoognyuletqy.supabase.co";
+        const supabasePassword = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhhdndybHZ2dG9vZ255dWxldHF5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE1NzUwMzcsImV4cCI6MjA1NzE1MTAzN30.ri4N687J6SbaITHNbo2os3apqpKlnjLJaB45zFtQ5ao";
+
+        var supabase = window.supabase.createElement(supabaseUrl, supabasePassword);
+    </script>
 </head>
 
 <body>
@@ -39,47 +45,11 @@
     </div>
     <div class="section">
         <div class="section-text">
-            <h3>보관/배송 내역 조회</h3>
-            <p>맡긴 짐의 보관, 배송 상태를 조회할 수 있습니다.</p>
-
-            <div class="review-list">
-                <div class="review-item">
-                    <div class="review-image">
-                        <img src="src/images/review_img (1).png" alt="후기 이미지 1">
-                        <img src="src/images/review_img (2).png" alt="후기 이미지 2">
-                    </div>
-                    <div class="review-text">
-                        <h3>좋은 경험이었습니다!</h3>
-                        <p>고민 없이 했던 여행, 최고의 선택이었어요!</p>
-                        <span class="rating">★★★★★</span>
-                        <small>2025년 2월 20일</small>
-                    </div>
-                </div>
-
-                <div class="review-item">
-                    <div class="review-image">
-                        <img src="src/images/review_img (3).png" alt="후기 이미지">
-                    </div>
-                    <div class="review-text">
-                        <h3>예약이 편리했어요</h3>
-                        <p>예약 시스템이 간편하고 빠르게 처리되었습니다.</p>
-                        <span class="rating">★★★★★</span>
-                        <small>2025년 2월 18일</small>
-                    </div>
-                </div>
-
-                <div class="review-item">
-                    <div class="review-image">
-                        <img src="src/images/review_img (4).png" alt="후기 이미지">
-                    </div>
-                    <div class="review-text">
-                        <h3>정말 편리한 서비스</h3>
-                        <p>서비스가 정말 좋았고, 추가적인 도움을 받을 때도 빠르게 대응해주셔서 좋았습니다.</p>
-                        <span class="rating">★★★★★</span>
-                        <small>2025년 2월 15일</small>
-                    </div>
-                </div>
+            <div class="section-title">
+                <h3>이용자들의 솔직한 후기</h3>
+                <p>여러분의 소중한 경험도 함께 공유해주세요! 최고의 서비스는 함께 만들어갑니다.</p>
             </div>
+
 
             <div class="review-form">
                 <form id="review-form">

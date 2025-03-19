@@ -93,7 +93,7 @@ ul, li {
     font-weight: bold;
 }
 
-.language {
+.login {
     font-size: 20px;
     width: 20%;
     display: flex;
@@ -101,17 +101,17 @@ ul, li {
     justify-content: center;
 }
 
-.select_language {
+.select_login {
     color: #0066CC;
-    border-bottom: solid 1px #0066CC;
     line-height: 35px;
     cursor: pointer;
-    font-size: 15px;
+    font-size: 18px;
     font-weight: bold;
 }
 
-.select_language::after {
-    content: "▼";
+.select_login:hover {
+    font-weight: bolder;
+    color: #ffb74c;
 }
 
 .sub_menu_container {
