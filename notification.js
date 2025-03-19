@@ -1,7 +1,9 @@
-// ✅ Supabase 연결
-const supabaseUrl = "https://wunmezoxjspgtstkpgwv.supabase.co";
-const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind1bm1lem94anNwZ3RzdGtwZ3d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0MjUwMTgsImV4cCI6MjA1NTAwMTAxOH0.MoL5es2vyhmm-WyRx585rgd6he-zn5I3YopLrdHQ4cc";
-const supabase = supabase.createClient(supabaseUrl, supabaseAnonKey);
+const supabase = window.supabase.createClient(
+    'https://wunmezoxjspgtstkpgwv.supabase.co',
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Ind1bm1lem94anNwZ3RzdGtwZ3d2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzk0MjUwMTgsImV4cCI6MjA1NTAwMTAxOH0.MoL5es2vyhmm-WyRx585rgd6he-zn5I3YopLrdHQ4cc'
+);
+console.log('Supabase 객체:', supabase);
+
 
 // ✅ Supabase에서 공지사항 가져오기
 async function getNotifications() {
@@ -14,6 +16,9 @@ async function getNotifications() {
         console.error("📌 공지사항 불러오기 실패:", error);
         return [];
     }
+
+    console.log("📌 Supabase에서 가져온 공지사항 데이터:", data);
+
     return data;
 }
 
@@ -41,17 +46,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     // ✅ Supabase 데이터가 있으면 덮어쓰기
     if (supabaseData.length > 0) {
         notices = supabaseData;
-    }
-
-    // ✅ 공지사항 리스트 업데이트
-    if (notices.length === 0) {
-        noticeList.innerHTML = "<p>📌 공지사항이 없습니다.</p>";
-    } else {
-        noticeList.innerHTML = notices.map(notice => `
-            <li>
-                <a href="notice-detail.html?id=${notice.id}">${notice.title}</a> - ${new Date(notice.created_at).toLocaleDateString()}
-            </li>
-        `).join("");
     }
 
     // ✅ 공지사항 테이블 표시 함수

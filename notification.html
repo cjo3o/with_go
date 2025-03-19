@@ -1,63 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>공지사항</title>
     <link rel="stylesheet" href="src/css/reset.css">
     <link rel="stylesheet" href="src/css/notification.css">
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            const eventList = document.querySelector(".event-list");
-
-            if (!eventList) {
-                console.error("📌 오류: `.event-list` 요소를 찾을 수 없습니다!");
-                return;
-            }
-
-            if (!window.events || events.length === 0) {
-                console.error("📌 오류: `events` 배열이 정의되지 않았거나 비어있습니다!");
-                return;
-            }
-
-            events.forEach(event => {
-                const eventItem = document.createElement("div");
-                eventItem.classList.add("event-item");
-
-                eventItem.innerHTML = `
-                <img src="${event.img}" alt="${event.title}">
-                <div class="event-text">
-                    <h3>${event.title}</h3>
-                    <p>${event.date}</p>
-                </div>
-            `;
-
-                eventItem.addEventListener("click", () => {
-                    window.location.href = `notice-detail.html?id=${event.id}`;
-                });
-
-                eventList.appendChild(eventItem);
-            });
-        });
-    </script>
 </head>
 
 <body>
 <div class="wrap">
-    <div class="header">
-
-    </div>
+    <div class="header"></div>
     <div class="content">
         <h1>WITH GO, STAY INFORMED</h1>
     </div>
 </div>
+
 <div class="section">
     <div class="section-text">
         <h3>이용자들을 위한 안내사항</h3>
         <p>안내 사항을 숙지하시고 원활한 이용 바랍니다</p>
     </div>
 </div>
+
+<!-- ✅ 기본 공지사항 (하드코딩된 공지들) -->
 <div class="notice">
     <div class="notice-item">
         <img src="src/images/notice1.png">
@@ -68,21 +35,24 @@
     <div class="notice-item">
         <img src="src/images/notice2.png">
         <h3>시스템 점검 안내</h3>
-        <p>2025년 2월 28일<br>2:00AM 부터 5:00AM 까지
-            <br/>시스템 점검이 있습니다.</p>
+        <p>2025년 2월 28일<br>2:00AM 부터 5:00AM 까지<br>시스템 점검이 있습니다.</p>
     </div>
 
     <div class="notice-item">
         <img src="src/images/notice3.png">
         <h3>이벤트 참여 안내</h3>
-        <p>2025년 3월 1일부터<br>다양한 이벤트가 진행됩니다.
-            <br/> 많은 참여 부탁드립니다.</p>
+        <p>2025년 3월 1일부터<br>다양한 이벤트가 진행됩니다.<br> 많은 참여 부탁드립니다.</p>
     </div>
 </div>
+
+<!-- ✅ Supabase에서 불러온 공지사항을 표시할 컨테이너 -->
 <div class="notice-container">
     <div class="search-box">
-        <input type="text" placeholder="검색어를 입력해주세요."><img src="src/icon/searche.png">
+        <input type="text" placeholder="검색어를 입력해주세요.">
+        <img src="src/icon/searche.png">
     </div>
+
+    <div class="event-list"></div>
 
     <table class="notice-table">
         <thead>
@@ -92,16 +62,18 @@
             <th>날짜</th>
         </tr>
         </thead>
-        <tbody>
-
-        </tbody>
+        <tbody></tbody>
     </table>
-    <ul id="notice-list"></ul>
 
+    <ul id="notice-list"></ul>
 </div>
-<div class="footer">
-</div>
+
+<div class="footer"></div>
+
+<!-- ✅ Supabase 라이브러리 로드 -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- ✅ JS 파일 로드 -->
 <script src="dropdown.js"></script>
 <script src="notification.js"></script>
 </body>
