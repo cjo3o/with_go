@@ -153,3 +153,8 @@ $select_location.addEventListener('click', function () {
         alert("장소를 선택해주세요.")
     }
 });
+
+document.addEventListener('DOMContentLoaded', async function () {
+    const res = await supabase.auth.getUser();
+    $name.value = res.data.user.user_metadata.name;
+})
