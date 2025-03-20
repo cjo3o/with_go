@@ -33,7 +33,6 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
       }
 
-
       // Supabase에 후기 삽입
       const { error } = await supabase
         .from("review")
