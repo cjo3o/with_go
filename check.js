@@ -7,10 +7,10 @@ const $search_reserveBox = document.querySelector('#search_reserveBox');
 const $cancelBtn = document.querySelector('.cancelBtn');
 
 async function searchReserve() {
-    const res = await supabase.from('delivery').select('re_num, delivery_date, name, phone, delivery_start, delivery_arrive, small, medium, large, price').eq('phone', $search_reserveBox.value).order('delivery_date', {ascending: false});
+    const res = await supabase.from('delivery').select().eq('phone', $search_reserveBox.value).order('delivery_date', {ascending: false});
     let rows = '';
 
-    console.log(res.status);
+    console.log(res.data);
 
     if (res.data.length === 0) {
         await Swal.fire({
@@ -19,22 +19,21 @@ async function searchReserve() {
             text: "연락처를 확인해 주세요."
         })
     } else {
-        for (let i = 0; i < res.data.length; i++) {
+        res.data.forEach(data => {
             rows += `
                 <tr onclick="openDetail(this)">
-                    <td>${res.data[i].delivery_date}</td>
-                    <td>${res.data[i].name}</td>
-                    <td>${res.data[i].phone}</td>
-                    <td>${res.data[i].delivery_start}</td>
-                    <td>${res.data[i].delivery_arrive}</td>
-                    <td>${res.data[i].small}</td>
-                    <td>${res.data[i].medium}</td>
-                    <td>${res.data[i].large}</td>
-                    <td>${res.data[i].price}</td>
-                    <td style="display: none">${res.data[i].re_num}</td>
+                    <td>${data.delivery_date}</td>
+                    <td>${data.name}</td>
+                    <td>${data.phone}</td>
+                    <td>${data.delivery_start}</td>
+                    <td>${data.delivery_arrive}</td>
+                    <td>${data.small}</td>
+                    <td>${data.medium}</td>
+                    <td>${data.large}</td>
+                    <td>${data.price}</td>
                 </tr>
                 `
-        }
+        })
         let delivery_table = `
                                 <table>
                                     <thead>
@@ -72,7 +71,6 @@ function openDetail(trTag) {
     const medium = trTag.children[6].innerText;
     const large = trTag.children[7].innerText;
     const price = trTag.children[8].innerText;
-    const re_num = trTag.children[9].innerText;
     const $cancelBtn = document.querySelector('.cancelBtn');
 
     $check_detail_contents.innerHTML = `
@@ -92,7 +90,7 @@ function openDetail(trTag) {
                                         <p>총합 <span>${price} 원</span></p>
                                        `;
     $cancelBtn.innerHTML = `
-                            <button class="cancelReserve" onclick="cancelReserve('${re_num}')">
+                            <button class="cancelReserve" onclick="cancelReserve()">
                                 예약취소
                             </button>
                            `;
@@ -107,7 +105,7 @@ function closeDetail() {
     $cancelBtn.classList.remove('slide_up');
 }
 
-async function cancelReserve(re_num) {
+async function cancelReserve() {
     const result = await Swal.fire({
         title: "정말 취소하시겠습니까?",
         text: "취소하시면 복구하실 수 없습니다!",
@@ -119,39 +117,39 @@ async function cancelReserve(re_num) {
         cancelButtonText: "취소"
     });
 
-    if (result.isConfirmed) {
-        const inputResult = await Swal.fire({
-            title: "예약번호를 입력해 주세요.",
-            input: "text",
-            inputAttributes: {
-                autocapitalize: "off"
-            },
-            showCancelButton: true,
-            confirmButtonText: "확인",
-            cancelButtonText: "취소",
-            showLoaderOnConfirm: true,
-            preConfirm: async (input_re_num) => {
-                if (input_re_num === re_num) {
-                    return {success: true, message: "예약번호가 일치합니다!"};
-                } else {
-                    return Swal.showValidationMessage(`예약번호가 일치하지 않습니다!`);
-                }
-            },
-            allowOutsideClick: () => !Swal.isLoading()
-        });
-
-        if (inputResult.isConfirmed && inputResult.value.success) {
-            await Swal.fire({
-                title: "알림",
-                text: "예약이 취소되었습니다.",
-                icon: "success"
-            });
-
-            // 데이터베이스에서 예약 삭제
-            await supabase.from('delivery').delete().eq('re_num', re_num).select();
-            closeDetail();
-            $view_table_container.style.display = 'none';
-            $search_check.style.display = 'flex';
-        }
-    }
+    // if (result.isConfirmed) {
+    //     const inputResult = await Swal.fire({
+    //         title: "예약번호를 입력해 주세요.",
+    //         input: "text",
+    //         inputAttributes: {
+    //             autocapitalize: "off"
+    //         },
+    //         showCancelButton: true,
+    //         confirmButtonText: "확인",
+    //         cancelButtonText: "취소",
+    //         showLoaderOnConfirm: true,
+    //         preConfirm: async (input_re_num) => {
+    //             if (input_re_num === re_num) {
+    //                 return {success: true, message: "예약번호가 일치합니다!"};
+    //             } else {
+    //                 return Swal.showValidationMessage(`예약번호가 일치하지 않습니다!`);
+    //             }
+    //         },
+    //         allowOutsideClick: () => !Swal.isLoading()
+    //     });
+    //
+    //     if (inputResult.isConfirmed && inputResult.value.success) {
+    //         await Swal.fire({
+    //             title: "알림",
+    //             text: "예약이 취소되었습니다.",
+    //             icon: "success"
+    //         });
+    //
+    //         // 데이터베이스에서 예약 삭제
+    //         await supabase.from('delivery').delete().eq('re_num', re_num).select();
+    //         closeDetail();
+    //         $view_table_container.style.display = 'none';
+    //         $search_check.style.display = 'flex';
+    //     }
+    // }
 }
