@@ -116,8 +116,7 @@ ul, li {
     color: #ffb74c;
 }
 
-.kakao_login {
-    margin-top: 2px;
+.login_container {
     opacity: 0;
     overflow: hidden;
     background-color: #0066CC;
@@ -131,8 +130,15 @@ ul, li {
     transition: all 0.2s;
 }
 
-.kakao_login:hover {
-    background-color: #0060c5;
+.kakao_login,
+.logout {
+    color: #ffb74c;
+    transition: all 0.2s;
+}
+
+
+.kakao_login:hover,
+.logout:hover {
     color: #ffebc8;
 }
 

@@ -34,7 +34,7 @@
                     <p>짐 걱정 없이 떠나는 완벽한 하루, 지금 예약하세요!</p>
                 </div>
                 <div class="reservation_infor_contents_container">
-                    <div class="reservation_infor_contents" onclick="location.href='keep_reservation.html'">
+                    <div class="reservation_infor_contents" id="storReserve">
                         <!--                        <div class="reservation_infor_contents_title">-->
                         <!--                            <h2>보관예약</h2>-->
                         <!--                        </div>-->
@@ -77,7 +77,7 @@
                             보관 예약
                         </div>
                     </div>
-                    <div class="reservation_infor_contents" onclick="location.href='delivery_reservation.html'">
+                    <div class="reservation_infor_contents" id="deliverReserve">
                         <div class="reservation_infor_contents_main">
                             <div class="reservation_infor_contents_main_section">
                                 <div class="reservation_infor_contents_main_section_img">
@@ -282,6 +282,23 @@
 <script src="dropdown.js"></script>
 <script src="change_btn.js"></script>
 <script src="check.js"></script>
+<script>
+    document.querySelector('#storReserve').addEventListener('click', function() {
+        if (localStorage.length === 0) {
+            alert('로그인 후 이용해 주세요.');
+        } else {
+            location.href = 'keep_reservation.html';
+        }
+    });
+
+    document.querySelector('#deliverReserve').addEventListener('click', function() {
+        if (localStorage.length === 0) {
+            alert('로그인 후 이용해 주세요.');
+        } else {
+            location.href = 'delivery_reservation.html';
+        }
+    });
+</script>
 </body>
 
 </html>
