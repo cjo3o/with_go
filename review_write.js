@@ -8,13 +8,13 @@ document.addEventListener("DOMContentLoaded", function () {
     // 파일 선택 시 파일명 표시
     const fileInput = document.getElementById("upload_file");
     const fileNameSpan = document.getElementById("file_name");
-  
+
     fileInput.addEventListener("change", function () {
       fileNameSpan.textContent = this.files.length > 0
         ? this.files[0].name
         : "선택된 파일 없음";
     });
-  
+
     // 확인 버튼 클릭 이벤트
     document.getElementById("submit-btn").addEventListener("click", async function () {
       const name = document.getElementById("name").value.trim();
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function () {
       const title = document.getElementById("title").value.trim();
       const review_txt = document.getElementById("review_text").value.trim();
       const user_id = crypto.randomUUID(); // UUID 생성
-  
+
       // 유효성 검사
       if (!name || !password || !title || !review_txt) {
         await Swal.fire({
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         return;
       }
-  
+
       // Supabase에 후기 삽입
       const { error } = await supabase
         .from("review")
@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", function () {
             created_at: new Date()
           }
         ]);
-  
+
       if (error) {
         console.error("Supabase 오류:", error.message);
         await Swal.fire({
@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", function () {
         });
         return;
       }
-  
+
       // 성공 팝업 후 페이지 이동
       await Swal.fire({
         icon: "success",
@@ -64,7 +64,7 @@ document.addEventListener("DOMContentLoaded", function () {
         text: "후기가 성공적으로 등록되었습니다.",
         confirmButtonText: "확인"
       });
-  
+
       window.location.href = "review.html";
     });
   });
