@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="src/css/reset.css">
     <link rel="stylesheet" href="src/css/inquiry.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        const supabaseUrl = "https://xjunxpksphlpqslrouky.supabase.co";
-        const supabasePassword = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhqdW54cGtzcGhscHFzbHJvdWt5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDE3NDM5MzAsImV4cCI6MjA1NzMxOTkzMH0.rLWo4vdh5c4WUV4Cn2f2JHdVJdSnNwQoyLzE4IZryvk";
+        const supabaseUrl = "https://zgrjjnifqoactpuqolao.supabase.co";
+        const supabasePassword = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpncmpqbmlmcW9hY3RwdXFvbGFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNDc0NTgsImV4cCI6MjA1NjgyMzQ1OH0._Vl-6CRKdMjeDRyNoxlfect7sgusZ7L0N5OYu0a5hT0";
 
         const supabase = window.supabase.createClient(supabaseUrl, supabasePassword);
     </script>
@@ -55,6 +55,20 @@
 
                         </tbody>
                     </table>
+                    <div class="pagination">
+                        <!-- 이전 페이지 화살표 -->
+                        <button id="prevBtn" class="arrow-btn" onclick="loadPage(currentPage - 1)">
+                            <i class="fa-solid fa-chevron-left"></i> <!-- 왼쪽 화살표 아이콘 -->
+                        </button>
+                    
+                        <!-- 페이지 번호 버튼들이 표시될 영역 -->
+                        <div id="pageBtns" class="page-btns"></div>
+                    
+                        <!-- 다음 페이지 화살표 -->
+                        <button id="nextBtn" class="arrow-btn" onclick="loadPage(currentPage + 1)">
+                            <i class="fa-solid fa-chevron-right"></i> <!-- 오른쪽 화살표 아이콘 -->
+                        </button>
+                    </div>
                 </div>
                 <div class="cen_down con2">
                     <div class="down_right">

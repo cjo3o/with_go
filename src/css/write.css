@@ -1,31 +1,28 @@
 .wrap {
-    background-color: #ccc;
+    /* background-color: #ccc; */
     min-height: 100vh;
     flex-direction: column;
 }
 
-
-.content {
-    min-width: 1250px;
-    margin-top: 87px;
-    height: 250px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    background-image: url(/src/images/review_bg.png);
-    background-repeat: no-repeat;
-    background-size: cover;
-    background-position: center;
-    flex: 1;
+.con {
+    min-width: 1200px;
+    text-align: center;
 }
 
-.content h1 {
+
+.con_header {
+    margin-top: 87px;
+    height: 250px;
+    background-image: url(/src/images/review_bg.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.con_header h1 {
     color: white;
-    text-align: center;
     font-size: 30px;
     line-height: 250px;
-    opacity: 0;
     animation: slideUp 1.2s forwards;
 }
 
@@ -41,13 +38,30 @@
     }
 }
 
+
+.con_title {
+    margin: 60px auto;
+}
+
+.con_title h3 {
+    margin-bottom: 10px;
+    font-size: 24px;
+    color: rgb(0, 102, 204);
+}
+
+
+.con_title p {
+    font-size: 15px;
+}
+
+
 .section {
     min-width: 1250px;
     display: flex;
     justify-content: center;
     align-items: center;
     width: 100vw;
-    min-height: 100vh;
+    /* min-height: 100vh; */
     background-color: white;
 }
 
@@ -71,11 +85,9 @@
 .write {
     background-color: #f4f5f6;
     font-size: 12px;
-    margin-bottom: 15px;
     border-radius: 6px;
     overflow: hidden;
     padding-top: 10px;
-    padding-bottom: 15px;
 }
 
 .write .group {
