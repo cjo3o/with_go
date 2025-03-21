@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="ko">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>공지사항</title>
+    <title>공지사항 관리</title>
     <link rel="stylesheet" href="src/css/reset.css">
     <link rel="stylesheet" href="src/css/notification.css">
+    <link rel="stylesheet" href="src/css/admin.css">
 </head>
 
 <body>
@@ -23,7 +23,6 @@
         <p>안내 사항을 숙지하시고 원활한 이용 바랍니다</p>
     </div>
 </div>
-
 
 <div class="notice">
     <div class="notice-item">
@@ -45,37 +44,36 @@
     </div>
 </div>
 
-
 <div class="notice-container">
-    <div class="search-box">
-        <input type="text" placeholder="검색어를 입력해주세요.">
-        <img src="src/icon/searche.png">
-    </div>
+    <h2>공지사항 관리</h2>
 
-    <div class="event-list"></div>
+
+    <form id="notice-form">
+        <input type="hidden" id="notice-id">  <!-- 수정 시 ID 저장 -->
+        <label>제목: <input type="text" id="notice-title" required></label>
+        <label>내용: <textarea id="notice-content" required></textarea></label>
+        <label>날짜: <input type="date" id="notice-date" required></label>
+        <button type="submit">저장</button>
+    </form>
+
 
     <table class="notice-table">
         <thead>
         <tr>
-            <th>번호</th>
+            <th>ID</th>
             <th>제목</th>
             <th>날짜</th>
+            <th>관리</th>
         </tr>
         </thead>
-        <tbody></tbody>
+        <tbody id="notice-list"></tbody>
     </table>
-
-    <ul id="notice-list"></ul>
 </div>
 
 <div class="footer"></div>
 
-<!-- ✅ Supabase 라이브러리 로드 -->
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<!-- ✅ JS 파일 로드 -->
-<script src="dropdown.js"></script>
-<script src="notification.js"></script>
+<script src="admin_notification.js"></script>
 </body>
-
 </html>

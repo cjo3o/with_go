@@ -19,6 +19,8 @@ body {
     justify-content: center;
     align-items: center;
     background-color: #5e5e5e;
+    background-image: url(/src/images/review_bg.png);
+    background-size: cover;
 }
 .content h1 {
     color: white;
