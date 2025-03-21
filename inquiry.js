@@ -76,10 +76,10 @@ class getdate{
             fullmonth = '0'+fullmonth;
         }
         if(fulldate<10){
-            
+            fulldate = '0'+fulldate;
         }
         
-        return this.date.getFullYear()+"-"+month;
+        return this.date.getFullYear()+"-"+fullmonth+"-"+fulldate;
     }
 }
 async function loadPage(page) {
@@ -99,10 +99,10 @@ async function loadPage(page) {
         boardList.innerHTML = `<tr><td colspan="6">등록된 게시글이 없습니다.</td></tr>`;
         return;
     }
-
+    let today = new getdate();
     data.forEach((item) => {
         const row = document.createElement('tr');
-        
+        if(item.created_at!=null && today.fullDate==item.created_at.slice(0,10)){
         row.innerHTML = `
             <td>${item.text_num}</td>
             <td>${item.type}</td>
@@ -111,6 +111,7 @@ async function loadPage(page) {
             <td>${item.created_at.slice(11,19)}</td>
             <td>${item.status}</td>
         `;
+        }else if(item.created_at!=null){
         row.innerHTML = `
             <td>${item.text_num}</td>
             <td>${item.type}</td>
@@ -119,7 +120,16 @@ async function loadPage(page) {
             <td>${item.created_at.slice(0,10)}</td>
             <td>${item.status}</td>
         `;
-
+        }else{
+            row.innerHTML = `
+            <td>${item.text_num}</td>
+            <td>${item.type}</td>
+            <td class="title"><a href="view.html?id=${item.id}">${item.title}</a></td>
+            <td>${item.name}</td>
+            <td>저장오류</td>
+            <td>${item.status}</td>
+        `;  
+        }
         row.onclick = () => {
             window.location.href = `view.html?id=${item.id}`;
         };
