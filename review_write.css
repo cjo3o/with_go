@@ -75,7 +75,7 @@
   border-radius: 6px;
   overflow: hidden;
   padding-top: 10px;
-  padding-bottom: 15px;
+  padding-bottom: 5px;
 }
 
 .write .group {
@@ -93,7 +93,7 @@
   padding-left: 7px;
   width: 100px;
   font-weight: bold;
-  margin-top: 8px;
+  /* margin-top: 8px; */
   text-align: left;
   color: #525f7f;
 }
@@ -133,6 +133,51 @@
   outline-color: #0066cc;
 }
 
+/* ------------------------------ */
+.group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  font-family: sans-serif;
+}
+
+.column {
+  width: 100px;
+  font-weight: bold;
+  color: #333;
+}
+
+.upload_file {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: background-color 0.3s, color 0.3s;
+  color: #333;
+}
+
+.custom-file-upload:hover {
+  background-color: #f0f0f0;
+}
+
+#upload_file {
+  display: none;
+}
+
+#file_name {
+  font-size: 14px;
+  color: #666;
+}
+
+/* ------------------------------ */
 .button {
   display: flex;
   justify-content: center;
@@ -176,7 +221,11 @@
   border-color: #3e454f;
 }
 
-
+em {
+  color: red;
+  font-style: normal;
+  vertical-align: -3px;
+}
 
 
 
