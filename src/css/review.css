@@ -46,8 +46,8 @@
     width: 100vw;
     min-height: 100vh;
     background-color: white;
+    position: relative;
 }
-
 .section-text {
     width: 90%;
     max-width: 800px;
@@ -155,7 +155,7 @@
     gap: 5px;
     margin: 30px 0;
   }
-  
+
   .pagination a {
     display: inline-block;
     width: 32px;
@@ -167,7 +167,7 @@
     text-decoration: none;
     color: #333;
   }
-  
+
   .pagination a.active {
     border: 1px solid #0066cc;
     color: #0066cc;
@@ -181,7 +181,7 @@
     gap: 10px;
     margin-top: 20px;
   }
-  
+
   .button > button {
     padding: 0 30px;
     font-size: 1rem;
@@ -195,8 +195,8 @@
     background-color: #0066cc;
     border-color: #0066cc;
   }
-  
+
   .button > button:hover {
     background-color: #3e454f;
     border-color: #3e454f;
-  } 
+  }

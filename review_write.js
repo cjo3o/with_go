@@ -76,7 +76,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         file_url = publicUrl.publicUrl;
       }
-  
+
       // Supabase에 후기 데이터 저장
       const { error } = await supabase
         .from("review")
