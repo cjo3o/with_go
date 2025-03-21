@@ -71,8 +71,10 @@ async function post() {
 }
 
 async function savePost(name, pw, title, question_txt, type, fileUrl = '') {
-    const res = await supabase.from('question').insert([{ name, pw, title, question_txt, type:type.value, image_url: fileUrl }]).select();
+    const res = await supabase.from('question').insert([{ name, pw, title, question_txt, type: type.value, image_url: fileUrl }]).select();
 
+    console.log(res);
+    
     if (res.error) {
         return { success: false, errorMessage: '게시글 등록 중 오류가 발생했습니다.' };
     }
