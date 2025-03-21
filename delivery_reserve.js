@@ -112,8 +112,10 @@ function deliverySubmit() {
 }
 
 async function paymentSubmit() {
-    const res = await supabase.from('delivery').insert([
+    const res = await supabase.auth.getUser();
+    await supabase.from('delivery').insert([
         {
+            user_id: res.data.user.id,
             name: $name.value,
             phone: $phone.value,
             delivery_date: $date.value,
@@ -130,17 +132,9 @@ async function paymentSubmit() {
 
     await Swal.fire({
         title: "예약이 완료되었습니다!",
-        text: `예약취소시 예약번호가 필요합니다!`,
         icon: "success",
         draggable: true
     })
-
-    await Swal.fire({
-        text: `예약번호 : ${res.data[0].re_num}`,
-        icon: "success",
-        draggable: true
-    })
-
     location.href = 'index.html';
 }
 
@@ -153,3 +147,8 @@ $select_location.addEventListener('click', function () {
         alert("장소를 선택해주세요.")
     }
 });
+
+document.addEventListener('DOMContentLoaded', async function () {
+    const loginData = await supabase.auth.getUser();
+    $name.value = loginData.data.user.user_metadata.name;
+})
