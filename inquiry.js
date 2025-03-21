@@ -32,7 +32,7 @@ async function loadPostsAndPagination() {
 
     const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-    renderPagination(totalPages); 
+    renderPagination(totalPages);
     loadPage(currentPage);
 }
 
@@ -50,7 +50,7 @@ function renderPagination(totalPages) {
             pageBtn.classList.add('active');
         }
 
-       
+
         pageBtn.addEventListener('click', () => {
             currentPage = i;
 
@@ -65,21 +65,21 @@ function renderPagination(totalPages) {
         pageBtnsContainer.appendChild(pageBtn);
     }
 }
-class getdate{
-    constructor(){
-        this.date=new Date();
+class getdate {
+    constructor() {
+        this.date = new Date();
     }
-    get fullDate(){
-        let fullmonth = this.date.getMonth()+1;
+    get fullDate() {
+        let fullmonth = this.date.getMonth() + 1;
         let fulldate = this.date.getDate();
-        if(fullmonth<10){
-            fullmonth = '0'+fullmonth;
+        if (fullmonth < 10) {
+            fullmonth = '0' + fullmonth;
         }
-        if(fulldate<10){
-            fulldate = '0'+fulldate;
+        if (fulldate < 10) {
+            fulldate = '0' + fulldate;
         }
-        
-        return this.date.getFullYear()+"-"+fullmonth+"-"+fulldate;
+
+        return this.date.getFullYear() + "-" + fullmonth + "-" + fulldate;
     }
 }
 async function loadPage(page) {
@@ -88,7 +88,7 @@ async function loadPage(page) {
 
     const { data } = await supabase
         .from('question')
-        .select('text_num, type, title, name, created_at')
+        .select('text_num, type, title, name, created_at, stat')
         .order('created_at', { ascending: sortDirection === 'asc' })
         .range(offset, to);
 
@@ -101,34 +101,38 @@ async function loadPage(page) {
     }
     let today = new getdate();
     data.forEach((item) => {
+
         const row = document.createElement('tr');
-        if(item.created_at!=null && today.fullDate==item.created_at.slice(0,10)){
-        row.innerHTML = `
+        if (item.created_at != null && today.fullDate == item.created_at.slice(0, 10)) {
+
+            let localTime = new Date(item.created_at);
+
+            row.innerHTML = `
             <td>${item.text_num}</td>
             <td>${item.type}</td>
             <td class="title"><a href="view.html?id=${item.id}">${item.title}</a></td>
             <td>${item.name}</td>
-            <td>${item.created_at.slice(11,19)}</td>
-            <td>${item.status}</td>
+            <td>${localTime.getHours() + ":" + localTime.getMinutes()}</td>
+            <td>${item.stat}</td>
         `;
-        }else if(item.created_at!=null){
-        row.innerHTML = `
+        } else if (item.created_at != null) {
+            row.innerHTML = `
             <td>${item.text_num}</td>
             <td>${item.type}</td>
             <td class="title"><a href="view.html?id=${item.id}">${item.title}</a></td>
             <td>${item.name}</td>
-            <td>${item.created_at.slice(0,10)}</td>
-            <td>${item.status}</td>
+            <td>${item.created_at.slice(0, 10)}</td>
+            <td>${item.stat}</td>
         `;
-        }else{
+        } else {
             row.innerHTML = `
             <td>${item.text_num}</td>
             <td>${item.type}</td>
             <td class="title"><a href="view.html?id=${item.id}">${item.title}</a></td>
             <td>${item.name}</td>
             <td>저장오류</td>
-            <td>${item.status}</td>
-        `;  
+            <td>${item.stat}</td>
+        `;
         }
         row.onclick = () => {
             window.location.href = `view.html?id=${item.id}`;
