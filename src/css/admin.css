@@ -1,0 +1,89 @@
+
+.notice-container {
+    margin: 40px auto;
+    text-align: center;
+    padding: 20px;
+}
+
+#notice-form {
+    width: 100%;
+    height: 350px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    border-radius: 8px;
+    background-color: rgba(228, 228, 228, 0.51);
+}
+
+#notice-form label {
+    font-size: 15px;
+    font-weight: bold;
+    text-align: left;
+    width: 100%;
+    max-width: 80%;
+}
+#notice-form input,
+#notice-form textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+#notice-form textarea {
+    min-height: 100px;
+    resize: vertical;
+    margin-left: 10px;
+}
+textarea#notice-content {
+    vertical-align: top;
+    padding-top: 10px;
+    resize: none;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    width: 100%;
+    max-width: 89%;
+}
+
+.bt1, .bt2 {
+    padding: 8px 16px;
+    border: none;
+    background-color: rgb(0,102,204);
+    color: white;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.bt1:hover, .bt2:hover {
+    background-color: rgb(158, 158, 158);
+}
+
+.notice-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    margin-top: 20px;
+}
+
+.notice-table th, .notice-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: center;
+}
+
+.notice-table th {
+    background-color: rgb(0,102,204);
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+
