@@ -67,6 +67,12 @@ function renderPagination(total, page) {
     });
     pagination.appendChild(prev);
   }
+  if (page === 1) {
+    const prev = createPaginationButton("&lsaquo;", () => {
+      fetchReviews(currentPage);
+    });
+    pagination.appendChild(prev);
+  }
 
     // 페이지 번호
   for (let i = 1; i <= totalPages; i++) {
@@ -85,6 +91,12 @@ function renderPagination(total, page) {
     });
     pagination.appendChild(next);
   }
+  if (page === totalPages) {
+    const next = createPaginationButton("&rsaquo;", () => {
+      fetchReviews(currentPage);
+    });
+    pagination.appendChild(next);
+  }
 }
 
 // 페이지네이션 버튼 생성 함수
@@ -100,47 +112,24 @@ function createPaginationButton(text, onClick) {
 }
 
 // 글쓰기 버튼
+// 글쓰기 버튼 이벤트
 document.getElementById("write-btn").addEventListener("click", async function (e) {
   e.preventDefault();
 
-  const { value: uuidInput } = await Swal.fire({
-    title: "UUID 인증",
-    input: "text",
-    inputLabel: "당신의 UUID를 입력하세요",
-    inputPlaceholder: "예: a3f0f2b6-... 등",
-    showCancelButton: true,
-    confirmButtonText: "확인",
-    cancelButtonText: "취소"
-  });
+  const { data, error } = await supabase.auth.getUser();
 
-  if (!uuidInput) return;
-
-  // 사용자 인증
-  const { data, error } = await supabase
-      .from("users")
-      .select("*") // 전체 정보 가져오기
-      .eq("id", uuidInput)
-      .single();
-
-  if (error || !data) {
+  if (error || !data?.user.id) {
+    // 로그인 안 된 상태
     await Swal.fire({
-      icon: "error",
-      title: "인증 실패",
-      text: "인증되지 않았습니다.",
+      icon: "warning",
+      title: "로그인이 필요합니다",
+      text: "로그인을 하고 다시 시도해주세요.",
+      confirmButtonText: "확인"
     });
     return;
   }
 
-  // 인증 성공: 사용자 정보 localStorage 저장
-  localStorage.setItem("user_id", data.id);
-
-  await Swal.fire({
-    icon: "success",
-    title: "인증되었습니다!",
-    confirmButtonText: "확인"
-  });
-
-  // 작성 페이지로 이동
+  // 로그인된 상태 → 글쓰기 페이지로 이동
   window.location.href = "review_write.html";
 });
 
@@ -148,3 +137,31 @@ document.getElementById("write-btn").addEventListener("click", async function (e
 document.addEventListener("DOMContentLoaded", function () {
   fetchReviews(currentPage);
 });
+
+// 상세 리뷰 ------------------------------------------------------------------------------
+function renderReviews(reviews) {
+  const list = document.getElementById('review-list');
+  list.innerHTML = '';
+
+  reviews.forEach((item) => {
+    const div = document.createElement('div');
+    div.className = 'review-item';
+    div.innerHTML = `
+      <div class="user">
+        <img src="images/person.png" class="user-icon" alt="icon" />
+        ${item.name}
+      </div>
+      <div class="title">${item.title}</div>
+      <div class="content">${item.review_txt}</div>
+      ${item.file_url ? `<img src="${item.file_url}" class="review-image" alt="첨부이미지">` : ""}
+    `;
+
+    // 후기 카드 클릭 시 상세 페이지로 이동
+    div.addEventListener('click', () => {
+      window.location.href = `review_detail.html?review_num=${item.review_num}`;
+    });
+
+    list.appendChild(div);
+  });
+}
+

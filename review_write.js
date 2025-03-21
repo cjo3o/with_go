@@ -21,20 +21,9 @@ document.addEventListener("DOMContentLoaded", function () {
       const password = document.getElementById("password").value.trim();
       const title = document.getElementById("title").value.trim();
       const review_txt = document.getElementById("review_text").value.trim();
-      const user_id = crypto.randomUUID(); // UUID 생성
+      // const user_id = localStorage.getItem("user_id"); // UUID 생성
       const file = fileInput.files[0];
-
-      // uuid 검사
-      const res = supabase.auth.getUser();
-      if(!res.data.user.id) {
-        Swal.fire({
-          icon: "error",
-          title: "입력 실패",
-          text: "로그인해야 리뷰남기실 수 있습니다.",
-        });
-        return;
-      }
-
+      const res = await supabase.auth.getUser();
       // 유효성 검사
       if (!name || !password || !title || !review_txt) {
         await Swal.fire({
@@ -49,8 +38,8 @@ document.addEventListener("DOMContentLoaded", function () {
       let file_url = null;
 
       if (file) {
-        const fileExt = file.name.split(".").pop();
-        const fileName = crypto.randomUUID() + "." + file.name.split(".")[1];   // 한글파일도 저장 가능
+        const fileExt = file.name.split(".")[1];      // 한글파일도 저장 가능
+        const fileName = crypto.randomUUID() + "." + fileExt;
         const filePath = `review_uploads/${fileName}`;
 
         const { error: uploadError } = await supabase
@@ -86,7 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
             password,
             title,
             review_txt,
-            // user_id,
+            user_id: res.data.user.id,
             created_at: new Date(),
             file_url: file_url // 있으면 URL, 없으면 null
           }
