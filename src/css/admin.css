@@ -85,15 +85,5 @@ textarea#notice-content {
     font-size: 14px;
     font-weight: bold;
 }
-.edit-btn, .delete-btn{
-    padding: 8px 16px;
-    border: none;
-    background-color: rgb(0,102,204);
-    color: white;
-    border-radius: 4px;
-    cursor: pointer;
-}
-.edit-btn:hover, .delete-btn:hover{
-    background-color: rgb(158, 158, 158);
-}
+
 
