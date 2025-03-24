@@ -101,6 +101,7 @@ ul, li {
     justify-content: center;
     flex-direction: column;
     cursor: pointer;
+    position: relative;
 }
 
 .select_login {
@@ -119,31 +120,35 @@ ul, li {
 .login_container {
     opacity: 0;
     overflow: hidden;
-    background-color: #0066CC;
+    background-color: #f2f2f2;
     color: #ffb74c;
     position: absolute;
     top: 87px;
-    padding: 0.5rem;
+    left: 50%;
     font-size: 18px;
-    border-radius: 5px;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: all 0.3s;
+    transform: translate(-50%);
 }
 
-.kakao_login,
-.logout {
-    color: #ffb74c;
-    transition: all 0.2s;
+.login_container > div {
+    border-bottom: 1px solid #e8e8e8;
+    padding: 0.7rem 1.8rem;
+    font-weight: bold;
+    text-align: center;
 }
 
+.login_container > div:last-child {
+    border-bottom: none;
+}
 
-.kakao_login:hover,
-.logout:hover {
-    color: #ffebc8;
+.login_container  > div:hover {
+    color: #0066CC;
 }
 
 .down {
     opacity: 1;
+    transition: all 0.3s;
 }
 
 .sub_menu_container {

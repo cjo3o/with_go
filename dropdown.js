@@ -56,7 +56,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 document.querySelector('.login_container').classList.remove('down');
             });
 
-            document.querySelector('.kakao_login').addEventListener('click', async function () {
+            document.querySelector('#kakao_login').addEventListener('click', async function () {
                 await supabase.auth.signInWithOAuth({
                     provider: 'kakao'
                 })
@@ -71,14 +71,20 @@ document.addEventListener("DOMContentLoaded", async function () {
                 const $select_login = document.querySelector('.select_login');
                 const nick = res.data.user.email.split('@').slice(0, 1);
                 const $logout = document.querySelector('.logout');
-                const $kakao_login = document.querySelector('.kakao_login');
+                const $login_content = document.querySelectorAll('.login_content');
                 $select_login.innerHTML = `${nick} 님`;
+                $login_content.forEach(content => {
+                    content.style.display = 'none'; // 각 요소의 display 속성을 'none'으로 설정
+                });
                 $logout.style.display = 'block';
-                $kakao_login.style.display = 'none';
+                console.log($login_content);
+
             } else {
-                const $kakao_login = document.querySelector('.kakao_login');
+                const $login_content = document.querySelectorAll('.login_content');
                 const $logout = document.querySelector('.logout');
-                $kakao_login.style.display = 'block';
+                $login_content.forEach(content => {
+                    content.style.display = 'block'; // 각 요소의 display 속성을 'none'으로 설정
+                });
                 $logout.style.display = 'none';
             }
 
