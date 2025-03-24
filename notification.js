@@ -6,21 +6,36 @@ console.log('Supabase 객체:', supabase);
 
 
 // ✅ Supabase에서 공지사항 가져오기
-async function getNotifications() {
-    let { data, error } = await supabase
+async function getLatestNotices(limit = 2) {
+    const { data, error } = await supabase
+        .from("withgo_notifications")
+        .select("id, title, content, created_at")  // ✅ content 포함시켜야 해요!
+        .order("created_at", { ascending: false })
+        .limit(limit);
+
+    if (error) {
+        console.error("📌 최신 공지사항 불러오기 실패:", error);
+        return [];
+    }
+    return data;
+}
+
+// ✅ 공지사항 전체 불러오기 함수 (예시로 10개까지 가져옴)
+async function getNotifications(limit = 10) {
+    const { data, error } = await supabase
         .from("withgo_notifications")
         .select("*")
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .limit(limit);
 
     if (error) {
         console.error("📌 공지사항 불러오기 실패:", error);
         return [];
     }
 
-    console.log("📌 Supabase에서 가져온 공지사항 데이터:", data);
-
     return data;
 }
+
 
 // ✅ 페이지 로드 후 실행 (중복 방지!)
 document.addEventListener("DOMContentLoaded", async function () {

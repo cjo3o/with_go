@@ -8,6 +8,7 @@ body {
 .wrap {
     width: 100%;
 }
+
 .content {
     margin-top: 87px;
     height: 250px;
@@ -19,6 +20,7 @@ body {
     background-image: url(/src/images/review_bg.png);
     background-size: cover;
 }
+
 .content h1 {
     color: white;
     text-align: center;
@@ -27,6 +29,7 @@ body {
     opacity: 0;
     animation: slideUp 1.2s forwards;
 }
+
 .section {
     display: flex;
     justify-content: center;
@@ -35,14 +38,17 @@ body {
     /*position: relative;*/
     margin-top: 100px;
 }
+
 .section-text {
     text-align: center;
     font-size: 24px;
 }
-.section-text  > h3 {
+
+.section-text > h3 {
     margin-bottom: 15px;
-    color: rgb(0,102,204);
+    color: rgb(0, 102, 204);
 }
+
 .section-text > p {
     font-size: 15px;
 }
@@ -58,6 +64,7 @@ body {
         opacity: 1;
     }
 }
+
 .section {
     display: flex;
     justify-content: center;
@@ -66,17 +73,21 @@ body {
     position: relative;
     margin-top: 100px;
 }
+
 .section-text {
     text-align: center;
     font-size: 24px;
 }
-.section-text  > h3 {
+
+.section-text > h3 {
     margin-bottom: 15px;
-    color: rgb(0,102,204);
+    color: rgb(0, 102, 204);
 }
+
 .section-text > p {
     font-size: 15px;
 }
+
 .notice {
     display: flex;
     flex-wrap: wrap;
@@ -104,12 +115,14 @@ body {
     height: 40px;
     margin-bottom: 15px;
 }
+
 .notice-item h3 {
     font-size: 18px;
     font-weight: bold;
     margin-bottom: 10px;
     color: #373737;
 }
+
 .notice-item p {
     font-size: 14px;
     color: #373737;
@@ -117,14 +130,22 @@ body {
 
 .notice-detail {
     max-width: 1000px;
-    margin: 60px auto 0 ;
-    padding: 50px 50px 0 ;
+    margin: 60px auto 0;
+    padding: 50px 50px 0;
     line-height: 1.3;
 }
+
 .notice-detail button {
-    padding: 3px 5px;
+    padding: 8px 16px;
+    border: none;
+    background-color: rgb(0,102,204);
+    color: white;
+    border-radius: 4px;
     cursor: pointer;
     margin-top: 20px;
+}
+.notice-detail button:hover {
+    background-color: rgb(158, 158, 158);
 }
 
 .notice-header {
@@ -150,13 +171,24 @@ body {
     margin: 0;
 }
 
+.related-notice {
+    margin-top: 40px;
+}
+
+.related-notice ul li {
+    margin-bottom: 6px;
+    list-style: none;
+}
+
 .ktx-notice1 {
     font-weight: bold;
 }
+
 .ktx-notice2 {
     font-weight: bold;
-    color: rgb(0,102,204);
+    color: rgb(0, 102, 204);
 }
+
 .ktx-notice {
     line-height: 1.5;
 }
@@ -166,39 +198,70 @@ body {
     padding-bottom: 40px;
     border-bottom: solid 0.5px rgb(30, 30, 30);
 }
-.storage-notice-weight{
-    font-size: 20px ;
+
+.storage-notice-weight {
+    font-size: 20px;
     font-weight: bold;
-    color: rgb(0,102,204);
+    color: rgb(0, 102, 204);
 }
+
 .highlight-text {
     font-size: 20px;
     font-weight: bold;
     color: rgb(0, 102, 204);
 }
-    .notice-list {
-        max-width: 1000px;
-        line-height: 1.5;
-        margin: 20px auto 100px;
-        padding: 50px 50px 0;
-        font-size: 12px;
-    }
 
-    .notice-list ul {
-        list-style-type: none;
-        padding: 0;
-        margin: 0;
-    }
+.notice-list {
+    max-width: 1000px;
+    line-height: 1.5;
+    margin: 20px auto 100px;
+    padding: 50px 50px 0;
+    font-size: 12px;
+}
 
-    .notice-list li {
-        padding: 10px 0;
-        border-bottom: 1px solid #eee;
-    }
+.notice-list ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
 
-    .notice-list a {
-        text-decoration: none;
-        color: #363636;
-        font-size: 16px;
-    }
+.notice-list li {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.notice-list a {
+    text-decoration: none;
+    color: #363636;
+    font-size: 16px;
+}
+
+#other-notice-list {
+    margin-top: 20px;
+    padding: 0;
+    list-style: none;
+}
+
+#other-notice-list li {
+    padding: 8px 0;
+    font-size: 15px;
+}
+
+#other-notice-list li:not(:last-child) {
+    border-bottom: 1px solid #cfcfcf;
+}
+
+#other-notice-list li a {
+    text-decoration: none;
+    color: #333;
+    display: inline-block;
+    width: 100%;
+}
+
+#other-notice-list li span {
+    color: #888;
+    font-size: 13px;
+    margin-left: 8px;
+}
 
 
