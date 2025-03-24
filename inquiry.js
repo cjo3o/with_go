@@ -41,6 +41,18 @@ function renderPagination(totalPages) {
     const pageBtnsContainer = document.getElementById('pageBtns');
     pageBtnsContainer.innerHTML = '';
 
+    // 이전 버튼 활성화/비활성화
+    const prevBtn = document.getElementById('prevBtn');
+    prevBtn.hidden = currentPage === 1;  // currentPage가 1이면 비활성화
+
+    prevBtn.addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            updatePage(totalPages);
+        }
+    });
+
+    // 페이지 번호 버튼 생성
     for (let i = 1; i <= totalPages; i++) {
         const pageBtn = document.createElement('button');
         pageBtn.textContent = i;
@@ -50,21 +62,36 @@ function renderPagination(totalPages) {
             pageBtn.classList.add('active');
         }
 
-
         pageBtn.addEventListener('click', () => {
             currentPage = i;
-
-            const url = new URL(window.location);
-            url.searchParams.set('pageNum', currentPage);
-            window.history.pushState({}, '', url);
-
-            renderPagination(totalPages);
-            loadPage(currentPage);
+            updatePage(totalPages);
         });
 
         pageBtnsContainer.appendChild(pageBtn);
     }
+
+    // 다음 버튼 활성화/비활성화
+    const nextBtn = document.getElementById('nextBtn');
+    nextBtn.disabled = currentPage === totalPages;  // currentPage가 마지막 페이지면 비활성화
+
+    nextBtn.addEventListener('click', () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            updatePage(totalPages);
+        }
+    });
 }
+
+function updatePage(totalPages) {
+    // URL에 페이지 번호를 업데이트
+    const url = new URL(window.location);
+    url.searchParams.set('pageNum', currentPage);
+    window.history.pushState({}, '', url);
+
+    renderPagination(totalPages);  // 페이지 버튼을 재렌더링
+    loadPage(currentPage);         // 해당 페이지 데이터 로드
+}
+
 class getdate {
     constructor() {
         this.date = new Date();
