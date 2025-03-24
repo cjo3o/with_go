@@ -18,10 +18,8 @@ body {
     justify-content: center;
     align-items: center;
     background-color: #5e5e5e;
-    /*background-image: url(/with_go/src/images/review_bg.png);*/
-    /*background-repeat: no-repeat;*/
-    /*background-size: cover;*/
-    /*background-position: center;*/
+    background-image: url(/src/images/review_bg.png);
+    background-size: cover;
 }
 
 .content h1 {
