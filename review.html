@@ -25,14 +25,27 @@
             <div class="section-text">
             <div class="section-title">
                 <h3>이용자들의 솔직한 후기</h3>
-                <p>여러분의 소중한 경험도 함께 공유해주세요! 최고의 서비스는 함께 만들어갑니다.</p>
+                <p>여러분의 소중한 경험도 함께 공유해 주세요! 최고의 서비스는 함께 만들어갑니다.</p>
             </div>
             <div class="write">
                 <!------------------------------------------------------------------>
                 <!-- 후기 카드 목록 -->
                 <div class="review-list" id="review-list"></div>
                 <!-- 페이지네이션 -->
-                <div class="pagination" id="pagination"></div>
+                <div class="pagination">
+                    <!-- 이전 페이지 화살표 -->
+                    <button id="prevBtn" class="arrow-btn">
+                        <i class="fa-solid fa-chevron-left"></i> <!-- 왼쪽 화살표 아이콘 -->
+                    </button>
+
+                    <!-- 페이지 번호 버튼들이 표시될 영역 -->
+                    <div id="pageBtns" class="page-btns"></div>
+
+                    <!-- 다음 페이지 화살표 -->
+                    <button id="nextBtn" class="arrow-btn">
+                        <i class="fa-solid fa-chevron-right"></i> <!-- 오른쪽 화살표 아이콘 -->
+                    </button>
+                </div>
                 <!-- 글쓰기 버튼 -->
                 <div class="button">
                     <button type="button" id="write-btn">글쓰기</button>
