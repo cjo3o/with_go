@@ -16,7 +16,7 @@ async function getNoticeDetail(id) {
         .single();  // ✅ 단일 결과만 가져오기
 
     if (error) {
-        console.error("📌 공지사항 불러오기 실패:", error);
+        console.error("공지사항 불러오기 실패:", error);
         return null;
     }
     return data;
@@ -35,9 +35,10 @@ document.addEventListener("DOMContentLoaded", async function () {
     if (notice) {
         document.getElementById("notice-title").textContent = notice.title;
         document.getElementById("notice-date").textContent = new Date(notice.created_at).toLocaleDateString();
-        document.getElementById("notice-text").innerHTML = notice.content || "내용 없음";
+
+        document.getElementById("notice-text").textContent = notice.content;
     } else {
         document.getElementById("notice-title").textContent = "공지사항을 찾을 수 없습니다!";
-        document.getElementById("notice-text").innerHTML = "<p>존재하지 않는 공지사항입니다.</p>";
+        document.getElementById("notice-text").textContent = "<p>존재하지 않는 공지사항입니다.</p>";
     }
 });

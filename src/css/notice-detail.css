@@ -164,6 +164,8 @@ body {
 .notice-content {
     height: auto;
     padding-bottom: 40px;
+    white-space: pre-line;
+    line-height: 1.6;
     border-bottom: solid 0.5px rgb(30, 30, 30);
 }
 .storage-notice-weight{

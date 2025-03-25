@@ -11,6 +11,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     const submitBtn = document.querySelector(".bt1");
     if (submitBtn) submitBtn.addEventListener("click", handleNoticeSubmit);
 
+    const textarea = document.getElementById("notice-content");
+    textarea.addEventListener("input", function () {
+        this.style.height = "auto";
+        this.style.height = this.scrollHeight + "px";
+    });
 
     await loadNotices();
 });
@@ -42,7 +47,6 @@ async function loadNotices() {
         console.error("공지사항 불러오기 실패:", error);
         return;
     }
-
     const noticeList = document.getElementById("notice-list");
     noticeList.innerHTML = "";
 
@@ -50,7 +54,7 @@ async function loadNotices() {
         const row = document.createElement("tr");
         row.innerHTML = `
       <td>${notice.id}</td>
-      <td>${notice.title}</td>
+      <td class="clickable-title" onclick="editNotice(${notice.id})">${notice.title}</td>
       <td>${new Date(notice.created_at).toLocaleDateString()}</td>
       <td>
         <button class="edit-btn" onclick="editNotice(${notice.id})">수정</button>
@@ -68,9 +72,8 @@ async function handleNoticeSubmit(event) {
     const id = document.getElementById("notice-id").value.trim();
     const title = document.getElementById("notice-title").value.trim();
     const content = document.getElementById("notice-content").value.trim();
-    const date = document.getElementById("notice-date").value;
 
-    if (!title || !content || !date) {
+    if (!title || !content) {
         alert("모든 필드를 입력해주세요!");
         return;
     }
@@ -79,8 +82,8 @@ async function handleNoticeSubmit(event) {
 
         const { error } = await supabase
             .from("withgo_notifications")
-            .update({ title, content, created_at: date })
-            .eq("id", id);
+            .update({ title, content })
+            .eq("id", id)
 
         if (error) {
             console.error("공지 수정 실패:", error);
@@ -93,7 +96,7 @@ async function handleNoticeSubmit(event) {
 
         const { error } = await supabase
             .from("withgo_notifications")
-            .insert([{ title, content, created_at: date }]);
+            .insert([{ title, content,}]);
 
         if (error) {
             console.error("공지 추가 실패:", error);
@@ -128,7 +131,6 @@ async function editNotice(id) {
     document.getElementById("notice-id").value = data.id;
     document.getElementById("notice-title").value = data.title;
     document.getElementById("notice-content").value = plainContent;
-    document.getElementById("notice-date").value = data.created_at.split("T")[0];
 }
 
 
@@ -155,5 +157,4 @@ function resetForm() {
     document.getElementById("notice-id").value = "";
     document.getElementById("notice-title").value = "";
     document.getElementById("notice-content").value = "";
-    document.getElementById("notice-date").value = "";
 }
