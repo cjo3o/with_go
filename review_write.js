@@ -20,12 +20,13 @@ document.addEventListener("DOMContentLoaded", function () {
       const name = document.getElementById("name").value.trim();
       const password = document.getElementById("password").value.trim();
       const title = document.getElementById("title").value.trim();
+      const type = document.querySelector('input[name="type"]:checked').value;
       const review_txt = document.getElementById("review_text").value.trim();
       // const user_id = localStorage.getItem("user_id"); // UUID 생성
       const file = fileInput.files[0];
       const res = await supabase.auth.getUser();
       // 유효성 검사
-      if (!name || !password || !title || !review_txt) {
+      if (!name || !password || !title || !type || !review_txt) {
         await Swal.fire({
           icon: "error",
           title: "입력 실패",
@@ -74,6 +75,7 @@ document.addEventListener("DOMContentLoaded", function () {
             name,
             password,
             title,
+            type,
             review_txt,
             user_id: res.data.user.id,
             created_at: new Date(),

@@ -8,7 +8,7 @@
 
     <link rel="stylesheet" href="src/css/reset.css">
     <link rel="stylesheet" href="src/css/review.css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -18,7 +18,7 @@
         <div class="header">
         </div>
 
-        <div class="content">
+        <div class="contents">
             <h1>TRAVEL STORIES WITH GO</h1>
         </div>
         <div class="section">
@@ -27,6 +27,12 @@
                 <h3>이용자들의 솔직한 후기</h3>
                 <p>여러분의 소중한 경험도 함께 공유해 주세요! 최고의 서비스는 함께 만들어갑니다.</p>
             </div>
+                <!-- 타입 필터 버튼 -->
+                <div class="filter-btns">
+                    <button class="filter-btn active" data-type="all">전체</button>
+                    <button class="filter-btn" data-type="보관">보관</button>
+                    <button class="filter-btn" data-type="배송">배송</button>
+                </div>
             <div class="write">
                 <!------------------------------------------------------------------>
                 <!-- 후기 카드 목록 -->
