@@ -41,9 +41,8 @@ function renderPagination(totalPages) {
     const pageBtnsContainer = document.getElementById('pageBtns');
     pageBtnsContainer.innerHTML = '';
 
-    // 이전 버튼 활성화/비활성화
     const prevBtn = document.getElementById('prevBtn');
-    prevBtn.hidden = currentPage === 1;  // currentPage가 1이면 비활성화
+    prevBtn.hidden = currentPage === 1;
 
     prevBtn.addEventListener('click', () => {
         if (currentPage > 1) {
@@ -52,7 +51,6 @@ function renderPagination(totalPages) {
         }
     });
 
-    // 페이지 번호 버튼 생성
     for (let i = 1; i <= totalPages; i++) {
         const pageBtn = document.createElement('button');
         pageBtn.textContent = i;
@@ -70,9 +68,8 @@ function renderPagination(totalPages) {
         pageBtnsContainer.appendChild(pageBtn);
     }
 
-    // 다음 버튼 활성화/비활성화
     const nextBtn = document.getElementById('nextBtn');
-    nextBtn.disabled = currentPage === totalPages;  // currentPage가 마지막 페이지면 비활성화
+    nextBtn.disabled = currentPage === totalPages;
 
     nextBtn.addEventListener('click', () => {
         if (currentPage < totalPages) {
@@ -83,18 +80,18 @@ function renderPagination(totalPages) {
 }
 
 function updatePage(totalPages) {
-    // URL에 페이지 번호를 업데이트
+
     const url = new URL(window.location);
     url.searchParams.set('pageNum', currentPage);
     window.history.pushState({}, '', url);
 
-    renderPagination(totalPages);  // 페이지 버튼을 재렌더링
-    loadPage(currentPage);         // 해당 페이지 데이터 로드
+    renderPagination(totalPages);
+    loadPage(currentPage);
 }
 
 class getdate {
-    constructor() {
-        this.date = new Date();
+    constructor(a) {
+        a ? this.date = new Date(a) : this.date = new Date();
     }
     get fullDate() {
         let fullmonth = this.date.getMonth() + 1;
@@ -108,6 +105,13 @@ class getdate {
 
         return this.date.getFullYear() + "-" + fullmonth + "-" + fulldate;
     }
+    get getTime() {
+        let hours = this.date.getHours();
+        let minutes = this.date.getMinutes();
+        if (hours < 10) hours = '0' + hours;
+        if (minutes < 10) minutes = '0' + minutes;
+        return hours + ":" + minutes;
+    }
 }
 async function loadPage(page) {
     const offset = (page - 1) * itemsPerPage;
@@ -115,9 +119,10 @@ async function loadPage(page) {
 
     const { data } = await supabase
         .from('question')
-        .select('text_num, type, title, name, created_at, stat')
+        .select('text_num, type, title, name, secret, created_at, stat')
         .order('created_at', { ascending: sortDirection === 'asc' })
         .range(offset, to);
+
 
     const boardList = document.getElementById('board_list');
     boardList.innerHTML = '';
@@ -126,43 +131,58 @@ async function loadPage(page) {
         boardList.innerHTML = `<tr><td colspan="6">등록된 게시글이 없습니다.</td></tr>`;
         return;
     }
+
     let today = new getdate();
     data.forEach((item) => {
 
         const row = document.createElement('tr');
+
+        let displayTitle = '';
+
+
+        if (item.secret) {
+            displayTitle = '🔑 비밀글입니다.';
+        } else {
+            if (item.title === undefined || item.title === null || item.title === '') {
+                displayTitle = '제목 오류입니다.';
+            } else {
+                displayTitle = item.title;
+            }
+        }
+
         if (item.created_at != null && today.fullDate == item.created_at.slice(0, 10)) {
-
-            let localTime = new Date(item.created_at);
-
+            let localTime = new getdate(item.created_at);
             row.innerHTML = `
             <td>${item.text_num}</td>
             <td>${item.type}</td>
-            <td class="title"><a href="view.html?id=${item.id}">${item.title}</a></td>
+            <td class="title"><a href="inquirycheck.html?id=${item.text_num}">${displayTitle}</a></td>
             <td>${item.name}</td>
-            <td>${localTime.getHours() + ":" + localTime.getMinutes()}</td>
+            <td>${localTime.getTime}</td>
             <td>${item.stat}</td>
         `;
         } else if (item.created_at != null) {
             row.innerHTML = `
             <td>${item.text_num}</td>
             <td>${item.type}</td>
-            <td class="title"><a href="view.html?id=${item.id}">${item.title}</a></td>
+            <td class="title"><a href="inquirycheck.html?id=${item.text_num}">${displayTitle}</a></td>
             <td>${item.name}</td>
             <td>${item.created_at.slice(0, 10)}</td>
             <td>${item.stat}</td>
         `;
-        } else {
+        }
+        else {
             row.innerHTML = `
             <td>${item.text_num}</td>
             <td>${item.type}</td>
-            <td class="title"><a href="view.html?id=${item.id}">${item.title}</a></td>
+            <td class="title"><a href="inquirycheck.html?id=${item.text_num}">${displayTitle}</a></td>
             <td>${item.name}</td>
             <td>저장오류</td>
             <td>${item.stat}</td>
         `;
         }
+
         row.onclick = () => {
-            window.location.href = `view.html?id=${item.id}`;
+            window.location.href = `inquirycheck.html?id=${item.text_num}`;
         };
 
         boardList.appendChild(row);

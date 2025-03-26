@@ -10,32 +10,32 @@ async function post() {
     if (name.length == 0) {
         await Swal.fire({
             icon: "error",
-            title: "등록 실패",
+            title: "수정 실패",
             text: "이름을 입력해주세요.",
         });
     } else if (pw.length == 0) {
         await Swal.fire({
             icon: "error",
-            title: "등록 실패",
+            title: "수정 실패",
             text: "비밀번호를 입력해주세요.",
         });
     } else if (title.length == 0) {
         await Swal.fire({
             icon: "error",
-            title: "등록 실패",
+            title: "수정 실패",
             text: "제목을 입력해주세요.",
         });
     } else if (!type) {
         await Swal.fire({
             icon: "error",
-            title: "등록 실패",
+            title: "수정 실패",
             text: "예약 종류를 선택해주세요.",
         });
     }
     else if (question_txt.length == 0) {
         await Swal.fire({
             icon: "error",
-            title: "등록 실패",
+            title: "수정 실패",
             text: "내용을 입력하세요.",
         });
     } else {
@@ -49,8 +49,8 @@ async function post() {
         if (result.success) {
             await Swal.fire({
                 icon: "success",
-                title: "등록 완료",
-                text: "게시글이 성공적으로 등록되었습니다.",
+                title: "수정 완료",
+                text: "게시글이 성공적으로 수정되었습니다.",
             });
 
             window.location.href = 'inquiry.html';
@@ -58,7 +58,7 @@ async function post() {
             await Swal.fire({
                 icon: "error",
                 title: "등록 실패",
-                text: "게시글 등록이 실패하였습니다."
+                text: "게시글 수정에 실패했습니다."
             });
         }
     }
@@ -77,7 +77,7 @@ async function savePost(name, pw, title, secret, question_txt, type, fileUrl = '
     console.log(res);
     
     if (res.error) {
-        return { success: false, errorMessage: '게시글 등록 중 오류가 발생했습니다.' };
+        return { success: false, errorMessage: '게시글 수정 중 오류가 발생했습니다.' };
     }
 
     return { success: true };
@@ -103,3 +103,45 @@ passwordtext.addEventListener('input', function (event) {
     }
 });
 
+
+async function fetchPostDetails(postId) {
+    const { data, error } = await supabase
+        .from('question') // 'question' 테이블에서
+        .select('*') // 모든 열을 선택
+        .eq('text_num', postId); // 'text_num'이 postId인 게시글을 찾음
+
+    if (error) {
+        console.error('게시글 수정 오류:', error);
+        return null; // 오류가 발생하면 null 반환
+    }
+
+    return data ? data[0] : null; // 데이터가 있으면 첫 번째 게시글 반환
+}
+
+// 게시글 상세 정보를 표시하는 함수
+async function displayPostDetails() {
+    const postId = getPostIdFromURL(); // URL에서 게시글 text_num 가져오기
+
+    if (!postId) {
+        alert('게시글 text_num을 찾을 수 없습니다.');
+        return;
+    }
+
+    const postDetails = await fetchPostDetails(postId); // 게시글 상세 데이터 가져오기
+
+    if (!postDetails) {
+        alert('게시글을 찾을 수 없습니다.');
+        return;
+    }
+
+    const postHeaderHTML1 = `
+        ${postDetails.name}
+    `;
+
+
+    document.getElementById('name').innerHTML = postHeaderHTML1;
+
+}
+
+// 페이지 로드 후 게시글을 표시
+document.addEventListener('DOMContentLoaded', displayPostDetails);
