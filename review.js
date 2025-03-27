@@ -76,12 +76,12 @@ function openModal(review) {
     const createdDate = new Date(review.created_at).toLocaleDateString();
 
     modalBody.innerHTML = `
-        <h2>${review.title}</h2>
-        <p><strong>작성자:</strong> ${review.name}</p>
-        <p><strong>작성일:</strong> ${createdDate}</p>
-        <p><strong>내용:</strong><br>${review.review_txt}</p>
-        ${review.file_url ? `<img src="${review.file_url}" style="width:100%; margin-top:15px; border-radius:8px;" />` : ""}
-    `;
+  <h2>[${review.type}] ${review.title}</h2><br>
+  <p><strong>작성자:</strong> ${review.name}</p>
+  <p><strong>작성일:</strong> ${createdDate}</p>
+  <p>${review.review_txt}</p></p>
+  ${review.file_url ? `<div class="image-box"><img src="${review.file_url}" alt="첨부 이미지" /></div>` : ""}
+`;
 
     // 수정 버튼 클릭 시 비밀번호 확인 후 이동
     const editBtn = document.getElementById('edit-btn');
