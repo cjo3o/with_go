@@ -1,90 +1,70 @@
-document.addEventListener("DOMContentLoaded", async function () {
+document.addEventListener('DOMContentLoaded', async function () {
+    // URL에서 text_num 파라미터를 가져오기
     const urlParams = new URLSearchParams(window.location.search);
-    const postId = urlParams.get("id"); // URL에서 게시글 ID 가져오기
+    const textNum = urlParams.get('id'); // 'text_num'이 URL에 포함된 값을 가져옵니다.
 
-    if (!postId) {
-        Swal.fire({
-            icon: "error",
-            title: "오류",
-            text: "게시글 ID를 찾을 수 없습니다."
-        });
+    // text_num이 없으면 오류 처리
+    if (!textNum) {
+        alert("잘못된 접근입니다.");
+        window.location.href = "inquirycheck.html"; // 잘못된 접근시 목록 페이지로 이동
+    }
+
+    const { data, error } = await supabase
+        .from('question') // 게시글이 저장된 테이블 이름
+        .select('*')
+        .eq('text_num', textNum)  // 해당 ID의 게시글을 가져옴
+        .single();  // 하나의 레코드만 가져옴
+
+    if (error) {
+        console.error('게시글을 불러오는 데 실패했습니다:', error);
+        alert("게시글을 불러오지 못했습니다.");
         return;
     }
 
-    // 게시글 데이터 가져오기
-    const postData = await getPostData(postId);
+    // 불러온 데이터로 입력 필드 채우기
+    document.getElementById('name').value = data.name;
+    document.getElementById('password').value = data.pw;
+    document.getElementById('title').value = data.title;
+    document.getElementById('write_text').value = data.question_txt;
+    document.getElementById('secret-toggle').checked = data.secret;
 
-    if (!postData) {
-        Swal.fire({
-            icon: "error",
-            title: "게시글을 불러오는 데 실패했습니다.",
-            text: "게시글 데이터를 가져오는 데 실패했습니다."
-        });
-        return;
+    // 예약 종류 (라디오 버튼) 처리
+    const typeRadio = document.querySelector(`input[name="type"][value="${data.type}"]`);
+    if (typeRadio) {
+        typeRadio.checked = true;
     }
 
-    // 게시글 내용 표시
-    document.getElementById("post-title").textContent = postData.title;
-    document.getElementById("post-name").textContent = `작성자: ${postData.name}`;
-    document.getElementById("post-content").textContent = postData.question_txt;
+    // 첨부파일 처리 (필요에 따라 파일 URL을 처리할 수 있습니다)
+    // 예를 들어, `data.file_url`이 있을 경우 처리할 수 있음
 
-    // 수정 버튼 클릭 시 수정 페이지로 이동
-    document.getElementById("modify").addEventListener("click", function () {
-        window.location.href = `modify.html?id=${postId}`;  // 수정 페이지로 이동
-    });
+    // 수정 버튼 클릭 시
+    document.getElementById('input-btn').addEventListener('click', async function () {
+        const name = document.getElementById('name').value;
+        const password = document.getElementById('password').value;
+        const title = document.getElementById('title').value;
+        const content = document.getElementById('write_text').value;
+        const secret = document.getElementById('secret-toggle').checked;
+        const type = document.querySelector('input[name="type"]:checked').value;
 
-    // 삭제 버튼 클릭 시 게시글 삭제
-    document.getElementById("delete").addEventListener("click", async function () {
-        const confirmDelete = await Swal.fire({
-            icon: "warning",
-            title: "정말 삭제하시겠습니까?",
-            showCancelButton: true,
-            confirmButtonText: "삭제",
-            cancelButtonText: "취소"
-        });
+        // 입력된 데이터를 Supabase에 업데이트
+        const { data: updatedData, error: updateError } = await supabase
+            .from('question')
+            .update({
+                name: name,
+                pw: password,
+                title: title,
+                question_txt: content,
+                secret: secret,
+                type: type
+            })
+            .eq('text_num', textNum);  // 수정할 게시글 ID를 지정
 
-        if (confirmDelete.isConfirmed) {
-            const result = await deletePost(postId);
-
-            if (result.success) {
-                Swal.fire({
-                    icon: "success",
-                    title: "삭제 완료",
-                    text: "게시글이 삭제되었습니다."
-                });
-                window.location.href = "inquiry.html"; // 삭제 후 목록으로 이동
-            } else {
-                Swal.fire({
-                    icon: "error",
-                    title: "삭제 실패",
-                    text: "게시글 삭제에 실패하였습니다."
-                });
-            }
+        if (updateError) {
+            console.error('수정 실패:', updateError);
+            alert("수정에 실패했습니다.");
+        } else {
+            alert("수정이 완료되었습니다.");
+            window.location.href = 'inquiry.html'; // 수정 완료 후 목록 페이지로 리디렉션
         }
     });
 });
-
-// 게시글 데이터 가져오기
-async function getPostData(postId) {
-    const { data, error } = await supabase
-        .from("question")
-        .select("*")
-        .eq("id", postId)
-        .single();
-
-    if (error) {
-        return null;
-    }
-
-    return data;
-}
-
-// 게시글 삭제
-async function deletePost(postId) {
-    const { error } = await supabase
-        .from("question")
-        .delete()
-        .eq("id", postId);
-
-    return { success: !error };
-}
