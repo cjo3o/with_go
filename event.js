@@ -19,31 +19,45 @@ document.addEventListener("DOMContentLoaded", async function () {
         return;
     }
 
-    // Supabase에서 이벤트 데이터 불러오기
-    const { data: events, error } = await supabase
-        .from("withgo_event")
-        .select("*")
-        .order("date", { ascending: true });
+    const { data: faqs, error } = await supabase
+        .from("withgo_faqs") // 테이블 이름 확인 필요!
+        .select("*");
 
     if (error) {
-        console.error("Supabase에서 이벤트 불러오기 실패:", error);
+        console.error("FAQ 불러오기 실패:", error);
         return;
     }
 
-    // 데이터 렌더링
-    events.forEach(event => {
-        const eventItem = document.createElement("div");
-        eventItem.classList.add("event-item");
-        eventItem.innerHTML = `
-          <a href="${event.link_url}" target="_blank" class="event-link">
-            <img src="${event.img_url}" alt="${event.title}">
-            <div class="event-text">
-              <h3>${event.title}</h3>
-              <p>${event.date}</p>
-            </div>
-          </a>
-        `;
-        eventList.appendChild(eventItem);
-    });
+    const pageSize = Math.ceil(faqs.length / 2);
+    const page1Data = faqs.slice(0, pageSize);
+    const page2Data = faqs.slice(pageSize);
+
+    renderFAQ("page1", page1Data);
+    renderFAQ("page2", page2Data);
+    showPage(1); // 초기엔 1페이지 보여줌
 });
 
+function showPage(pageNumber) {
+    document.querySelectorAll(".faq-container").forEach((container, idx) => {
+        container.style.display = idx === pageNumber - 1 ? "block" : "none";
+    });
+
+    document.querySelectorAll(".page-button").forEach((btn, idx) => {
+        btn.classList.toggle("active", idx === pageNumber - 1);
+    });
+}
+
+function renderFAQ(containerId, faqList) {
+    const container = document.getElementById(containerId);
+    container.innerHTML = ""; // 초기화
+
+    faqList.forEach(faq => {
+        const faqItem = document.createElement("div");
+        faqItem.classList.add("faq-item");
+        faqItem.innerHTML = `
+      <h3 class="faq-question">${faq.question}</h3>
+      <p class="faq-answer">${faq.answer}</p>
+    `;
+        container.appendChild(faqItem);
+    });
+}

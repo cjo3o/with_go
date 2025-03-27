@@ -1,7 +1,3 @@
-const supabaseUrl = "https://zgrjjnifqoactpuqolao.supabase.co";
-const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpncmpqbmlmcW9hY3RwdXFvbGFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNDc0NTgsImV4cCI6MjA1NjgyMzQ1OH0._Vl-6CRKdMjeDRyNoxlfect7sgusZ7L0N5OYu0a5hT0";
-
-const supabase = window.supabase.createClient(supabaseUrl, supabaseAnonKey);
 
 document.addEventListener("DOMContentLoaded", async function () {
     const faqData = await loadFAQ();
@@ -37,10 +33,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     });
 });
 
-// ✅ Supabase에서 FAQ 데이터 불러오기
 async function loadFAQ() {
     let { data, error } = await supabase
-        .from("withgo_faqs")  // ✅ 테이블 이름 수정!!
+        .from("withgo_faqs")
         .select("*")
         .order("created_at", { ascending: true });
 
@@ -51,7 +46,6 @@ async function loadFAQ() {
     return data;
 }
 
-// ✅ FAQ 동적 생성 함수
 function renderFAQ(faqData) {
     const page1Container = document.getElementById("page1");
     const page2Container = document.getElementById("page2");
@@ -82,11 +76,15 @@ function renderFAQ(faqData) {
     });
 }
 
-// ✅ 페이지 변경 함수
 function showPage(page) {
     document.getElementById("page1").style.display = page === 1 ? "block" : "none";
     document.getElementById("page2").style.display = page === 2 ? "block" : "none";
 
     document.querySelectorAll(".page-button").forEach((btn) => btn.classList.remove("active"));
-    document.querySelectorAll(".page-button")[page - 1].classList.add("active");
+    const buttons = document.querySelectorAll(".page-button");
+    if (buttons[page - 1]) {
+        buttons[page - 1].classList.add("active");
+    }
 }
+
+window.showPage = showPage;
