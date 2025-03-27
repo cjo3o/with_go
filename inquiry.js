@@ -183,11 +183,66 @@ async function loadPage(page) {
         `;
         }
 
-        row.onclick = () => {
-            window.location.href = `inquirycheck.html?id=${item.text_num}`;
-        };
+        const titleLink = row.querySelector('.title a');
+
+        if (item.secret) {
+            titleLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                showPasswordPopup(item.text_num);  // 비밀번호 팝업을 띄움
+            });
+        }
+
+        // row.onclick = () => {
+        //     window.location.href = `inquirycheck.html?id=${item.text_num}`;
+        // };
 
         boardList.appendChild(row);
     });
 }
 
+function showPasswordPopup(postId) {
+    const passwordPopup = document.getElementById('password-popup');
+    const passwordInput = document.getElementById('password-input');
+    const passwordSubmit = document.getElementById('password-submit');
+    const passwordCancel = document.getElementById('password-cancel');
+
+    passwordPopup.style.display = 'flex';  // 팝업을 보이게 함
+
+    passwordSubmit.onclick = async () => {
+        const enteredPassword = passwordInput.value;
+
+        if (!enteredPassword) {
+            alert('비밀번호를 입력해주세요.');
+            return;
+        }
+
+        // 비밀번호 확인 과정 (예시)
+        const { data, error } = await supabase
+            .from('question')
+            .select('pw')
+            .eq('text_num', postId)
+            .single();
+
+            console.log(data);
+
+        if (error) {
+            alert('게시글을 찾을 수 없습니다.');
+            return;
+        }
+
+        if (data.pw === enteredPassword) {
+            // 비밀번호가 맞으면 상세 페이지로 이동
+            window.location.href = `inquirycheck.html?id=${postId}`;
+        } else {
+            alert('비밀번호가 틀렸습니다.');
+        }
+
+        // 비밀번호 입력 후 팝업 닫기
+        passwordPopup.style.display = 'none';
+        passwordInput.value = '';  // 비밀번호 입력 초기화
+    };
+
+    passwordCancel.onclick = () => {
+        passwordPopup.style.display = 'none';  // 팝업을 닫음
+    };
+}

@@ -1,111 +1,90 @@
-window.onload = async function () {
+document.addEventListener("DOMContentLoaded", async function () {
     const urlParams = new URLSearchParams(window.location.search);
-    const postId = urlParams.get('id');
+    const postId = urlParams.get("id"); // URL에서 게시글 ID 가져오기
 
-    if (postId) {
-        await loadPostData(postId);
-    }
-};
-
-async function loadPostData(postId) {
-    const { data, error } = await supabase
-        .from('question')
-        .select('*')
-        .eq('text_num', postId)
-        .single();
-
-    if (error) {
-        console.error('데이터 가져오기 오류:', error);
-        return;
-    }
-
-    console.log(data);
-
- 
-    document.getElementById('name').value = data.name;
-    document.getElementById('password').value = data.pw;
-    document.getElementById('title').value = data.title;
-    document.getElementById('write_text').value = data.question_txt;
-    document.getElementById('secret-toggle').checked = data.secret;
-
-    const typeInput = document.querySelector(`input[name="type"][value="${data.type}"]`);
-    if (typeInput) {
-        typeInput.checked = true;
-    }
-}
-
-async function updata() {
-    const name = document.getElementById('name').value;
-    const pw = document.getElementById('password').value;
-    const title = document.getElementById('title').value;
-    const question_txt = document.getElementById('write_text').value;
-    const secret = document.getElementById('secret-toggle').checked;
-    const type = document.querySelector('input[name="type"]:checked').value;
-    const file = document.getElementById('file').files[0];
-
-    if (!name || !pw || !title || !type || !question_txt) {
-        await Swal.fire({
+    if (!postId) {
+        Swal.fire({
             icon: "error",
-            title: "수정 실패",
-            text: "모든 필드를 입력해주세요.",
+            title: "오류",
+            text: "게시글 ID를 찾을 수 없습니다."
         });
         return;
     }
 
-    let fileUrl = '';
-    if (file) {
-        fileUrl = await uploadFile(file);
+    // 게시글 데이터 가져오기
+    const postData = await getPostData(postId);
+
+    if (!postData) {
+        Swal.fire({
+            icon: "error",
+            title: "게시글을 불러오는 데 실패했습니다.",
+            text: "게시글 데이터를 가져오는 데 실패했습니다."
+        });
+        return;
     }
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const postId = urlParams.get('id');
+    // 게시글 내용 표시
+    document.getElementById("post-title").textContent = postData.title;
+    document.getElementById("post-name").textContent = `작성자: ${postData.name}`;
+    document.getElementById("post-content").textContent = postData.question_txt;
 
-    if (postId) {
-        const result = await updatePost(postId, name, pw, title, secret, question_txt, type, fileUrl);
+    // 수정 버튼 클릭 시 수정 페이지로 이동
+    document.getElementById("modify").addEventListener("click", function () {
+        window.location.href = `modify.html?id=${postId}`;  // 수정 페이지로 이동
+    });
 
-        if (result.success) {
-            await Swal.fire({
-                icon: "success",
-                title: "수정 완료",
-                text: "게시글이 성공적으로 수정되었습니다.",
-            });
+    // 삭제 버튼 클릭 시 게시글 삭제
+    document.getElementById("delete").addEventListener("click", async function () {
+        const confirmDelete = await Swal.fire({
+            icon: "warning",
+            title: "정말 삭제하시겠습니까?",
+            showCancelButton: true,
+            confirmButtonText: "삭제",
+            cancelButtonText: "취소"
+        });
 
-            window.location.href = 'inquiry.html';
-        } else {
-            await Swal.fire({
-                icon: "error",
-                title: "수정 실패",
-                text: result.errorMessage
-            });
+        if (confirmDelete.isConfirmed) {
+            const result = await deletePost(postId);
+
+            if (result.success) {
+                Swal.fire({
+                    icon: "success",
+                    title: "삭제 완료",
+                    text: "게시글이 삭제되었습니다."
+                });
+                window.location.href = "inquiry.html"; // 삭제 후 목록으로 이동
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "삭제 실패",
+                    text: "게시글 삭제에 실패하였습니다."
+                });
+            }
         }
-    }
-}
+    });
+});
 
-async function uploadFile(file) {
-    const filename = `${crypto.randomUUID()}.${file.name.split('.').pop()}`;
-    await supabase.storage.from('images').upload(filename, file);
-
-    const res = await supabase.storage.from('images').getPublicUrl(filename);
-    return res.data.publicUrl;
-}
-
-async function updatePost(postId, name, pw, title, secret, question_txt, type, fileUrl = '') {
+// 게시글 데이터 가져오기
+async function getPostData(postId) {
     const { data, error } = await supabase
-        .from('question')
-        .update({
-            name,
-            pw,
-            title,
-            question_txt,
-            secret,
-            type,
-            image_url: fileUrl
-        })
-        .eq('id', postId);
+        .from("question")
+        .select("*")
+        .eq("id", postId)
+        .single();
 
     if (error) {
-        return { success: false, errorMessage: '게시글 수정 중 오류가 발생했습니다.' };
+        return null;
     }
 
-    return { success: true };
+    return data;
+}
+
+// 게시글 삭제
+async function deletePost(postId) {
+    const { error } = await supabase
+        .from("question")
+        .delete()
+        .eq("id", postId);
+
+    return { success: !error };
 }

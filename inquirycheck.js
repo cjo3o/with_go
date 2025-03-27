@@ -53,8 +53,8 @@ async function displayPostDetails() {
 document.addEventListener('DOMContentLoaded', displayPostDetails);
 
 
-document.getElementById("modify-link").addEventListener("click", function (event) {
-    event.preventDefault();  // 기본 동작(페이지 이동)을 막음
-    window.location.href = "modify.html";  // 수정 페이지로 이동
-});
+// document.getElementById("modify-link").addEventListener("click", function (event) {
+//     event.preventDefault();  // 기본 동작(페이지 이동)을 막음
+//     window.location.href = "modify.html";  // 수정 페이지로 이동
+// });
 
