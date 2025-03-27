@@ -6,7 +6,33 @@ const supabase = window.supabase.createClient(supabaseUrl, supabasePassword);
 // 페이지 설정
 const perPage = 5;
 let currentPage = 1;
-let currentType = 'all';  // 필터 상태
+let currentType = 'all';
+const groupSize = 10;
+
+// 오늘 날짜는 시간, 그 외는 날짜로 포맷
+function formatCreatedAt(dateString) {
+    const date = new Date(dateString);
+    const today = new Date();
+
+    const isToday = date.getFullYear() === today.getFullYear() &&
+        date.getMonth() === today.getMonth() &&
+        date.getDate() === today.getDate();
+
+    return isToday
+        ? date.toLocaleString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+        })  // 오늘: 날짜+시간
+        : date.toLocaleDateString('ko-KR', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        }); // 나머지: 날짜만
+}
 
 // 후기 불러오기
 async function fetchReviews(page = 1, type = 'all') {
@@ -19,12 +45,9 @@ async function fetchReviews(page = 1, type = 'all') {
         .order("created_at", { ascending: false })
         .range(from, to);
 
-    if (type !== "all") {
-        query = query.eq("type", type);
-    }
+    if (type !== "all") query = query.eq("type", type);
 
     const { data, error, count } = await query;
-
     if (error) {
         console.error("데이터 오류:", error.message);
         return;
@@ -43,7 +66,7 @@ function renderReviews(reviews) {
         const div = document.createElement("div");
         div.className = "review-item";
 
-        const createdDate = new Date(item.created_at).toLocaleDateString();
+        const formattedDate = formatCreatedAt(item.created_at);
 
         div.innerHTML = `
         <div class="review-content">
@@ -55,7 +78,7 @@ function renderReviews(reviews) {
                 <div class="content">${item.review_txt}</div>
                 <div class="name-date">
                     <span class="name">${item.name}</span>
-                    <span class="date">${createdDate}</span>
+                    <span class="date">${formattedDate}</span>
                 </div>
             </div>
             <div class="review-image-box">
@@ -69,36 +92,31 @@ function renderReviews(reviews) {
     });
 }
 
-// 모달 열기 함수
+// 모달 열기
 function openModal(review) {
     const modal = document.getElementById('review-modal');
     const modalBody = document.getElementById('modal-body');
-    const createdDate = new Date(review.created_at).toLocaleDateString();
+    const createdDate = formatCreatedAt(review.created_at);
 
     modalBody.innerHTML = `
-  <h2>[${review.type}] ${review.title}</h2><br>
-  <p><strong>작성자:</strong> ${review.name}</p>
-  <p><strong>작성일:</strong> ${createdDate}</p>
-  <p>${review.review_txt}</p></p>
-  ${review.file_url ? `<div class="image-box"><img src="${review.file_url}" alt="첨부 이미지" /></div>` : ""}
-`;
+        <h2>[${review.type}] ${review.title}</h2><br>
+        <p><strong>작성자:</strong> ${review.name}</p>
+        <p><strong>작성일:</strong> ${createdDate}</p>
+        <p>${review.review_txt}</p>
+        ${review.file_url ? `<div class="image-box"><img src="${review.file_url}" /></div>` : ""}
+    `;
 
-    // 수정 버튼 클릭 시 비밀번호 확인 후 이동
-    const editBtn = document.getElementById('edit-btn');
-    editBtn.onclick = async () => {
+    document.getElementById('edit-btn').onclick = async () => {
         const { value: password } = await Swal.fire({
             title: "비밀번호 확인",
             input: "password",
             inputLabel: "작성 시 등록한 비밀번호를 입력해주세요",
-            inputPlaceholder: "비밀번호",
+            showCancelButton: true,
             inputAttributes: {
                 maxlength: 8,
                 autocapitalize: "off",
                 autocorrect: "off",
-            },
-            showCancelButton: true,
-            confirmButtonText: "확인",
-            cancelButtonText: "취소"
+            }
         });
 
         if (!password) return;
@@ -109,25 +127,11 @@ function openModal(review) {
             .eq("review_num", review.review_num)
             .single();
 
-        if (error || !data) {
-            Swal.fire({
-                icon: "error",
-                title: "오류 발생",
-                text: "비밀번호 확인 중 오류가 발생했습니다.",
-            });
+        if (error || !data || data.password !== password) {
+            Swal.fire("비밀번호 불일치", "비밀번호가 일치하지 않습니다.", "error");
             return;
         }
 
-        if (data.password !== password) {
-            Swal.fire({
-                icon: "error",
-                title: "비밀번호 불일치",
-                text: "비밀번호가 일치하지 않습니다.",
-            });
-            return;
-        }
-
-        // 성공: 수정 페이지로 이동
         window.location.href = `review_write.html?mode=edit&review_num=${review.review_num}`;
     };
 
@@ -138,11 +142,9 @@ function openModal(review) {
 document.querySelector('.close-btn').addEventListener('click', () => {
     document.getElementById('review-modal').style.display = 'none';
 });
-
 window.addEventListener('click', (e) => {
-    const modal = document.getElementById('review-modal');
-    if (e.target === modal) {
-        modal.style.display = 'none';
+    if (e.target.id === 'review-modal') {
+        document.getElementById('review-modal').style.display = 'none';
     }
 });
 
@@ -153,6 +155,21 @@ function renderPagination(totalPages) {
 
     const prevBtn = document.getElementById("prevBtn");
     const nextBtn = document.getElementById("nextBtn");
+    const leftBtn = document.getElementById("leftBtn");
+    const rightBtn = document.getElementById("rightBtn");
+
+    const currentGroup = Math.floor((currentPage - 1) / groupSize);
+    const startPage = currentGroup * groupSize + 1;
+    let endPage = startPage + groupSize - 1;
+    if (endPage > totalPages) endPage = totalPages;
+
+    leftBtn.disabled = currentGroup === 0;
+    leftBtn.onclick = () => {
+        if (currentGroup > 0) {
+            currentPage = (currentGroup - 1) * groupSize + 1;
+            updatePage(totalPages);
+        }
+    };
 
     prevBtn.disabled = currentPage === 1;
     prevBtn.onclick = () => {
@@ -162,7 +179,7 @@ function renderPagination(totalPages) {
         }
     };
 
-    for (let i = 1; i <= totalPages; i++) {
+    for (let i = startPage; i <= endPage; i++) {
         const pageBtn = document.createElement("button");
         pageBtn.textContent = i;
         pageBtn.classList.add("page-btn");
@@ -172,7 +189,6 @@ function renderPagination(totalPages) {
             currentPage = i;
             updatePage(totalPages);
         };
-
         pageBtnsContainer.appendChild(pageBtn);
     }
 
@@ -180,6 +196,14 @@ function renderPagination(totalPages) {
     nextBtn.onclick = () => {
         if (currentPage < totalPages) {
             currentPage++;
+            updatePage(totalPages);
+        }
+    };
+
+    rightBtn.disabled = endPage === totalPages;
+    rightBtn.onclick = () => {
+        if (endPage < totalPages) {
+            currentPage = endPage + 1;
             updatePage(totalPages);
         }
     };
@@ -195,7 +219,6 @@ document.querySelectorAll(".filter-btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
         currentType = e.target.dataset.type;
         currentPage = 1;
-
         fetchReviews(currentPage, currentType);
 
         document.querySelectorAll(".filter-btn").forEach((b) =>
@@ -222,7 +245,7 @@ document.getElementById("write-btn")?.addEventListener("click", async (e) => {
     window.location.href = "review_write.html";
 });
 
-// 초기 로딩
+// 초기 실행
 document.addEventListener("DOMContentLoaded", () => {
     fetchReviews(currentPage, currentType);
 });
