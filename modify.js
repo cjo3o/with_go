@@ -34,7 +34,7 @@ async function loadPostData(postId) {
     }
 }
 
-async function post() {
+async function updata() {
     const name = document.getElementById('name').value;
     const pw = document.getElementById('password').value;
     const title = document.getElementById('title').value;

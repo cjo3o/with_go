@@ -85,7 +85,7 @@ async function savePost(name, pw, title, secret, question_txt, type, fileUrl = '
 
 async function uploadFile(file) {
     const filename = `${crypto.randomUUID()}.${file.name.split('.').pop()}`;
-    await supabase.storage.from('images').upload(filename, file);
+    await supabase.storage.from('images/inquiry_images').upload(filename, file);
 
     const res = await supabase.storage.from('images').getPublicUrl(filename);
     return res.data.publicUrl;
