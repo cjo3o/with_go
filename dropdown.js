@@ -95,6 +95,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     window.scrollTo({top: $check_container.offsetTop, behavior: 'smooth'});
                 } else {
                     location.href = 'reservation.html';
+                    window.scrollTo({top: $check_container.offsetTop, behavior: 'smooth'});
                 }
             });
             $header_reserve.addEventListener('click', function (event) {

@@ -195,7 +195,6 @@ td:nth-child(3) {
     background-color: #fff;
     width: 450px;
     padding: 1.5rem;
-    border: solid 3px #ccc;
     border-radius: 15px;
     display: flex;
     flex-direction: column;

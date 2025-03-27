@@ -175,7 +175,6 @@ tbody > tr:hover {
     background-color: #fff;
     width: 450px;
     padding: 1.5rem;
-    border: solid 3px #ccc;
     border-radius: 15px;
     display: flex;
     flex-direction: column;
@@ -195,20 +194,20 @@ tbody > tr:hover {
 }
 
 .cancelReserve {
-    background-color: #FF9900;
+    background-color: #0066CC;
     color: white;
-    padding: 0.8rem 2.3rem;
+    padding: 1rem 2.5rem;
     margin-top: 4rem;
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     font-weight: bold;
     border: none;
-    border-radius: 23px;
+    border-radius: 35px;
     cursor: pointer;
     transition: all 0.5s;
 }
 
 .cancelReserve:hover {
-    background-color: #ea8f00;
+    background-color: #005ebc;
     scale: 1.1;
 }
 
@@ -229,7 +228,9 @@ tbody > tr:hover {
 }
 
 .check_detail_contents > h1 {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
+    padding: 0.5rem;
+    color: #0066CC;
 }
 
 .check_detail_contents > span {
@@ -238,7 +239,8 @@ tbody > tr:hover {
 }
 
 .check_detail_contents > ul {
-    margin: 1rem 0;
+    padding: 1rem 0;
+    border-top: dashed 1px #ccc;
 }
 
 .check_detail_contents > ul > li {
