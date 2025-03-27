@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       file_url = publicUrl.publicUrl;
     }
 
-    // 👉 수정 모드일 경우
+    // 수정 모드일 경우
     if (mode === "edit" && reviewNum) {
       // 새로 파일을 올렸다면 기존 파일 삭제
       if (file_url && originFileName) {
@@ -128,7 +128,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         type,
         review_txt,
         user_id,
-        created_at: new Date(),
+        created_at: new Date(new Date().getTime() + 9 * 60 * 60 * 1000),    // 한국 시간
         file_url
       }
     ]);

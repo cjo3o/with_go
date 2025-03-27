@@ -20,6 +20,7 @@ function formatCreatedAt(dateString) {
 
     return isToday
         ? date.toLocaleString('ko-KR', {
+            timeZone: 'Asia/Seoul',
             year: 'numeric',
             month: '2-digit',
             day: '2-digit',
@@ -135,6 +136,66 @@ function openModal(review) {
         window.location.href = `review_write.html?mode=edit&review_num=${review.review_num}`;
     };
 
+    // 삭제 버튼
+    document.getElementById('delete-btn').onclick = async () => {
+        // 비밀번호 입력 먼저
+        const { value: password } = await Swal.fire({
+            title: "비밀번호 확인",
+            input: "password",
+            inputLabel: "작성 시 등록한 비밀번호를 입력해주세요",
+            inputPlaceholder: "비밀번호",
+            inputAttributes: {
+                maxlength: 6,
+                autocapitalize: "off",
+                autocorrect: "off"
+            },
+            showCancelButton: true,
+            confirmButtonText: "확인",
+            cancelButtonText: "취소"
+        });
+
+        if (!password) return;
+
+        // 비밀번호 검증
+        const { data, error } = await supabase
+            .from("review")
+            .select("password")
+            .eq("review_num", review.review_num)
+            .single();
+
+        if (error || !data || data.password !== password) {
+            Swal.fire("비밀번호 불일치", "비밀번호가 일치하지 않습니다.", "error");
+            return;
+        }
+
+        // 비밀번호 일치 → 삭제 확인
+        const result = await Swal.fire({
+            title: "정말 삭제하시겠습니까?",
+            text: "삭제된 후기는 복구할 수 없습니다.",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "삭제",
+            cancelButtonText: "취소"
+        });
+
+        if (result.isConfirmed) {
+            const { error: deleteError } = await supabase
+                .from("review")
+                .delete()
+                .eq("review_num", review.review_num);
+
+            if (deleteError) {
+                Swal.fire("삭제 실패", "후기 삭제 중 문제가 발생했습니다.", "error");
+            } else {
+                Swal.fire("삭제 완료", "후기가 삭제되었습니다.", "success").then(() => {
+                    document.getElementById("review-modal").style.display = "none";
+                    fetchReviews(currentPage, currentType); // 목록 갱신
+                });
+            }
+        }
+    };
+
+
     modal.style.display = 'block';
 }
 
@@ -217,7 +278,7 @@ function updatePage(totalPages) {
 // 필터 버튼
 document.querySelectorAll(".filter-btn").forEach((btn) => {
     btn.addEventListener("click", (e) => {
-        currentType = e.target.dataset.type;
+        currentType = e.target.dataset.type.trim();
         currentPage = 1;
         fetchReviews(currentPage, currentType);
 
