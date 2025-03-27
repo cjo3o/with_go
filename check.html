@@ -6,21 +6,19 @@
     <title>Document</title>
     <link rel="stylesheet" href="src/css/reset.css">
     <link rel="stylesheet" href="src/css/check.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+        <script src="check.js"></script>
 </head>
 
 <body>
 <div class="wrap">
-    <div class="header">
-
-    </div>
+    <div class="header"></div>
     <div class="contents">
         <div class="section1">
             <h1>ABOUT WITH GO</h1>
         </div>
         <div class="check_detail">
-            <div class="check_detail_contents">
-
-            </div>
+            <div class="check_detail_contents"></div>
         </div>
         <div class="check_container">
             <div class="check_contents">
@@ -30,12 +28,8 @@
                 </div>
                 <div class="change_btn_container">
                     <div class="change_btn">
-                        <div class="keep_btn active">
-                            보관
-                        </div>
-                        <div class="delivery_btn">
-                            배송
-                        </div>
+                        <div class="keep_btn active">보관</div>
+                        <div class="delivery_btn">배송</div>
                     </div>
                     <p style="margin-top: 1rem">※ 보관장소를 클릭하시면 상세정보를 볼 수 있습니다.</p>
                 </div>
@@ -59,20 +53,6 @@
                                 <td>6000</td>
                                 <td>보관중</td>
                             </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>2025-02-14</td>
-                                <td onclick="openDetail(this)">홍대입구</td>
-                                <td>9000</td>
-                                <td>보관중</td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>2025-02-17</td>
-                                <td onclick="openDetail(this)">명동</td>
-                                <td>6000</td>
-                                <td>보관완료</td>
-                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -95,85 +75,15 @@
                                 <td>2000</td>
                                 <td>배송완료</td>
                             </tr>
-                            <tr>
-                                <td>5</td>
-                                <td>2025-02-20</td>
-                                <td onclick="openDetail(this)">서울역</td>
-                                <td>16000</td>
-                                <td>배송중</td>
-                            </tr>
-                            <tr>
-                                <td>6</td>
-                                <td>2025-02-23</td>
-                                <td onclick="openDetail(this)">김포공항</td>
-                                <td>5000</td>
-                                <td>배송대기중</td>
-                            </tr>
                             </tbody>
                         </table>
                     </div>
                 </div>
-
-
             </div>
         </div>
     </div>
-    <div class="footer">
-
-    </div>
+    <div class="footer"></div>
 </div>
-<script src="dropdown.js"></script>
-<script src="change_btn.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const $check_detail = document.querySelector('.check_detail');
-        const $check_detail_contents = document.querySelector('.check_detail_contents');
 
-        // close 버튼 클릭 이벤트 리스너
-        function addCloseEvent() {
-            const $close = document.querySelector('.close');
-            if ($close) {
-                $close.addEventListener('click', function () {
-                    $check_detail.classList.remove('fade_in');
-                    $check_detail_contents.classList.remove('slide_up');
-                    console.log('클릭');
-                });
-            }
-        }
-
-        // openDetail 함수
-        window.openDetail = function(td) {
-            const row = td.parentElement; // 클릭한 td의 부모 tr 요소
-            const location = row.cells[2].innerText; // 보관 장소
-            const date = row.cells[1].innerText; // 보관 일자
-            const number = row.cells[0].innerText; // 수화물 번호
-            const price = row.cells[3].innerText; // 가격
-            const stat = row.cells[4].innerText; // 상태
-
-            $check_detail_contents.innerHTML = `
-            <span class="close">&times;</span>
-            <h1>조회 상세 정보</h1>
-            <span>${stat}</span>
-            <span style="font-size: 1.3rem;">보관 장소 : ${location}</span>
-            <span>보관 일자 : ${date}</span>
-            <span>수화물 번호 : ${number}</span>
-            <ul>가격
-                <li>소형 1개 1000원</li>
-                <li>중형 1개 2000원</li>
-                <li>대형 1개 3000원</li>
-            </ul>
-            <hr>
-            <p>총합<span>${price}원</span></p>
-        `;
-            $check_detail.classList.add('fade_in');
-            $check_detail_contents.classList.add('slide_up');
-
-            // close 버튼 이벤트 리스너 추가
-            addCloseEvent();
-        };
-    });
-
-</script>
 </body>
-
 </html>

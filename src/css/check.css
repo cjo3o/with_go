@@ -1,3 +1,11 @@
+body {
+    width: 100%;
+    min-height: 100vh;
+    flex-direction: column;
+    overflow-x: auto;
+    white-space: nowrap;
+}
+
 .wrap {
     width: 100%;
 }
@@ -76,7 +84,8 @@
 
 .keep_btn,
 .delivery_btn {
-    background-color: #e6e6e6;
+    background-color: rgb(158, 158, 158);
+    color: white;
     display: inline-block;
     padding: 0.5rem 1rem;
     border-radius: 5px;
@@ -85,7 +94,7 @@
 }
 
 .active {
-    background-color: #000;
+    background-color: rgb(0,102,204);
     color: #fff;
     font-weight: bold;
 }
@@ -112,13 +121,6 @@
     opacity: 0;
 }
 
-/*.delivery_table {*/
-/*    overflow: hidden;*/
-/*    height: 0;*/
-/*    transform: translateY(100px);*/
-/*    opacity: 0;*/
-/*}*/
-
 .up {
     height: auto;
     transform: translateY(0);
@@ -138,11 +140,13 @@ th, td {
 
 th {
     background-color: #ccc;
+    font-size: 15px;
 }
 
 td {
     background-color: #efefef;
     cursor: pointer;
+    font-size: 14px;
 }
 
 tbody > tr:hover {
@@ -262,4 +266,38 @@ tbody > tr:hover {
     table {
         width: 90%;
     }
+}
+
+
+
+.d-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 12px;
+}
+
+.d-total strong {
+    font-weight: bold;
+}
+
+.d-total span {
+    font-size: 15px;
+    font-weight: bold;
+}
+.check_detail_contents {
+    position: relative;
+    background-color: #fff;
+    width: 360px; /* 박스 크기 조절 */
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    font-family: 'Pretendard', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+    transform: translateY(100%);
+    opacity: 0;
+    margin: 0 auto;
 }
