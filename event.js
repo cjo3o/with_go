@@ -35,12 +35,15 @@ document.addEventListener("DOMContentLoaded", async function () {
         const eventItem = document.createElement("div");
         eventItem.classList.add("event-item");
         eventItem.innerHTML = `
-      <img src="${event.img_url}" alt="${event.title}">
-      <div class="event-text">
-        <h3>${event.title}</h3>
-        <p>${event.date}</p>
-      </div>
-    `;
+          <a href="${event.link_url}" target="_blank" class="event-link">
+            <img src="${event.img_url}" alt="${event.title}">
+            <div class="event-text">
+              <h3>${event.title}</h3>
+              <p>${event.date}</p>
+            </div>
+          </a>
+        `;
         eventList.appendChild(eventItem);
     });
 });
+
