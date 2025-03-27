@@ -112,12 +112,15 @@ function openModal(review) {
             title: "비밀번호 확인",
             input: "password",
             inputLabel: "작성 시 등록한 비밀번호를 입력해주세요",
-            showCancelButton: true,
+            inputPlaceholder: "비밀번호",
             inputAttributes: {
-                maxlength: 8,
+                maxlength: 6,
                 autocapitalize: "off",
-                autocorrect: "off",
-            }
+                autocorrect: "off"
+            },
+            showCancelButton: true,
+            confirmButtonText: "확인",
+            cancelButtonText: "취소"
         });
 
         if (!password) return;
