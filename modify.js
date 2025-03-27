@@ -1,50 +1,67 @@
-async function post() {
-    const name = document.querySelector('#name').value;
-    const pw = document.querySelector('#password').value;
-    const title = document.querySelector('#title').value;
-    const question_txt = document.querySelector('#write_text').value;
-    const secret = document.querySelector('input[name="secret"]').checked;
-    const type = document.querySelector('input[name="type"]:checked');
-    const file = document.querySelector('#file').files[0];
+window.onload = async function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('id');
 
-    if (name.length == 0) {
-        await Swal.fire({
-            icon: "error",
-            title: "수정 실패",
-            text: "이름을 입력해주세요.",
-        });
-    } else if (pw.length == 0) {
-        await Swal.fire({
-            icon: "error",
-            title: "수정 실패",
-            text: "비밀번호를 입력해주세요.",
-        });
-    } else if (title.length == 0) {
-        await Swal.fire({
-            icon: "error",
-            title: "수정 실패",
-            text: "제목을 입력해주세요.",
-        });
-    } else if (!type) {
-        await Swal.fire({
-            icon: "error",
-            title: "수정 실패",
-            text: "예약 종류를 선택해주세요.",
-        });
+    if (postId) {
+        await loadPostData(postId);
     }
-    else if (question_txt.length == 0) {
+};
+
+async function loadPostData(postId) {
+    const { data, error } = await supabase
+        .from('question')
+        .select('*')
+        .eq('text_num', postId)
+        .single();
+
+    if (error) {
+        console.error('데이터 가져오기 오류:', error);
+        return;
+    }
+
+    console.log(data);
+
+ 
+    document.getElementById('name').value = data.name;
+    document.getElementById('password').value = data.pw;
+    document.getElementById('title').value = data.title;
+    document.getElementById('write_text').value = data.question_txt;
+    document.getElementById('secret-toggle').checked = data.secret;
+
+    const typeInput = document.querySelector(`input[name="type"][value="${data.type}"]`);
+    if (typeInput) {
+        typeInput.checked = true;
+    }
+}
+
+async function post() {
+    const name = document.getElementById('name').value;
+    const pw = document.getElementById('password').value;
+    const title = document.getElementById('title').value;
+    const question_txt = document.getElementById('write_text').value;
+    const secret = document.getElementById('secret-toggle').checked;
+    const type = document.querySelector('input[name="type"]:checked').value;
+    const file = document.getElementById('file').files[0];
+
+    if (!name || !pw || !title || !type || !question_txt) {
         await Swal.fire({
             icon: "error",
             title: "수정 실패",
-            text: "내용을 입력하세요.",
+            text: "모든 필드를 입력해주세요.",
         });
-    } else {
-        let fileUrl = '';
-        if (file) {
-            fileUrl = await uploadFile(file);
-        }
+        return;
+    }
 
-        const result = await savePost(name, pw, title, secret, question_txt, type, fileUrl);
+    let fileUrl = '';
+    if (file) {
+        fileUrl = await uploadFile(file);
+    }
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const postId = urlParams.get('id');
+
+    if (postId) {
+        const result = await updatePost(postId, name, pw, title, secret, question_txt, type, fileUrl);
 
         if (result.success) {
             await Swal.fire({
@@ -57,30 +74,11 @@ async function post() {
         } else {
             await Swal.fire({
                 icon: "error",
-                title: "등록 실패",
-                text: "게시글 수정에 실패했습니다."
+                title: "수정 실패",
+                text: result.errorMessage
             });
         }
     }
-
-    if (!file) {
-        savePost(name, pw, title, secret, question_txt, type)
-    } else {
-        const fileUrl = await uploadFile(file);
-        savePost(name, pw, title, secret, question_txt, type, fileUrl);
-    }
-}
-
-async function savePost(name, pw, title, secret, question_txt, type, fileUrl = '') {
-    const res = await supabase.from('question').insert([{ name, pw, title, question_txt, secret, type: type.value, image_url: fileUrl }]).select();
-
-    console.log(res);
-    
-    if (res.error) {
-        return { success: false, errorMessage: '게시글 수정 중 오류가 발생했습니다.' };
-    }
-
-    return { success: true };
 }
 
 async function uploadFile(file) {
@@ -91,57 +89,23 @@ async function uploadFile(file) {
     return res.data.publicUrl;
 }
 
-
-const passwordtext = document.getElementById('password');
-
-passwordtext.addEventListener('input', function (event) {
-    let inputValue = passwordtext.value;
-    passwordtext.value = inputValue.replace(/[^0-9]/g, '');
-
-    if (passwordtext.value.length > 4) {
-        passwordtext.value = passwordtext.value.substring(0, 4);
-    }
-});
-
-
-async function fetchPostDetails(postId) {
+async function updatePost(postId, name, pw, title, secret, question_txt, type, fileUrl = '') {
     const { data, error } = await supabase
-        .from('question') // 'question' 테이블에서
-        .select('*') // 모든 열을 선택
-        .eq('text_num', postId); // 'text_num'이 postId인 게시글을 찾음
+        .from('question')
+        .update({
+            name,
+            pw,
+            title,
+            question_txt,
+            secret,
+            type,
+            image_url: fileUrl
+        })
+        .eq('id', postId);
 
     if (error) {
-        console.error('게시글 수정 오류:', error);
-        return null; // 오류가 발생하면 null 반환
+        return { success: false, errorMessage: '게시글 수정 중 오류가 발생했습니다.' };
     }
 
-    return data ? data[0] : null; // 데이터가 있으면 첫 번째 게시글 반환
+    return { success: true };
 }
-
-// 게시글 상세 정보를 표시하는 함수
-async function displayPostDetails() {
-    const postId = getPostIdFromURL(); // URL에서 게시글 text_num 가져오기
-
-    if (!postId) {
-        alert('게시글 text_num을 찾을 수 없습니다.');
-        return;
-    }
-
-    const postDetails = await fetchPostDetails(postId); // 게시글 상세 데이터 가져오기
-
-    if (!postDetails) {
-        alert('게시글을 찾을 수 없습니다.');
-        return;
-    }
-
-    const postHeaderHTML1 = `
-        ${postDetails.name}
-    `;
-
-
-    document.getElementById('name').innerHTML = postHeaderHTML1;
-
-}
-
-// 페이지 로드 후 게시글을 표시
-document.addEventListener('DOMContentLoaded', displayPostDetails);

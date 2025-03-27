@@ -150,12 +150,14 @@ async function loadPage(page) {
             }
         }
 
+        const inquiryUrl = `inquirycheck.html?id=${item.text_num}`;
+
         if (item.created_at != null && today.fullDate == item.created_at.slice(0, 10)) {
             let localTime = new getdate(item.created_at);
             row.innerHTML = `
             <td>${item.text_num}</td>
             <td>${item.type}</td>
-            <td class="title"><a href="inquirycheck.html?id=${item.text_num}">${displayTitle}</a></td>
+            <td class="title"><a href="${inquiryUrl}">${displayTitle}</a></td>
             <td>${item.name}</td>
             <td>${localTime.getTime}</td>
             <td>${item.stat}</td>
@@ -164,7 +166,7 @@ async function loadPage(page) {
             row.innerHTML = `
             <td>${item.text_num}</td>
             <td>${item.type}</td>
-            <td class="title"><a href="inquirycheck.html?id=${item.text_num}">${displayTitle}</a></td>
+            <td class="title"><a href="${inquiryUrl}">${displayTitle}</a></td>
             <td>${item.name}</td>
             <td>${item.created_at.slice(0, 10)}</td>
             <td>${item.stat}</td>
@@ -174,7 +176,7 @@ async function loadPage(page) {
             row.innerHTML = `
             <td>${item.text_num}</td>
             <td>${item.type}</td>
-            <td class="title"><a href="inquirycheck.html?id=${item.text_num}">${displayTitle}</a></td>
+            <td class="title"><a href="${inquiryUrl}">${displayTitle}</a></td>
             <td>${item.name}</td>
             <td>저장오류</td>
             <td>${item.stat}</td>
