@@ -8,6 +8,8 @@ const itemsPerPage = 10;
 const groupSize = 10;
 let sortDirection = 'desc';
 let searchQuery = '';
+let searchResults = [];  // 검색 결과를 저장할 배열
+let totalSearchResults = 0;  // 검색 결과의 총 개수
 
 // 검색 기능 초기화
 function setupSearch() {
@@ -17,79 +19,9 @@ function setupSearch() {
     // 검색 아이콘 클릭 시
     searchIcon.addEventListener('click', async () => {
         const inputValue = document.querySelector('#searchinput').value;
-        const res = await supabase.from('question').select().ilike('title', `%${inputValue}%`).not('secret', 'eq', true);
-        const boardList = document.getElementById('board_list');
-        boardList.innerHTML = '';
-
-        let today = new getdate();
-        console.log(res);
-        res.data.forEach(item => {
-
-            const row = document.createElement('tr');
-
-            let displayTitle = '';
-
-
-            if (item.secret) {
-                displayTitle = '🔑 비밀글입니다.';
-            } else {
-                if (item.title === undefined || item.title === null || item.title === '') {
-                    displayTitle = '제목 오류입니다.';
-                } else {
-                    displayTitle = item.title;
-                }
-            }
-
-            const inquiryUrl = `inquirycheck.html?id=${item.text_num}`;
-
-            if (item.created_at != null && today.fullDate == item.created_at.slice(0, 10)) {
-                let localTime = new getdate(item.created_at);
-                row.innerHTML = `
-                <td>${item.text_num}</td>
-                <td>${item.type}</td>
-                <td class="title"><a href="${inquiryUrl}">${displayTitle}</a></td>
-                <td>${item.name}</td>
-                <td>${localTime.getTime}</td>
-                <td>${item.stat}</td>
-            `;
-            } else if (item.created_at != null) {
-                row.innerHTML = `
-                <td>${item.text_num}</td>
-                <td>${item.type}</td>
-                <td class="title"><a href="${inquiryUrl}">${displayTitle}</a></td>
-                <td>${item.name}</td>
-                <td>${item.created_at.slice(0, 10)}</td>
-                <td>${item.stat}</td>
-            `;
-            }
-            else {
-                row.innerHTML = `
-                <td>${item.text_num}</td>
-                <td>${item.type}</td>
-                <td class="title"><a href="${inquiryUrl}">${displayTitle}</a></td>
-                <td>${item.name}</td>
-                <td>저장오류</td>
-                <td>${item.stat}</td>
-            `;
-            }
-
-            /*  const titleLink = row.querySelector('.title a');
-     
-             if (item.secret) {
-                 titleLink.addEventListener('click', (e) => {
-                     e.preventDefault();
-                     showPasswordPopup(item.text_num);  // 비밀번호 팝업을 띄움
-                 });
-             } */
-
-            // row.onclick = () => {
-            //     window.location.href = `inquirycheck.html?id=${item.text_num}`;
-            // };
-            console.log(row);
-            boardList.appendChild(row);
-        })
-
-
+        searchQuery = inputValue.trim().toLowerCase();  // 검색어 업데이트
+        currentPage = 1;  // 검색 시 첫 페이지로 리셋
+        await loadSearchResults();  // 검색 결과 로드
     });
 
     // Enter 키를 눌렀을 때도 검색
@@ -97,10 +29,155 @@ function setupSearch() {
         if (event.key === 'Enter') {
             searchQuery = searchInput.value.trim().toLowerCase();
             currentPage = 1; // 검색 시 첫 페이지로 리셋
-            loadPostsAndPagination();
+            loadSearchResults();
         }
     });
 }
+
+// 검색 결과 로드
+async function loadSearchResults() {
+    const { data, count, error } = await supabase
+        .from('question')
+        .select()
+        .ilike('title', `%${searchQuery}%`)
+        .not('secret', 'eq', true);
+
+    if (error) {
+        console.error(error);
+        return;
+    }
+
+    searchResults = data;  // 검색 결과 저장
+    totalSearchResults = count;  // 검색된 게시글 수
+    renderSearchPagination();  // 검색 결과에 대한 페이지네이션 렌더링
+    loadSearchPage(currentPage);  // 검색 결과에 해당하는 페이지 로드
+}
+
+// 검색 결과에 해당하는 페이지 로드
+async function loadSearchPage(page) {
+    const offset = (page - 1) * itemsPerPage;
+    const to = (page * itemsPerPage) - 1;
+
+    const boardList = document.getElementById('board_list');
+    boardList.innerHTML = '';
+
+    const pageResults = searchResults.slice(offset, to + 1);  // 페이지에 해당하는 게시글만 필터링
+
+    if (pageResults.length === 0) {
+        boardList.innerHTML = `<tr><td colspan="6">등록된 게시글이 없습니다.</td></tr>`;
+        return;
+    }
+
+    let today = new getdate();
+    pageResults.forEach((item) => {
+        const row = document.createElement('tr');
+
+        let displayTitle = '';
+
+        if (item.secret) {
+            displayTitle = '🔑 비밀글입니다.';
+        } else {
+            displayTitle = item.title || '제목 오류입니다.';
+        }
+
+        const inquiryUrl = `inquirycheck.html?id=${item.text_num}`;
+
+        if (item.created_at != null && today.fullDate == item.created_at.slice(0, 10)) {
+            let localTime = new getdate(item.created_at);
+            row.innerHTML = `
+                <td>${item.text_num}</td>
+                <td>${item.type}</td>
+                <td class="title"><a href="${inquiryUrl}">${displayTitle}</a></td>
+                <td>${item.name}</td>
+                <td>${localTime.getTime}</td>
+                <td>${item.stat}</td>
+            `;
+        } else if (item.created_at != null) {
+            row.innerHTML = `
+                <td>${item.text_num}</td>
+                <td>${item.type}</td>
+                <td class="title"><a href="${inquiryUrl}">${displayTitle}</a></td>
+                <td>${item.name}</td>
+                <td>${item.created_at.slice(0, 10)}</td>
+                <td>${item.stat}</td>
+            `;
+        } else {
+            row.innerHTML = `
+                <td>${item.text_num}</td>
+                <td>${item.type}</td>
+                <td class="title"><a href="${inquiryUrl}">${displayTitle}</a></td>
+                <td>${item.name}</td>
+                <td>저장오류</td>
+                <td>${item.stat}</td>
+            `;
+        }
+
+        boardList.appendChild(row);
+    });
+}
+
+// 검색 결과에 대한 페이지네이션 렌더링
+function renderSearchPagination() {
+    const pageBtnsContainer = document.getElementById("pageBtns");
+    pageBtnsContainer.innerHTML = "";
+
+    const totalPages = Math.ceil(totalSearchResults / itemsPerPage);
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const leftBtn = document.getElementById("leftBtn");
+    const rightBtn = document.getElementById("rightBtn");
+
+    const currentGroup = Math.floor((currentPage - 1) / groupSize);
+    const startPage = currentGroup * groupSize + 1;
+    let endPage = startPage + groupSize - 1;
+    if (endPage > totalPages) endPage = totalPages;
+
+    leftBtn.disabled = currentGroup === 0;
+    leftBtn.onclick = () => {
+        if (currentGroup > 0) {
+            currentPage = (currentGroup - 1) * groupSize + 1;
+            loadSearchPage(currentPage);
+        }
+    };
+
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.onclick = () => {
+        if (currentPage > 1) {
+            currentPage--;
+            loadSearchPage(currentPage);
+        }
+    };
+
+    for (let i = startPage; i <= endPage; i++) {
+        const pageBtn = document.createElement("button");
+        pageBtn.textContent = i;
+        pageBtn.classList.add("page-btn");
+        if (i === currentPage) pageBtn.classList.add("active");
+
+        pageBtn.onclick = () => {
+            currentPage = i;
+            loadSearchPage(currentPage);
+        };
+        pageBtnsContainer.appendChild(pageBtn);
+    }
+
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.onclick = () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            loadSearchPage(currentPage);
+        }
+    };
+
+    rightBtn.disabled = endPage === totalPages;
+    rightBtn.onclick = () => {
+        if (endPage < totalPages) {
+            currentPage = endPage + 1;
+            loadSearchPage(currentPage);
+        }
+    };
+}
+
 
 function getCurrentPageFromURL() {
     const params = new URLSearchParams(window.location.search);
