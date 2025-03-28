@@ -148,6 +148,13 @@ body {
     align-content: center;
 }
 
+/*#date_start::before {*/
+/*    color: gray;*/
+/*}*/
+/*#date_end::before {*/
+/*    color: gray;*/
+/*}*/
+
 .input-box_content > input,
 .input-box_content > select {
     width: 70%;
