@@ -32,3 +32,27 @@ document.addEventListener("DOMContentLoaded", function () {
         }, scrollCooldown);
     });
 });
+
+function goToReservation() {
+    const name = document.querySelector('input[name="name"]').value;
+    const phone =
+        document.querySelector('input[name="B_TEL1"]').value +
+        document.querySelector('input[name="B_TEL2"]').value +
+        document.querySelector('input[name="B_TEL3"]').value;
+    const carrierSelect = document.querySelector('select[name="package"]');
+    const carrier = carrierSelect.options[carrierSelect.selectedIndex].text;
+
+    // 필수 입력 체크
+    if (!name || !phone || !carrier || carrier === "패키지 종류") {
+        alert("이름, 연락처, 캐리어 종류를 모두 입력해주세요!");
+        return;
+    }
+
+    // localStorage에 저장
+    localStorage.setItem("reservation_name", name);
+    localStorage.setItem("reservation_phone", phone);
+    localStorage.setItem("reservation_carrier", carrier);
+
+    window.location.href = "delivery_reservation.html";
+    window.location.href = "keep_reservation.html";// 또는 keep_reservation.html
+}

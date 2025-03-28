@@ -30,8 +30,9 @@ window.searchReserve = async function () {
 
     let rows = '';
     data.forEach((item) => {
+        const encoded = encodeURIComponent(JSON.stringify(item));
         rows += `
-        <tr onclick='openDetail(${JSON.stringify(item)})'>
+        <tr onclick='openDetailFromString("${encoded}")'>
             <td>${item.delivery_date}</td>
             <td>${item.name}</td>
             <td>${item.phone}</td>
@@ -41,8 +42,7 @@ window.searchReserve = async function () {
             <td>${item.medium}</td>
             <td>${item.large}</td>
             <td>${item.price}</td>
-        </tr>
-        `;
+        </tr>`;
     });
 
     $delivery_table.innerHTML = `
@@ -61,39 +61,80 @@ window.searchReserve = async function () {
                 </tr>
             </thead>
             <tbody>${rows}</tbody>
-        </table>
-    `;
+        </table>`;
 
     $view_table_container.style.display = 'block';
     $search_check.style.display = 'none';
 };
 
+window.openDetailFromString = function (itemStr) {
+    const item = JSON.parse(decodeURIComponent(itemStr));
+    window.openDetail(item);
+};
+
 window.openDetail = function (item) {
+    const {
+        id,
+        delivery_date,
+        name,
+        phone,
+        delivery_start,
+        delivery_arrive,
+        small,
+        medium,
+        large,
+        price
+    } = item;
+
     $check_detail_contents.innerHTML = `
-        <span class="close">&times;</span>
-        <h2>조회 상세 정보</h2>
-        <p>배송일 자 : ${item.delivery_date}</p>
-        <p>출 발 지 : ${item.delivery_start}</p>
-        <p>도 착 지 : ${item.delivery_arrive}</p>
-        <p>이    름 : ${item.name}</p>
-        <p>연 락 처 : ${item.phone}</p>
-        <hr>
-        <p>ㆍ소형 : ${item.small}</p>
-        <p>ㆍ중형 : ${item.medium}</p>
-        <p>ㆍ대형 : ${item.large}</p>
-        <hr>
-        <div class="d-total">
-            <strong>총 합</strong>
-            <span>${item.price}</span>
-            <span>원</span>
-        </div>
-    `;
+        <div class="detail-modal">
+            <span class="close" style="cursor:pointer; float:right; font-size: 20px;">&times;</span>
+            <h2>조회 상세 정보</h2>
+            <span class="data">
+            <p>배송일자 : ${delivery_date}</p>
+            <p>출 발 지 : ${delivery_start}</p>
+            <p>도 착 지 : ${delivery_arrive}</p>
+            <p>이      름 : ${name}</p>
+            <p>연 락 처 : ${phone}</p>
+            </span>
+            <hr>
+            <span class="size">
+            <p>ㆍ소형 : ${small}</p>
+            <p>ㆍ중형 : ${medium}</p>
+            <p>ㆍ대형 : ${large}</p>
+           </span>
+            <div class="d-total">
+                <strong>총 합</strong>
+                <span>${price}</span>
+                <span>원</span>
+            </div>
+            <button class="cancelBtn" onclick="cancelReservation('${id}')">예약 취소</button>
+        </div>`;
 
     $check_detail.classList.add('fade_in');
     $check_detail_contents.classList.add('slide_up');
 
-    document.querySelector('.close').onclick = () => {
+    const $close = document.querySelector('.close');
+    $close.addEventListener('click', () => {
         $check_detail.classList.remove('fade_in');
         $check_detail_contents.classList.remove('slide_up');
-    };
+    });
 };
+
+
+async function cancelReservation(id) {
+    const confirmCancel = confirm("정말로 예약을 취소하시겠습니까?");
+    if (!confirmCancel) return;
+
+    const { error } = await client
+        .from("delivery")
+        .delete()
+        .eq("id", id);
+
+    if (error) {
+        alert("취소 실패했습니다");
+    } else {
+        alert("예약이 취소되었습니다");
+        location.reload();
+    }
+}

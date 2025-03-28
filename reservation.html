@@ -114,12 +114,8 @@
         </div>
         <div class="section2">
             <div class="check_detail">
-                <div class="check_detail_contents">
-
-                </div>
-                <div class="cancelBtn" style="transition-delay: 0.4s">
-
-                </div>
+                <div class="check_detail_contents"></div>
+<!--                <div class="cancelBtn" style="transition-delay: 0.4s"></div>-->
             </div>
             <div class="check_container">
                 <div class="check_contents">
@@ -196,14 +192,7 @@
                                onclick="window.open(this.href, '_blank', 'width=710, height=650'); return false;">상세보기</a>
                         </div>
                     </div>
-                    <!--                <div class="keep_board_controler">-->
-                    <!--                    <div class="keep_board_controler_btn">-->
-                    <!--                        <p>1</p>-->
-                    <!--                    </div>-->
-                    <!--                    <div class="keep_board_controler_btn">-->
-                    <!--                        <p>2</p>-->
-                    <!--                    </div>-->
-                    <!--                </div>-->
+
                 </div>
             </div>
             <div class="keep_container">
@@ -252,14 +241,7 @@
                                onclick="window.open(this.href, '_blank', 'width=950, height=650'); return false;">상세보기</a>
                         </div>
                     </div>
-                    <!--                <div class="keep_board_controler">-->
-                    <!--                    <div class="keep_board_controler_btn">-->
-                    <!--                        <p>1</p>-->
-                    <!--                    </div>-->
-                    <!--                    <div class="keep_board_controler_btn">-->
-                    <!--                        <p>2</p>-->
-                    <!--                    </div>-->
-                    <!--                </div>-->
+
                 </div>
             </div>
         </div>
@@ -270,6 +252,7 @@
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="dropdown.js"></script>
 <script src="change_btn.js"></script>
 <script src="check.js"></script>
@@ -292,6 +275,23 @@
     });
     document.querySelector('.search_check button').addEventListener('click', searchReserve);
 
+</script>
+<script>
+    window.addEventListener("DOMContentLoaded", () => {
+        // 헤더 넣기
+        fetch("header.html")
+            .then((res) => res.text())
+            .then((data) => {
+                document.querySelector(".header").innerHTML = data;
+            });
+
+        // 푸터 넣기
+        fetch("footer.html")
+            .then((res) => res.text())
+            .then((data) => {
+                document.querySelector(".footer").innerHTML = data;
+            });
+    });
 </script>
 </body>
 

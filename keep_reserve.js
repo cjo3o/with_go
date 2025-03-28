@@ -37,3 +37,19 @@ $select_location.addEventListener('click', function (){
         alert("보관장소를 선택해주세요.")
     }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const name = localStorage.getItem("reservation_name");
+    const phone = localStorage.getItem("reservation_phone");
+    const carrier = localStorage.getItem("reservation_carrier");
+
+    if (name) document.getElementById("name").value = name;
+    if (phone) document.getElementById("phone").value = phone;
+
+    // ✅ select 요소에 기본값만 세팅 (사용자 선택 가능)
+    const $carrierSelect = document.getElementById("carrier");
+    if ($carrierSelect && carrier) {
+        const option = [...$carrierSelect.options].find(opt => opt.text === carrier);
+        if (option) $carrierSelect.value = option.value;
+    }
+});

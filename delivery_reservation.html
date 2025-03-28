@@ -14,6 +14,30 @@
         const supabasePassword = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpncmpqbmlmcW9hY3RwdXFvbGFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNDc0NTgsImV4cCI6MjA1NjgyMzQ1OH0._Vl-6CRKdMjeDRyNoxlfect7sgusZ7L0N5OYu0a5hT0";
 
         var supabase = window.supabase.createClient(supabaseUrl, supabasePassword);
+
+        window.deliverySubmit = async function () {
+            const data = {
+                date: document.getElementById("date").value,
+                start: document.getElementById("start").value,
+                arrive: document.getElementById("arrive").value,
+                detail_adr: document.getElementById("detail_adr").value,
+                name: document.getElementById("name").value,
+                phone: document.getElementById("phone").value,
+                carrier: localStorage.getItem("reservation_carrier") || "",
+                small: parseInt(document.getElementById("small").value),
+                medium: parseInt(document.getElementById("medium").value),
+                large: parseInt(document.getElementById("large").value),
+                total_price: parseInt(document.getElementById("total_price").textContent)
+            };
+
+            const { error } = await supabase.from("delivery").insert([data]);
+            if (error) {
+                alert("저장 실패");
+            } else {
+                alert("배송 예약 완료");
+                localStorage.clear();
+            }
+        }
     </script>
     <link rel="stylesheet" href="src/css/reset.css">
     <link rel="stylesheet" href="src/css/keep_reservation.css">
@@ -89,67 +113,7 @@
                 </div>
             </div>
         </div>
-        <!--        <div class="arrive_location">-->
-        <!--            <div class="arrive_location_contents">-->
-        <!--                <span class="close">&times;</span>-->
-        <!--                <div class="arrive_location_contents_header">-->
-        <!--                    <h1>보관 장소 선택</h1>-->
-        <!--                </div>-->
-        <!--                <div class="arrive_location_contents_body">-->
-        <!--                    <div class="card">-->
-        <!--                        <label for="seoul">-->
-        <!--                            <div class="card_title">-->
-        <!--                                <input type="radio" name="arrive_location" id="seoul"/>-->
-        <!--                                <h3>서울역</h3>-->
-        <!--                            </div>-->
-        <!--                            <div class="card_body">-->
-        <!--                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 22:00</p>-->
-        <!--                                <p>1번 출구에서 2번출구 방향</p>-->
-        <!--                            </div>-->
-        <!--                        </label>-->
-        <!--                    </div>-->
-        <!--                    <div class="card">-->
-        <!--                        <label for="hongdae">-->
-        <!--                            <div class="card_title">-->
-        <!--                                <input type="radio" name="arrive_location" id="hongdae"/>-->
-        <!--                                <h3>홍대입구</h3>-->
-        <!--                            </div>-->
-        <!--                            <div class="card_body">-->
-        <!--                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 22:00</p>-->
-        <!--                                <p>2호선 지하1층 공항철도 연결통로 내</p>-->
-        <!--                            </div>-->
-        <!--                        </label>-->
-        <!--                    </div>-->
-        <!--                    <div class="card">-->
-        <!--                        <label for="myeongdong">-->
-        <!--                            <div class="card_title">-->
-        <!--                                <input type="radio" name="arrive_location" id="myeongdong"/>-->
-        <!--                                <h3>명동</h3>-->
-        <!--                            </div>-->
-        <!--                            <div class="card_body">-->
-        <!--                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 22:00</p>-->
-        <!--                                <p>명동역 1,9,10번 출구 내</p>-->
-        <!--                            </div>-->
-        <!--                        </label>-->
-        <!--                    </div>-->
-        <!--                    <div class="card">-->
-        <!--                        <label for="gimpo">-->
-        <!--                            <div class="card_title">-->
-        <!--                                <input type="radio" name="arrive_location" id="gimpo"/>-->
-        <!--                                <h3>김포공항</h3>-->
-        <!--                            </div>-->
-        <!--                            <div class="card_body">-->
-        <!--                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 22:00</p>-->
-        <!--                                <p>5호선 김포공항 지하1층 게이트 방향</p>-->
-        <!--                            </div>-->
-        <!--                        </label>-->
-        <!--                    </div>-->
-        <!--                </div>-->
-        <!--                <div class="submit_select">-->
-        <!--                    <button class="select_location">선택완료</button>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--        </div>-->
+
         <div class="touModal_container">
             <div class="touModal">
                 <span class="close" onclick="closeModal()">&times;</span>
@@ -314,28 +278,7 @@
                                     <input type="text" name="전화번호" id="phone" placeholder="전화번호를 입력해주세요.">
                                 </div>
                             </div>
-                            <!--                            <div class="keep_reservation_contents_main_box_input-box">-->
-                            <!--                                <div class="input-box_title">-->
-                            <!--                                    국가-->
-                            <!--                                </div>-->
-                            <!--                                <div class="input-box_content">-->
-                            <!--                                    <select name="" id="country">-->
-                            <!--                                        <option>국가를 선택해주세요.</option>-->
-                            <!--                                        <option>대한민국</option>-->
-                            <!--                                        <option>중국</option>-->
-                            <!--                                        <option>일본</option>-->
-                            <!--                                        <option>미국</option>-->
-                            <!--                                    </select>-->
-                            <!--                                </div>-->
-                            <!--                            </div>-->
-                            <!--                            <div class="keep_reservation_contents_main_box_input-box">-->
-                            <!--                                <div class="input-box_title">-->
-                            <!--                                    이메일-->
-                            <!--                                </div>-->
-                            <!--                                <div class="input-box_content">-->
-                            <!--                                    <input type="text" name="" id="mail" placeholder="이메일을 입력해주세요.">-->
-                            <!--                                </div>-->
-                            <!--                            </div>-->
+
                         </div>
                     </div>
                     <div class="agreement_container">
