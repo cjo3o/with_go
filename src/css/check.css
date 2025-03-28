@@ -162,13 +162,16 @@ tbody > tr:hover {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    transition: all 0.5s;
+    transition-delay: 0.5s;
 }
 
 .fade_in {
     background-color: rgba(0,0,0,0.7);
-    transition: background-color 0.4s;
-    height: 100%;
+    transition: all 0.4s;
+    height: 100vh;
 }
+
 
 .check_detail_contents {
     position: relative;
@@ -182,6 +185,8 @@ tbody > tr:hover {
     transform: translateY(100%);
     opacity: 0;
     margin: 0 auto;
+    transition: all 0.5s;
+    transition-delay: 0.3s;
 }
 
 .cancelBtn {
