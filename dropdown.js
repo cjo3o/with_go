@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", async function () {
     const res = await supabase.auth.getUser();
-    console.log(res);
     fetch("header.html")
         .then(response => response.text())
         .then(data => {
@@ -126,7 +125,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                 }
             });
 
-
         });
 
     fetch("footer.html")
@@ -134,4 +132,20 @@ document.addEventListener("DOMContentLoaded", async function () {
         .then(data => {
             document.querySelector(".footer").innerHTML = data;
         });
+
+    document.querySelector('#storReserve').addEventListener('click', function() {
+        if (res.data.user === null) {
+            alert('로그인 후 이용해 주세요.');
+        } else {
+            location.href = 'keep_reservation.html';
+        }
+    });
+
+    document.querySelector('#deliverReserve').addEventListener('click', function() {
+        if (res.data.user === null) {
+            alert('로그인 후 이용해 주세요.');
+        } else {
+            location.href = 'delivery_reservation.html';
+        }
+    });
 });
