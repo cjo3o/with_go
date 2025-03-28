@@ -19,18 +19,18 @@ async function searchReserve() {
             text: "연락처를 확인해 주세요."
         })
     } else {
-        res.data.forEach(data => {
+        res.data.forEach(item => {
             rows += `
                 <tr onclick="openDetail(this)">
-                    <td>${data.delivery_date}</td>
-                    <td>${data.name}</td>
-                    <td>${data.phone}</td>
-                    <td>${data.delivery_start}</td>
-                    <td>${data.delivery_arrive}</td>
-                    <td>${data.small}</td>
-                    <td>${data.medium}</td>
-                    <td>${data.large}</td>
-                    <td>${data.price}</td>
+                    <td>${item.delivery_date}</td>
+                    <td>${item.name}</td>
+                    <td>${item.phone}</td>
+                    <td>${item.delivery_start}</td>
+                    <td>${item.delivery_arrive}</td>
+                    <td>${item.small}</td>
+                    <td>${item.medium}</td>
+                    <td>${item.large}</td>
+                    <td>${item.price}</td>
                 </tr>
                 `
         })

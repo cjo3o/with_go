@@ -13,6 +13,7 @@ document.addEventListener("DOMContentLoaded", async function () {
             const $header_acc = document.querySelector('#header_acc');
             const $header_keep = document.querySelector('#header_keep');
             const $select_login = document.querySelector('.select_login');
+            const $header_reserve = document.querySelector('#header_reserve');
             //
             // const $menu_img = document.querySelector('.menu_img');
             // const $sub_menu_modal_container = document.querySelector('.sub_menu_modal_container');
@@ -50,13 +51,15 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             document.querySelector('.login').addEventListener('mouseover', function () {
                 document.querySelector('.login_container').classList.add('down');
+                document.querySelector('.logout_container').classList.add('down2');
             });
 
             document.querySelector('.login').addEventListener('mouseout', function () {
                 document.querySelector('.login_container').classList.remove('down');
+                document.querySelector('.logout_container').classList.remove('down2');
             });
 
-            document.querySelector('.kakao_login').addEventListener('click', async function () {
+            document.querySelector('#kakao_login').addEventListener('click', async function () {
                 await supabase.auth.signInWithOAuth({
                     provider: 'kakao'
                 })
@@ -71,14 +74,16 @@ document.addEventListener("DOMContentLoaded", async function () {
                 const $select_login = document.querySelector('.select_login');
                 const nick = res.data.user.email.split('@').slice(0, 1);
                 const $logout = document.querySelector('.logout');
-                const $kakao_login = document.querySelector('.kakao_login');
+                const $login_container = document.querySelector('.login_container');
                 $select_login.innerHTML = `${nick} 님`;
+                $login_container.style.display = 'none';
                 $logout.style.display = 'block';
-                $kakao_login.style.display = 'none';
+
             } else {
-                const $kakao_login = document.querySelector('.kakao_login');
+                const $login_content = document.querySelectorAll('.login_content');
                 const $logout = document.querySelector('.logout');
-                $kakao_login.style.display = 'block';
+                const $login_container = document.querySelector('.login_container');
+                $login_container.style.display = 'block';
                 $logout.style.display = 'none';
             }
 
@@ -88,6 +93,33 @@ document.addEventListener("DOMContentLoaded", async function () {
                 event.preventDefault();
                 if ($check_container) {
                     window.scrollTo({top: $check_container.offsetTop, behavior: 'smooth'});
+                } else {
+                    location.href = 'reservation.html';
+                }
+            });
+            $header_reserve.addEventListener('click', function (event) {
+                const $reservation_infor_contents_container = document.querySelector('.reservation_infor_contents_container');
+                event.preventDefault();
+                if ($reservation_infor_contents_container) {
+                    window.scrollTo({top: 0, behavior: 'smooth'});
+                } else {
+                    location.href = 'reservation.html';
+                }
+            });
+            $header_acc.addEventListener('click', function (event) {
+                const $keep_container = document.querySelector('.keep_container');
+                event.preventDefault();
+                if ($keep_container) {
+                    window.scrollTo({top: $keep_container.offsetTop, behavior: 'smooth'});
+                } else {
+                    location.href = 'reservation.html';
+                }
+            });
+            $header_keep.addEventListener('click', function (event) {
+                const $keep_container = document.querySelector('.keep_container');
+                event.preventDefault();
+                if ($keep_container) {
+                    window.scrollTo({top: $keep_container.offsetTop, behavior: 'smooth'});
                 } else {
                     location.href = 'reservation.html';
                 }
