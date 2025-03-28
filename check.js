@@ -108,8 +108,8 @@ window.openDetail = function (item) {
                 <span>${price}</span>
                 <span>원</span>
             </div>
-            <button class="cancelBtn" onclick="cancelReservation('${id}')">예약 취소</button>
-        </div>`;
+        </div>
+<button class="cancelBtn" onclick="cancelReservation('${id}')">예약 취소</button>`;
 
     $check_detail.classList.add('fade_in');
     $check_detail_contents.classList.add('slide_up');
