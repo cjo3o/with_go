@@ -8,6 +8,8 @@ const $storage_table = document.querySelector('.storage_table');
 const $delivery_table = document.querySelector('.delivery_table');
 const $view_table_container = document.querySelector('.view_table_container');
 const $search_check = document.querySelector('.search_check');
+const $search_checkBox = document.querySelector('#search_checkBox');
+const $search_check_btn = document.querySelector('.search_check_btn');
 const $check_detail = document.querySelector('.check_detail');
 const $check_detail_contents = document.querySelector('.check_detail_contents');
 const $cancelBtn = document.querySelector('.cancelBtn');
@@ -15,7 +17,9 @@ const $cancelBtn = document.querySelector('.cancelBtn');
 if ($checkbox1) {
     $checkbox1.addEventListener('change', function () {
             if (this.checked) {
-                if ($checkbox2) {$checkbox2.checked = false;}
+                if ($checkbox2) {
+                    $checkbox2.checked = false;
+                }
             }
         }
     )
@@ -25,7 +29,9 @@ if ($checkbox1) {
 if ($checkbox2) {
     $checkbox2.addEventListener('change', function () {
             if (this.checked) {
-                if ($checkbox1) {$checkbox1.checked = false;}
+                if ($checkbox1) {
+                    $checkbox1.checked = false;
+                }
             }
         }
     )
@@ -104,7 +110,7 @@ async function searchReserve() {
         if (data && data.length > 0) {
             hasResults = true;
             rows = data.map(item => `
-                <tr>
+                <tr onclick="openDetail_st(this)">
                     <td>${item.name}</td>
                     <td>${item.phone}</td>
                     <td>${item.storage_start_date}</td>
@@ -158,7 +164,7 @@ async function searchReserve() {
         if (data && data.length > 0) {
             hasResults = true;
             rows = data.map(item => `
-                <tr>
+                <tr onclick="openDetail_de(this)">
                     <td>${item.delivery_date}</td>
                     <td>${item.name}</td>
                     <td>${item.phone}</td>
@@ -203,43 +209,114 @@ async function searchReserve() {
     }
 }
 
-function addCloseEvent() {
-    const $close = document.querySelector('.close');
-    if ($close) {
-        $close.addEventListener('click', function () {
-            $check_detail.classList.remove('fade_in');
-            $check_detail_contents.classList.remove('slide_up');
-            console.log('클릭');
-        });
-    }
-}
+function openDetail_st(trTag) {
+    const name = trTag.children[0].innerText;
+    const phone = trTag.children[1].innerText;
+    const storage_start_date = trTag.children[2].innerText;
+    const storage_end_date = trTag.children[3].innerText;
+    const samll = trTag.children[4].innerText;
+    const medium = trTag.children[5].innerText;
+    const large = trTag.children[6].innerText;
+    const price = trTag.children[7].innerText;
+    // const $cancelBtn = document.querySelector('.cancelBtn');
 
-// openDetail 함수
-window.openDetail = function (td) {
-    const row = td.parentElement; // 클릭한 td의 부모 tr 요소
-    const location = row.cells[2].innerText; // 보관 장소
-    const date = row.cells[1].innerText; // 보관 일자
-    const number = row.cells[0].innerText; // 수화물 번호
-    const price = row.cells[3].innerText; // 가격
-    const stat = row.cells[4].innerText; // 상태
     $check_detail_contents.innerHTML = `
-            <span class="close">&times;</span>
-            <h1>조회 상세 정보</h1>
-            <span>${stat}</span>
-            <span style="font-size: 1.3rem;">보관 장소 : ${location}</span>
-            <span>보관 일자 : ${date}</span>
-            <span>수화물 번호 : ${number}</span>
-            <ul>가격
-                <li>소형 1개 1000원</li>
-                <li>중형 1개 2000원</li>
-                <li>대형 1개 3000원</li>
-            </ul>
-            <hr>
-            <p>총합<span>${price}원</span></p>
-        `;
+                                        <span class="close" onclick="closeDetail()">&times;</span>
+                                        <h1>조회 상세 정보</h1>
+                                        <span>이름 : ${name}</span>
+                                        <span>연락처 : ${phone}</span>
+                                        <span>보관일자 : ${storage_start_date}</span>
+                                        <span>보관종료 : ${storage_end_date}</span>
+                                        <ul>
+                                            <li>소형 : ${samll}</li>
+                                            <li>중형 : ${medium}</li>
+                                            <li>대형 : ${large}</li>
+                                        </ul>
+                                        <hr>
+                                        <p>총합 <span>${price} 원</span></p>
+                                       `;
+    $cancelBtn.innerHTML = `
+                            <button class="cancelReserve" onclick="cancelReserve()">
+                                예약취소
+                            </button>
+                           `;
     $check_detail.classList.add('fade_in');
     $check_detail_contents.classList.add('slide_up');
+    $cancelBtn.classList.add('slide_up');
+}
 
-    // close 버튼 이벤트 리스너 추가
-    addCloseEvent();
-};
+function closeDetail() {
+    $check_detail_contents.classList.remove('slide_up');
+    $cancelBtn.classList.remove('slide_up');
+    $check_detail.classList.remove('fade_in');
+}
+
+async function cancelReserve() {
+    const result = await Swal.fire({
+        title: "정말 취소하시겠습니까?",
+        text: "취소하시면 복구하실 수 없습니다!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "확인",
+        cancelButtonText: "예약취소"
+    });
+}
+
+function openDetail_de(trTag) {
+    const date = trTag.children[0].innerText;
+    const name = trTag.children[1].innerText;
+    const phone = trTag.children[2].innerText;
+    const start = trTag.children[3].innerText;
+    const arrive = trTag.children[4].innerText;
+    const samll = trTag.children[5].innerText;
+    const medium = trTag.children[6].innerText;
+    const large = trTag.children[7].innerText;
+    const price = trTag.children[8].innerText;
+    // const $cancelBtn = document.querySelector('.cancelBtn');
+
+    $check_detail_contents.innerHTML = `
+                                        <span class="close" onclick="closeDetail()">&times;</span>
+                                        <h1>조회 상세 정보</h1>
+                                        <span>배송일자 : ${date}</span>
+                                        <span>출발지 : ${start}</span>
+                                        <span>도착지 : ${arrive}</span>
+                                        <span>이름 : ${name}</span>
+                                        <span>연락처 : ${phone}</span>
+                                        <ul>
+                                            <li>소형 : ${samll}</li>
+                                            <li>중형 : ${medium}</li>
+                                            <li>대형 : ${large}</li>
+                                        </ul>
+                                        <hr>
+                                        <p>총합 <span>${price} 원</span></p>
+                                       `;
+    $cancelBtn.innerHTML = `
+                            <button class="cancelReserve" onclick="cancelReserve()">
+                                예약취소
+                            </button>
+                           `;
+    $check_detail.classList.add('fade_in');
+    $check_detail_contents.classList.add('slide_up');
+    $cancelBtn.classList.add('slide_up');
+}
+
+function closeDetail() {
+    $check_detail_contents.classList.remove('slide_up');
+    $cancelBtn.classList.remove('slide_up');
+    $check_detail.classList.remove('fade_in');
+}
+
+async function cancelReserve() {
+    const result = await Swal.fire({
+        title: "정말 취소하시겠습니까?",
+        text: "취소하시면 복구하실 수 없습니다!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "확인",
+        cancelButtonText: "취소"
+    });
+}
