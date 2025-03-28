@@ -38,45 +38,46 @@ async function loadPostsAndPagination() {
 
 
 function renderPagination(totalPages) {
-    const pageBtnsContainer = document.getElementById('pageBtns');
-    pageBtnsContainer.innerHTML = '';
+    const pageBtnsContainer = document.getElementById("pageBtns");
+    pageBtnsContainer.innerHTML = "";
 
-    const prevBtn = document.getElementById('prevBtn');
-    prevBtn.hidden = currentPage === 1;
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
 
-    prevBtn.addEventListener('click', () => {
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.onclick = () => {
         if (currentPage > 1) {
             currentPage--;
             updatePage(totalPages);
         }
-    });
+    };
 
     for (let i = 1; i <= totalPages; i++) {
-        const pageBtn = document.createElement('button');
+        const pageBtn = document.createElement("button");
         pageBtn.textContent = i;
-        pageBtn.classList.add('page-btn');
+        pageBtn.classList.add("page-btn");
+        if (i === currentPage) pageBtn.classList.add("active");
 
-        if (i === currentPage) {
-            pageBtn.classList.add('active');
-        }
-
-        pageBtn.addEventListener('click', () => {
+        pageBtn.onclick = () => {
             currentPage = i;
             updatePage(totalPages);
-        });
+        };
 
         pageBtnsContainer.appendChild(pageBtn);
     }
 
-    const nextBtn = document.getElementById('nextBtn');
     nextBtn.disabled = currentPage === totalPages;
-
-    nextBtn.addEventListener('click', () => {
+    nextBtn.onclick = () => {
         if (currentPage < totalPages) {
             currentPage++;
             updatePage(totalPages);
         }
-    });
+    };
+}
+
+function updatePage(totalPages) {
+    renderPagination(totalPages);
+    fetchReviews(currentPage, currentType);
 }
 
 function updatePage(totalPages) {
@@ -200,49 +201,72 @@ async function loadPage(page) {
     });
 }
 
-function showPasswordPopup(postId) {
-    const passwordPopup = document.getElementById('password-popup');
-    const passwordInput = document.getElementById('password-input');
-    const passwordSubmit = document.getElementById('password-submit');
-    const passwordCancel = document.getElementById('password-cancel');
-
-    passwordPopup.style.display = 'flex';  // 팝업을 보이게 함
-
-    passwordSubmit.onclick = async () => {
-        const enteredPassword = passwordInput.value;
-
-        if (!enteredPassword) {
-            alert('비밀번호를 입력해주세요.');
-            return;
+async function showPasswordPopup(postId) {
+    // Swal.fire로 비밀번호 입력 팝업 생성
+    const { value: enteredPassword, isConfirmed } = await Swal.fire({
+        text: '작성시 입력한 비밀번호를 입력하세요',
+        input: 'password',
+        inputAttributes: {
+            autocapitalize: 'off',
+            placeholder: '비밀번호 숫자 6자리를 입력하세요',
+            inputMode: 'numeric',  // 모바일에서 숫자 키패드로 입력할 수 있도록 설정
+            maxlength: 6,  // 최대 6자리 입력 가능
+            pattern: '^[0-9]{1,6}$',
+        },
+        showCancelButton: true,
+        confirmButtonText: '확인',
+        cancelButtonText: '취소',
+        reverseButtons: true,
+        inputValidator: (value) => {
+            if (!value) {
+                return '비밀번호가 입력해주세요.';
+            }
+            if (!/^\d{1,6}$/.test(value)) {
+                return '숫자만 입력 가능하며, 최대 6자리까지 가능합니다.';
+            }
+        },
+        customClass: {
+            input: 'custom-input'  // custom class 추가
+        },
+        didOpen: () => {
+            // 'custom-input' 클래스에 CSS를 적용
+            const inputElement = document.querySelector('.swal2-input');
+            if (inputElement) {
+                inputElement.style.height = '35px'; // 크기 조정 (원하는 크기로 변경)
+                event.target.value = event.target.value.replace(/[^0-9]/g, '');
+            }
         }
+    });
 
-        // 비밀번호 확인 과정 (예시)
-        const { data, error } = await supabase
-            .from('question')
-            .select('pw')
-            .eq('text_num', postId)
-            .single();
+    // 사용자가 비밀번호 입력을 취소했거나 비밀번호가 입력되지 않았을 경우
+    if (!isConfirmed || !enteredPassword) {
+        return;
+    }
 
-            console.log(data);
+    // 비밀번호 확인 과정 (예시)
+    const { data, error } = await supabase
+        .from('question')
+        .select('pw')
+        .eq('text_num', postId)
+        .single();
 
-        if (error) {
-            alert('게시글을 찾을 수 없습니다.');
-            return;
-        }
+    if (error) {
+        Swal.fire({
+            icon: 'error',
+            title: '게시글을 찾을 수 없습니다.',
+            text: '게시글을 찾는 데 실패했습니다.'
+        });
+        return;
+    }
 
-        if (data.pw === enteredPassword) {
-            // 비밀번호가 맞으면 상세 페이지로 이동
-            window.location.href = `inquirycheck.html?id=${postId}`;
-        } else {
-            alert('비밀번호가 틀렸습니다.');
-        }
-
-        // 비밀번호 입력 후 팝업 닫기
-        passwordPopup.style.display = 'none';
-        passwordInput.value = '';  // 비밀번호 입력 초기화
-    };
-
-    passwordCancel.onclick = () => {
-        passwordPopup.style.display = 'none';  // 팝업을 닫음
-    };
+    if (data.pw === enteredPassword) {
+        // 비밀번호가 맞으면 상세 페이지로 이동
+        window.location.href = `inquirycheck.html?id=${postId}`;
+    } else {
+        Swal.fire({
+            icon: 'error',
+            title: '비밀번호가 틀렸습니다.',
+            text: '입력한 비밀번호가 맞지 않습니다.'
+        });
+    }
 }

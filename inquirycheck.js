@@ -67,7 +67,7 @@ async function deletePost(postId) {
     }
 
     Swal.fire({
-        title: "Deleted!",
+        title: "삭제 완료",
         text: "게시글 삭제에 성공하였습니다.",
         icon: "success"
     }).then(() => {
@@ -84,17 +84,35 @@ async function isSecretPost(postId) {
 // 비밀번호 입력 팝업
 async function promptForPassword(postId) {
     const { value: password } = await Swal.fire({
-        text: '비밀번호를 입력하세요',
+        text: '작성시 입력한 비밀번호를 입력하세요',
         input: 'password',
         inputAttributes: {
-            autocapitalize: 'off'
+            autocapitalize: 'off',
+            placeholder: '비밀번호 숫자 6자리를 입력하세요',
+            inputMode: 'numeric',  // 모바일에서 숫자 키패드로 입력할 수 있도록 설정
+            maxlength: 6,  // 최대 6자리 입력 가능
+            pattern: '^[0-9]{1,6}$',
         },
         showCancelButton: true,
-        confirmButtonText: '삭제',
+        confirmButtonText: '확인',
         cancelButtonText: '취소',
+        reverseButtons: true,
         inputValidator: (value) => {
             if (!value) {
-                return '비밀번호를 입력하세요.';
+                return '비밀번호가 입력해주세요.';
+            }
+            if (!/^\d{1,6}$/.test(value)) {
+                return '숫자만 입력 가능하며, 최대 6자리까지 가능합니다.';
+            }
+        },
+        customClass: {
+            input: 'custom-input'  // custom class 추가
+        },
+        didOpen: () => {
+            // 'custom-input' 클래스에 CSS를 적용
+            const inputElement = document.querySelector('.swal2-input');
+            if (inputElement) {
+                inputElement.style.height = '35px'; // 크기 조정 (원하는 크기로 변경)
             }
         }
     });
@@ -145,7 +163,8 @@ document.getElementById("delete").addEventListener("click", async function (even
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
             cancelButtonColor: "#d33",
-            confirmButtonText: "확인"
+            confirmButtonText: "확인",
+            cancelButtonText: "취소"
         }).then((result) => {
             if (result.isConfirmed) {
                 deletePost(postId);  // 삭제 함수 호출
