@@ -124,7 +124,10 @@ function openModal(review) {
             reverseButtons: true
         });
 
-        if (!password) return;
+        if (!password) {
+            await Swal.fire("입력 오류", "비밀번호를 입력해주세요.", "warning");
+            return;
+        }
 
         const { data, error } = await supabase
             .from("review")
@@ -159,8 +162,10 @@ function openModal(review) {
             reverseButtons: true,
         });
 
-        if (!password) return;
-
+        if (!password) {
+            await Swal.fire("입력 오류", "비밀번호를 입력해주세요.", "warning");
+            return;
+        }
         // 비밀번호 검증
         const { data, error } = await supabase
             .from("review")

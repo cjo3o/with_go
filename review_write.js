@@ -142,3 +142,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     window.location.href = "review.html";
   });
 });
+
+// 숫자만 입력 가능
+function validation_num(ev) {
+  const allowedKeys = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"];
+
+  if (!/[0-9]/.test(ev.key) && !allowedKeys.includes(ev.key)) {
+    ev.preventDefault();
+  }
+}
