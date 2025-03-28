@@ -29,7 +29,9 @@
                 </div>
                 <div class="reservation_infor_contents_container">
                     <div class="reservation_infor_contents" id="storReserve">
-
+                        <!--                        <div class="reservation_infor_contents_title">-->
+                        <!--                            <h2>보관예약</h2>-->
+                        <!--                        </div>-->
                         <div class="reservation_infor_contents_main">
                             <div class="reservation_infor_contents_main_section">
                                 <div class="reservation_infor_contents_main_section_img">
@@ -114,8 +116,12 @@
         </div>
         <div class="section2">
             <div class="check_detail">
-                <div class="check_detail_contents"></div>
-<!--                <div class="cancelBtn" style="transition-delay: 0.4s"></div>-->
+                <div class="check_detail_contents">
+
+                </div>
+                <div class="cancelBtn" style="transition-delay: 0.4s">
+
+                </div>
             </div>
             <div class="check_container">
                 <div class="check_contents">
@@ -126,22 +132,28 @@
                     <div class="view_table_container" style="display: none">
                         <div class="change_btn_container">
                             <div class="change_btn">
-                                <div class="keep_btn active">
+                                <label class="keep_btn active" for="keep_checkBox">
+                                    <input type="radio" name="reserve_type" id="keep_checkBox" checked="checked">
                                     보관
-                                </div>
-                                <div class="delivery_btn">
+                                </label>
+                                <label class="delivery_btn" for="delivery_checkBox">
+                                    <input type="radio" name="reserve_type" id="delivery_checkBox">
                                     배송
-                                </div>
+                                </label>
                             </div>
                         </div>
                         <div class="table_container">
                             <div class="delivery_table">
 
                             </div>
+                            <div class="keep_table">
+
+                            </div>
                         </div>
                         <div class="alert">
                             <h2>※조회할 내역이 존재하지 않습니다.※</h2>
                         </div>
+                        <!--                        <p style="width: 1200px; margin: 0 auto; opacity: 0; transform: translateY(100%); animation: slideUp 0.5s forwards; animation-delay: 1.5s" class="click_infor">※ 보관장소를 클릭하시면 상세정보를 볼 수 있습니다.</p>-->
                     </div>
                     <div class="search_check">
                         <input type="text" name="" id="search_reserveBox" placeholder="연락처를 입력해 주세요.">
@@ -251,8 +263,6 @@
 
     </div>
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="dropdown.js"></script>
 <script src="change_btn.js"></script>
 <script src="check.js"></script>

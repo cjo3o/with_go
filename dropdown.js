@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", async function () {
     const res = await supabase.auth.getUser();
-    console.log(res);
     fetch("header.html")
         .then(response => response.text())
         .then(data => {
@@ -70,7 +69,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 location.reload();
             });
 
-            if (localStorage.length > 0) {
+            if (res.data.user !== null) {
                 const $select_login = document.querySelector('.select_login');
                 const nick = res.data.user.email.split('@').slice(0, 1);
                 const $logout = document.querySelector('.logout');
@@ -95,6 +94,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                     window.scrollTo({top: $check_container.offsetTop, behavior: 'smooth'});
                 } else {
                     location.href = 'reservation.html';
+                    window.scrollTo({top: $check_container.offsetTop, behavior: 'smooth'});
                 }
             });
             $header_reserve.addEventListener('click', function (event) {
@@ -125,7 +125,6 @@ document.addEventListener("DOMContentLoaded", async function () {
                 }
             });
 
-
         });
 
     fetch("footer.html")
@@ -133,4 +132,20 @@ document.addEventListener("DOMContentLoaded", async function () {
         .then(data => {
             document.querySelector(".footer").innerHTML = data;
         });
+
+    document.querySelector('#storReserve').addEventListener('click', function() {
+        if (res.data.user === null) {
+            alert('로그인 후 이용해 주세요.');
+        } else {
+            location.href = 'keep_reservation.html';
+        }
+    });
+
+    document.querySelector('#deliverReserve').addEventListener('click', function() {
+        if (res.data.user === null) {
+            alert('로그인 후 이용해 주세요.');
+        } else {
+            location.href = 'delivery_reservation.html';
+        }
+    });
 });
