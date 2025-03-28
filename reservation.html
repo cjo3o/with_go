@@ -10,12 +10,6 @@
     <link rel="stylesheet" href="src/css/check.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>
-        const supabaseUrl = "https://zgrjjnifqoactpuqolao.supabase.co";
-        const supabasePassword = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpncmpqbmlmcW9hY3RwdXFvbGFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNDc0NTgsImV4cCI6MjA1NjgyMzQ1OH0._Vl-6CRKdMjeDRyNoxlfect7sgusZ7L0N5OYu0a5hT0";
-
-        var supabase = window.supabase.createClient(supabaseUrl, supabasePassword);
-    </script>
 </head>
 
 <body>
@@ -35,9 +29,7 @@
                 </div>
                 <div class="reservation_infor_contents_container">
                     <div class="reservation_infor_contents" id="storReserve">
-                        <!--                        <div class="reservation_infor_contents_title">-->
-                        <!--                            <h2>보관예약</h2>-->
-                        <!--                        </div>-->
+
                         <div class="reservation_infor_contents_main">
                             <div class="reservation_infor_contents_main_section">
                                 <div class="reservation_infor_contents_main_section_img">
@@ -154,13 +146,11 @@
                         <div class="alert">
                             <h2>※조회할 내역이 존재하지 않습니다.※</h2>
                         </div>
-                        <!--                        <p style="width: 1200px; margin: 0 auto; opacity: 0; transform: translateY(100%); animation: slideUp 0.5s forwards; animation-delay: 1.5s" class="click_infor">※ 보관장소를 클릭하시면 상세정보를 볼 수 있습니다.</p>-->
                     </div>
                     <div class="search_check">
                         <input type="text" name="" id="search_reserveBox" placeholder="연락처를 입력해 주세요.">
-                        <button onclick="searchReserve()">
-                            검색
-                        </button>
+                        <button id="searchBtn">검색</button>
+
                     </div>
                 </div>
             </div>
@@ -279,9 +269,11 @@
 
     </div>
 </div>
+
 <script src="dropdown.js"></script>
 <script src="change_btn.js"></script>
 <script src="check.js"></script>
+
 <script>
     document.querySelector('#storReserve').addEventListener('click', function() {
         if () {
@@ -298,6 +290,8 @@
             location.href = 'delivery_reservation.html';
         }
     });
+    document.querySelector('.search_check button').addEventListener('click', searchReserve);
+
 </script>
 </body>
 
