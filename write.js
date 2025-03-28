@@ -98,8 +98,8 @@ passwordtext.addEventListener('input', function (event) {
     let inputValue = passwordtext.value;
     passwordtext.value = inputValue.replace(/[^0-9]/g, '');
 
-    if (passwordtext.value.length > 4) {
-        passwordtext.value = passwordtext.value.substring(0, 4);
+    if (passwordtext.value.length > 6) {
+        passwordtext.value = passwordtext.value.substring(0, 6);
     }
 });
 

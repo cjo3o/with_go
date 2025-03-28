@@ -63,8 +63,26 @@ document.addEventListener('DOMContentLoaded', async function () {
             console.error('수정 실패:', updateError);
             alert("수정에 실패했습니다.");
         } else {
-            alert("수정이 완료되었습니다.");
-            window.location.href = 'inquiry.html'; // 수정 완료 후 목록 페이지로 리디렉션
+            Swal.fire({
+                title: '수정 완료!',
+                text: '수정이 완료되었습니다.',
+                icon: 'success',
+                confirmButtonText: '확인'
+            }).then(() => {
+                window.location.href = 'inquiry.html'; // 수정 완료 후 목록 페이지로 리디렉션
+            });
         }
     });
 });
+
+const passwordtext = document.getElementById('password');
+
+passwordtext.addEventListener('input', function (event) {
+    let inputValue = passwordtext.value;
+    passwordtext.value = inputValue.replace(/[^0-9]/g, '');
+
+    if (passwordtext.value.length > 6) {
+        passwordtext.value = passwordtext.value.substring(0, 6);
+    }
+});
+
