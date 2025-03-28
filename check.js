@@ -10,7 +10,6 @@ async function searchReserve() {
     const res = await supabase.from('delivery').select().eq('phone', $search_reserveBox.value).order('delivery_date', {ascending: false});
     let rows = '';
 
-    console.log(res.data);
 
     if (res.data.length === 0) {
         await Swal.fire({
@@ -100,9 +99,9 @@ function openDetail(trTag) {
 }
 
 function closeDetail() {
-    $check_detail.classList.remove('fade_in');
     $check_detail_contents.classList.remove('slide_up');
     $cancelBtn.classList.remove('slide_up');
+    $check_detail.classList.remove('fade_in');
 }
 
 async function cancelReserve() {
