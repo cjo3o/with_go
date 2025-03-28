@@ -111,7 +111,7 @@ function openModal(review) {
         const { value: password } = await Swal.fire({
             title: "비밀번호 확인",
             input: "password",
-            inputLabel: "작성 시 등록한 비밀번호를 입력해주세요",
+            inputLabel: "등록한 비밀번호를 입력해주세요",
             inputPlaceholder: "비밀번호",
             inputAttributes: {
                 maxlength: 6,
@@ -119,8 +119,9 @@ function openModal(review) {
                 autocorrect: "off"
             },
             showCancelButton: true,
+            cancelButtonText: "취소",
             confirmButtonText: "확인",
-            cancelButtonText: "취소"
+            reverseButtons: true
         });
 
         if (!password) return;
@@ -145,7 +146,7 @@ function openModal(review) {
         const { value: password } = await Swal.fire({
             title: "비밀번호 확인",
             input: "password",
-            inputLabel: "작성 시 등록한 비밀번호를 입력해주세요",
+            inputLabel: "등록한 비밀번호를 입력해주세요",
             inputPlaceholder: "비밀번호",
             inputAttributes: {
                 maxlength: 6,
@@ -153,8 +154,9 @@ function openModal(review) {
                 autocorrect: "off"
             },
             showCancelButton: true,
+            cancelButtonText: "취소",
             confirmButtonText: "확인",
-            cancelButtonText: "취소"
+            reverseButtons: true,
         });
 
         if (!password) return;
