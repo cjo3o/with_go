@@ -50,7 +50,6 @@ function closeModal() {
         const modal = $close[i].parentNode.parentNode;
         modal.style.display = 'none';
     }
-
 }
 
 function openSelectLocation() {
@@ -64,7 +63,6 @@ function openSelectLocation() {
 function searchAddress() {
     new daum.Postcode({
         oncomplete: function (data) {
-            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
             $arrive.value = data.address;
         }
     }).open();
@@ -75,19 +73,14 @@ function deliverySubmit() {
     for (let i = 0; i < arr.length; i++) {
         if (arr[i].value === '') {
             alert(`${arr[i].name}을(를) 입력해주세요.`);
-            // Swal.fire({
-            //     icon: "error",
-            //     title: "알림",
-            //     text: `${arr[i].name}을(를) 입력해주세요!`,
-            // });
-            window.scrollTo({top: arr[i].offsetTop, behavior: 'smooth'});
+            window.scrollTo({ top: arr[i].offsetTop, behavior: 'smooth' });
             return;
         }
     }
 
     if (agree.checked === false) {
         alert('이용약관을 확인해주세요.');
-        window.scrollTo({top: agree.offsetTop, behavior: 'smooth'});
+        window.scrollTo({ top: agree.offsetTop, behavior: 'smooth' });
         return;
     }
 
@@ -106,42 +99,37 @@ function deliverySubmit() {
         $keep_reservation_contents.style.display = 'none';
         $keep_reservation_check_contents.style.display = 'block';
 
-        window.scrollTo({top: 0, behavior: 'smooth'});
-
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 }
 
 async function paymentSubmit() {
     const res = await supabase.auth.getUser();
-    await supabase.from('delivery').insert([
-        {
-            user_id: res.data.user.id,
-            name: $name.value,
-            phone: $phone.value,
-            delivery_date: $date.value,
-            delivery_start: $start.value,
-            delivery_arrive: $arrive.value,
-            detail_adr: $detail_adr.value,
-            small: small.value,
-            medium: medium.value,
-            large: large.value,
-            price: Number($totalPrice.innerText)
-        }
-    ]).select();
-
+    await supabase.from('delivery').insert([{
+        user_id: res.data.user.id,
+        name: $name.value,
+        phone: $phone.value,
+        delivery_date: $date.value,
+        delivery_start: $start.value,
+        delivery_arrive: $arrive.value,
+        detail_adr: $detail_adr.value,
+        small: small.value,
+        medium: medium.value,
+        large: large.value,
+        price: Number($totalPrice.innerText)
+    }]);
 
     await Swal.fire({
         title: "예약이 완료되었습니다!",
         icon: "success",
         draggable: true
-    })
+    });
     location.href = 'index.html';
 }
 
 $select_location.addEventListener('click', function () {
     if (!!document.querySelector('input[name="start_location"]:checked')) {
         $start.value = document.querySelector('input[name="start_location"]:checked').parentNode.children[1].innerText;
-
         closeModal();
     } else {
         alert("장소를 선택해주세요.")
@@ -150,19 +138,24 @@ $select_location.addEventListener('click', function () {
 
 document.addEventListener('DOMContentLoaded', async function () {
     const loginData = await supabase.auth.getUser();
-    $name.value = loginData.data.user.user_metadata.name;
+    if (loginData?.data?.user?.user_metadata?.name) {
+        $name.value = loginData.data.user.user_metadata.name;
+    }
 
+    // 빠른 예약에서 가져온 값 자동 세팅
     const name = localStorage.getItem("reservation_name");
     const phone = localStorage.getItem("reservation_phone");
     const carrier = localStorage.getItem("reservation_carrier");
 
-    if (name) document.getElementById("name").value = name;
-    if (phone) document.getElementById("phone").value = phone;
+    if (name) $name.value = name;
+    if (phone) $phone.value = phone;
 
-    // ✅ select 요소에 기본값만 세팅 (사용자 선택 가능)
+    // select box 자동 선택
     const $carrierSelect = document.getElementById("carrier");
     if ($carrierSelect && carrier) {
-        const option = [...$carrierSelect.options].find(opt => opt.text === carrier);
-        if (option) $carrierSelect.value = option.value;
+        const matchedOption = [...$carrierSelect.options].find(opt => opt.text === carrier);
+        if (matchedOption) {
+            $carrierSelect.value = matchedOption.value;
+        }
     }
 });
