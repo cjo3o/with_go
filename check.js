@@ -5,21 +5,24 @@ const $view_table_container = document.querySelector('.view_table_container');
 const $delivery_table = document.querySelector('.delivery_table');
 const $search_reserveBox = document.querySelector('#search_reserveBox');
 const $cancelBtn = document.querySelector('.cancelBtn');
-
+const $keep_checkBox = document.querySelector('.keep_checkBox');
+const $delivery_checkBox = document.querySelector('.delivery_checkBox');
 async function searchReserve() {
-    const res = await supabase.from('delivery').select().eq('phone', $search_reserveBox.value).order('delivery_date', {ascending: false});
-    let rows = '';
+
+    if ($delivery_checkBox.checked) {
+        const res = await supabase.from('delivery').select().eq('phone', $search_reserveBox.value).order('delivery_date', {ascending: false});
+        let rows = '';
 
 
-    if (res.data.length === 0) {
-        await Swal.fire({
-            icon: "error",
-            title: "조회할 내역이 존재하지 않습니다.",
-            text: "연락처를 확인해 주세요."
-        })
-    } else {
-        res.data.forEach(item => {
-            rows += `
+        if (res.data.length === 0) {
+            await Swal.fire({
+                icon: "error",
+                title: "조회할 내역이 존재하지 않습니다.",
+                text: "연락처를 확인해 주세요."
+            })
+        } else {
+            res.data.forEach(item => {
+                rows += `
                 <tr onclick="openDetail(this)">
                     <td>${item.delivery_date}</td>
                     <td>${item.name}</td>
@@ -32,8 +35,8 @@ async function searchReserve() {
                     <td>${item.price}</td>
                 </tr>
                 `
-        })
-        let delivery_table = `
+            })
+            let delivery_table = `
                                 <table>
                                     <thead>
                                     <tr>
@@ -53,11 +56,64 @@ async function searchReserve() {
                                     </tbody>
                                 </table>
                                 `
-        $delivery_table.innerHTML = delivery_table;
-        $view_table_container.style.display = 'block';
-        $search_check.style.display = 'none';
+            $delivery_table.innerHTML = delivery_table;
+            $view_table_container.style.display = 'block';
+            $search_check.style.display = 'none';
+        }
     }
 
+    if ($keep_checkBox.checked) {
+        const res = await supabase.from('storage').select().eq('phone', $search_reserveBox.value).order('delivery_date', {ascending: false});
+        let rows = '';
+
+
+        if (res.data.length === 0) {
+            await Swal.fire({
+                icon: "error",
+                title: "조회할 내역이 존재하지 않습니다.",
+                text: "연락처를 확인해 주세요."
+            })
+        } else {
+            res.data.forEach(item => {
+                rows += `
+                <tr onclick="openDetail(this)">
+                    <td>${item.delivery_date}</td>
+                    <td>${item.name}</td>
+                    <td>${item.phone}</td>
+                    <td>${item.delivery_start}</td>
+                    <td>${item.delivery_arrive}</td>
+                    <td>${item.small}</td>
+                    <td>${item.medium}</td>
+                    <td>${item.large}</td>
+                    <td>${item.price}</td>
+                </tr>
+                `
+            })
+            let delivery_table = `
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th>배송일자</th>
+                                        <th>이름</th>
+                                        <th>연락처</th>
+                                        <th>배송 출발지</th>
+                                        <th>배송 도착지</th>
+                                        <th>소형</th>
+                                        <th>중형</th>
+                                        <th>대형</th>
+                                        <th>가격</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    ${rows}
+                                    </tbody>
+                                </table>
+                                `
+            $delivery_table.innerHTML = delivery_table;
+            $view_table_container.style.display = 'block';
+            $search_check.style.display = 'none';
+        }
+    }
 }
 
 function openDetail(trTag) {
