@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 location.reload();
             });
 
-            if (localStorage.length > 0) {
+            if (res.data.user !== null) {
                 const $select_login = document.querySelector('.select_login');
                 const nick = res.data.user.email.split('@').slice(0, 1);
                 const $logout = document.querySelector('.logout');
