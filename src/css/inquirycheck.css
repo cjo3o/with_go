@@ -76,7 +76,8 @@
 .cc {
     height: 300px;
     width: 900px;
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid rgb(180, 180, 180);
+
     p {
         width: 900px;
         text-align: left;
@@ -85,10 +86,25 @@
     }
 }
 
+.cc2 {
+    width: 900px;
+    border-bottom: 1px solid rgb(0, 0, 0);
+    p {
+        margin-top: 14px;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    img {
+        margin-bottom: 14px;
+    }
+}
+
 .cf1 {
     width: 900px;
-    margin-top: 15px;
-    margin-bottom: 15px;
+    margin-top: 19px;
+    margin-bottom: 19px;
 }
 
 .cf_left {

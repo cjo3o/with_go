@@ -19,28 +19,50 @@ function setupSearch() {
     // 검색 아이콘 클릭 시
     searchIcon.addEventListener('click', async () => {
         const inputValue = document.querySelector('#searchinput').value;
-        searchQuery = inputValue.trim().toLowerCase();  // 검색어 업데이트
-        currentPage = 1;  // 검색 시 첫 페이지로 리셋
-        await loadSearchResults();  // 검색 결과 로드
+
+        // 검색어가 2글자 이상이고, 띄어쓰기가 아닌 경우만 진행
+        if (inputValue.length >= 2 && inputValue.replace(/\s/g, '').length > 0) {
+            searchQuery = inputValue.toLowerCase();  // 검색어 업데이트
+            currentPage = 1;  // 검색 시 첫 페이지로 리셋
+            await loadSearchResults();  // 검색 결과 로드
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: '검색 오류',
+                text: '검색은 2글자 이상이어야 하며, 띄어쓰기만 입력할 수 없습니다.',
+            });
+        }
     });
 
     // Enter 키를 눌렀을 때도 검색
     searchInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
-            searchQuery = searchInput.value.trim().toLowerCase();
-            currentPage = 1; // 검색 시 첫 페이지로 리셋
-            loadSearchResults();
+            const inputValue = searchInput.value.trim();
+
+            // 검색어가 2글자 이상이고, 띄어쓰기가 아닌 경우만 진행
+            if (inputValue.length >= 2 && inputValue.replace(/\s/g, '').length > 0) {
+                searchQuery = inputValue.toLowerCase();  // 검색어 업데이트
+                currentPage = 1; // 검색 시 첫 페이지로 리셋
+                loadSearchResults();
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: '검색어 오류',
+                    html: '검색어는 2글자 이상이어야 하며,<br> 띄어쓰기만 입력할 수 없습니다.'
+                });
+            }
+            event.preventDefault();  // 기본 동작 방지 (폼 제출 방지)
         }
     });
 }
-
 // 검색 결과 로드
 async function loadSearchResults() {
     const { data, count, error } = await supabase
         .from('question')
-        .select()
+        .select('*', { count: 'exact' })
         .ilike('title', `%${searchQuery}%`)
-        .not('secret', 'eq', true);
+        .not('secret', 'eq', true)
+        .order('created_at', { ascending: sortDirection === 'asc' });
 
     if (error) {
         console.error(error);
@@ -53,6 +75,7 @@ async function loadSearchResults() {
     loadSearchPage(currentPage);  // 검색 결과에 해당하는 페이지 로드
 }
 
+
 // 검색 결과에 해당하는 페이지 로드
 async function loadSearchPage(page) {
     const offset = (page - 1) * itemsPerPage;
@@ -64,7 +87,7 @@ async function loadSearchPage(page) {
     const pageResults = searchResults.slice(offset, to + 1);  // 페이지에 해당하는 게시글만 필터링
 
     if (pageResults.length === 0) {
-        boardList.innerHTML = `<tr><td colspan="6">등록된 게시글이 없습니다.</td></tr>`;
+        boardList.innerHTML = `<tr><td colspan="6">검색된 게시글이 없습니다.</td></tr>`;
         return;
     }
 
@@ -137,6 +160,7 @@ function renderSearchPagination() {
         if (currentGroup > 0) {
             currentPage = (currentGroup - 1) * groupSize + 1;
             loadSearchPage(currentPage);
+            renderSearchPagination();
         }
     };
 
@@ -145,6 +169,7 @@ function renderSearchPagination() {
         if (currentPage > 1) {
             currentPage--;
             loadSearchPage(currentPage);
+            renderSearchPagination();
         }
     };
 
@@ -157,6 +182,7 @@ function renderSearchPagination() {
         pageBtn.onclick = () => {
             currentPage = i;
             loadSearchPage(currentPage);
+            renderSearchPagination();  // 페이지네이션 리렌더링
         };
         pageBtnsContainer.appendChild(pageBtn);
     }
@@ -166,6 +192,7 @@ function renderSearchPagination() {
         if (currentPage < totalPages) {
             currentPage++;
             loadSearchPage(currentPage);
+            renderSearchPagination();
         }
     };
 
@@ -174,6 +201,7 @@ function renderSearchPagination() {
         if (endPage < totalPages) {
             currentPage = endPage + 1;
             loadSearchPage(currentPage);
+            renderSearchPagination();
         }
     };
 }

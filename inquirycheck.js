@@ -22,14 +22,24 @@ async function displayPostDetails() {
     const postId = getPostIdFromURL();
 
     if (!postId) {
-        alert('게시글 text_num을 찾을 수 없습니다.');
+        Swal.fire({
+            title: '게시글 찾기 실패',
+            text: '게시글을 찾을 수 없습니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+        });
         return;
     }
 
     const postDetails = await fetchPostDetails(postId);
 
     if (!postDetails) {
-        alert('게시글을 찾을 수 없습니다.');
+        Swal.fire({
+            title: '게시글 찾기 실패',
+            text: '게시글을 찾을 수 없습니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+        });
         return;
     }
 
@@ -45,9 +55,31 @@ async function displayPostDetails() {
             <p>${postDetails.question_txt}</p>
     `;
 
+    let postHeaderHTML3 = `
+    <p>첨부 파일: <a href="${postDetails.image_url}" target="_blank">${postDetails.image_url}</a></p>
+`;
+
+    // 첨부된 파일이 있는 경우
+    if (postDetails.image_url) {
+        // 파일 URL을 변수로 저장
+        const fileUrl = postDetails.image_url;
+        const fileName = fileUrl.split('/').pop();  // 파일 이름을 추출
+
+        // 파일 확장자 확인
+        const fileExtension = fileName.split('.').pop().toLowerCase();
+        if (['jpg', 'jpeg', 'png', 'gif', 'bmp'].includes(fileExtension)) {
+            // 이미지일 경우 미리보기로 이미지를 표시
+            postHeaderHTML3 += `
+            <div style="text-align: left;">
+                <img src="${fileUrl}" alt="첨부된 이미지" style="max-width: 200px; max-height: 200px; cursor: pointer; margin-top: 10px;">
+            </a>
+        `;
+        }
+    }
+
     document.getElementById('cen_heder2').innerHTML = postHeaderHTML1;
     document.getElementById('cen_content').innerHTML = postHeaderHTML2;
-
+    document.getElementById('cen_content2').innerHTML = postHeaderHTML3;
 }
 
 async function deletePost(postId) {
