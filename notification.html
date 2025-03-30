@@ -7,6 +7,7 @@
     <title>공지사항</title>
     <link rel="stylesheet" href="src/css/reset.css">
     <link rel="stylesheet" href="src/css/notification.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body>
@@ -48,8 +49,8 @@
 
 <div class="notice-container">
     <div class="search-box">
-        <input type="text" placeholder="검색어를 입력해주세요.">
-        <img src="src/icon/searche.png">
+        <input type="text" name="search" id="searchinput" class="search" placeholder="검색어를 입력해주세요.">
+        <i class="fa-solid fa-magnifying-glass search_img" id="searchIcon"></i>
     </div>
 
     <div class="event-list"></div>

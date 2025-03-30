@@ -27,6 +27,14 @@ document.addEventListener("DOMContentLoaded", async function () {
     const noticeList = document.getElementById("notice-list"); // 공지사항 목록
     const noticeTable = document.querySelector(".notice-table tbody"); // 테이블
     const searchInput = document.querySelector(".search-box input"); // 검색창
+    const searchIcon = document.getElementById("searchIcon");
+    searchIcon.addEventListener("click", function () {
+        const keyword = searchInput.value.trim().toLowerCase();
+        const filteredNotices = notices.filter(notice =>
+            notice.title.toLowerCase().includes(keyword) || notice.created_at.includes(keyword)
+        );
+        renderTable(filteredNotices);
+    });
 
     if (!noticeList || !noticeTable || !searchInput) {
         console.error("📌 오류: 필수 HTML 요소를 찾을 수 없습니다!");
