@@ -8,6 +8,8 @@ const itemsPerPage = 10;
 const groupSize = 10;
 let sortDirection = 'desc';
 let searchQuery = '';
+let searchResults = [];  // 검색 결과를 저장할 배열
+let totalSearchResults = 0;  // 검색 결과의 총 개수
 
 // 검색 기능 초기화
 function setupSearch() {
@@ -17,34 +19,95 @@ function setupSearch() {
     // 검색 아이콘 클릭 시
     searchIcon.addEventListener('click', async () => {
         const inputValue = document.querySelector('#searchinput').value;
-        const res = await supabase.from('question').select().ilike('title', `%${inputValue}%`).not('secret', 'eq', true);
-        const boardList = document.getElementById('board_list');
-        boardList.innerHTML = '';
 
-        let today = new getdate();
-        console.log(res);
-        res.data.forEach(item => {
+        // 검색어가 2글자 이상이고, 띄어쓰기가 아닌 경우만 진행
+        if (inputValue.length >= 2 && inputValue.replace(/\s/g, '').length > 0) {
+            searchQuery = inputValue.toLowerCase();  // 검색어 업데이트
+            currentPage = 1;  // 검색 시 첫 페이지로 리셋
+            await loadSearchResults();  // 검색 결과 로드
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: '검색 오류',
+                text: '검색은 2글자 이상이어야 하며, 띄어쓰기만 입력할 수 없습니다.',
+            });
+        }
+    });
 
-            const row = document.createElement('tr');
+    // Enter 키를 눌렀을 때도 검색
+    searchInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            const inputValue = searchInput.value.trim();
 
-            let displayTitle = '';
-
-
-            if (item.secret) {
-                displayTitle = '🔑 비밀글입니다.';
+            // 검색어가 2글자 이상이고, 띄어쓰기가 아닌 경우만 진행
+            if (inputValue.length >= 2 && inputValue.replace(/\s/g, '').length > 0) {
+                searchQuery = inputValue.toLowerCase();  // 검색어 업데이트
+                currentPage = 1; // 검색 시 첫 페이지로 리셋
+                loadSearchResults();
             } else {
-                if (item.title === undefined || item.title === null || item.title === '') {
-                    displayTitle = '제목 오류입니다.';
-                } else {
-                    displayTitle = item.title;
-                }
+                Swal.fire({
+                    icon: 'error',
+                    title: '검색어 오류',
+                    html: '검색어는 2글자 이상이어야 하며,<br> 띄어쓰기만 입력할 수 없습니다.'
+                });
             }
+            event.preventDefault();  // 기본 동작 방지 (폼 제출 방지)
+        }
+    });
+}
+// 검색 결과 로드
+async function loadSearchResults() {
+    const { data, count, error } = await supabase
+        .from('question')
+        .select('*', { count: 'exact' })
+        .ilike('title', `%${searchQuery}%`)
+        .not('secret', 'eq', true)
+        .order('created_at', { ascending: sortDirection === 'asc' });
 
-            const inquiryUrl = `inquirycheck.html?id=${item.text_num}`;
+    if (error) {
+        console.error(error);
+        return;
+    }
 
-            if (item.created_at != null && today.fullDate == item.created_at.slice(0, 10)) {
-                let localTime = new getdate(item.created_at);
-                row.innerHTML = `
+    searchResults = data;  // 검색 결과 저장
+    totalSearchResults = count;  // 검색된 게시글 수
+    renderSearchPagination();  // 검색 결과에 대한 페이지네이션 렌더링
+    loadSearchPage(currentPage);  // 검색 결과에 해당하는 페이지 로드
+}
+
+
+// 검색 결과에 해당하는 페이지 로드
+async function loadSearchPage(page) {
+    const offset = (page - 1) * itemsPerPage;
+    const to = (page * itemsPerPage) - 1;
+
+    const boardList = document.getElementById('board_list');
+    boardList.innerHTML = '';
+
+    const pageResults = searchResults.slice(offset, to + 1);  // 페이지에 해당하는 게시글만 필터링
+
+    if (pageResults.length === 0) {
+        boardList.innerHTML = `<tr><td colspan="6">검색된 게시글이 없습니다.</td></tr>`;
+        return;
+    }
+
+    let today = new getdate();
+    pageResults.forEach((item) => {
+        const row = document.createElement('tr');
+
+        let displayTitle = '';
+
+        if (item.secret) {
+            displayTitle = '🔑 비밀글입니다.';
+        } else {
+            displayTitle = item.title || '제목 오류입니다.';
+        }
+
+        const inquiryUrl = `inquirycheck.html?id=${item.text_num}`;
+
+        if (item.created_at != null && today.fullDate == item.created_at.slice(0, 10)) {
+            let localTime = new getdate(item.created_at);
+            row.innerHTML = `
                 <td>${item.text_num}</td>
                 <td>${item.type}</td>
                 <td class="title"><a href="${inquiryUrl}">${displayTitle}</a></td>
@@ -52,8 +115,8 @@ function setupSearch() {
                 <td>${localTime.getTime}</td>
                 <td>${item.stat}</td>
             `;
-            } else if (item.created_at != null) {
-                row.innerHTML = `
+        } else if (item.created_at != null) {
+            row.innerHTML = `
                 <td>${item.text_num}</td>
                 <td>${item.type}</td>
                 <td class="title"><a href="${inquiryUrl}">${displayTitle}</a></td>
@@ -61,9 +124,8 @@ function setupSearch() {
                 <td>${item.created_at.slice(0, 10)}</td>
                 <td>${item.stat}</td>
             `;
-            }
-            else {
-                row.innerHTML = `
+        } else {
+            row.innerHTML = `
                 <td>${item.text_num}</td>
                 <td>${item.type}</td>
                 <td class="title"><a href="${inquiryUrl}">${displayTitle}</a></td>
@@ -71,36 +133,79 @@ function setupSearch() {
                 <td>저장오류</td>
                 <td>${item.stat}</td>
             `;
-            }
-
-            /*  const titleLink = row.querySelector('.title a');
-     
-             if (item.secret) {
-                 titleLink.addEventListener('click', (e) => {
-                     e.preventDefault();
-                     showPasswordPopup(item.text_num);  // 비밀번호 팝업을 띄움
-                 });
-             } */
-
-            // row.onclick = () => {
-            //     window.location.href = `inquirycheck.html?id=${item.text_num}`;
-            // };
-            console.log(row);
-            boardList.appendChild(row);
-        })
-
-
-    });
-
-    // Enter 키를 눌렀을 때도 검색
-    searchInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            searchQuery = searchInput.value.trim().toLowerCase();
-            currentPage = 1; // 검색 시 첫 페이지로 리셋
-            loadPostsAndPagination();
         }
+
+        boardList.appendChild(row);
     });
 }
+
+// 검색 결과에 대한 페이지네이션 렌더링
+function renderSearchPagination() {
+    const pageBtnsContainer = document.getElementById("pageBtns");
+    pageBtnsContainer.innerHTML = "";
+
+    const totalPages = Math.ceil(totalSearchResults / itemsPerPage);
+    const prevBtn = document.getElementById("prevBtn");
+    const nextBtn = document.getElementById("nextBtn");
+    const leftBtn = document.getElementById("leftBtn");
+    const rightBtn = document.getElementById("rightBtn");
+
+    const currentGroup = Math.floor((currentPage - 1) / groupSize);
+    const startPage = currentGroup * groupSize + 1;
+    let endPage = startPage + groupSize - 1;
+    if (endPage > totalPages) endPage = totalPages;
+
+    leftBtn.disabled = currentGroup === 0;
+    leftBtn.onclick = () => {
+        if (currentGroup > 0) {
+            currentPage = (currentGroup - 1) * groupSize + 1;
+            loadSearchPage(currentPage);
+            renderSearchPagination();
+        }
+    };
+
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.onclick = () => {
+        if (currentPage > 1) {
+            currentPage--;
+            loadSearchPage(currentPage);
+            renderSearchPagination();
+        }
+    };
+
+    for (let i = startPage; i <= endPage; i++) {
+        const pageBtn = document.createElement("button");
+        pageBtn.textContent = i;
+        pageBtn.classList.add("page-btn");
+        if (i === currentPage) pageBtn.classList.add("active");
+
+        pageBtn.onclick = () => {
+            currentPage = i;
+            loadSearchPage(currentPage);
+            renderSearchPagination();  // 페이지네이션 리렌더링
+        };
+        pageBtnsContainer.appendChild(pageBtn);
+    }
+
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.onclick = () => {
+        if (currentPage < totalPages) {
+            currentPage++;
+            loadSearchPage(currentPage);
+            renderSearchPagination();
+        }
+    };
+
+    rightBtn.disabled = endPage === totalPages;
+    rightBtn.onclick = () => {
+        if (endPage < totalPages) {
+            currentPage = endPage + 1;
+            loadSearchPage(currentPage);
+            renderSearchPagination();
+        }
+    };
+}
+
 
 function getCurrentPageFromURL() {
     const params = new URLSearchParams(window.location.search);

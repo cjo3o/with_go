@@ -5,8 +5,14 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     // text_num이 없으면 오류 처리
     if (!textNum) {
-        alert("잘못된 접근입니다.");
-        window.location.href = "inquirycheck.html"; // 잘못된 접근시 목록 페이지로 이동
+        Swal.fire({
+            title: '잘못된 접근',
+            text: '잘못된 접근입니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+        }).then(() => {
+            window.location.href = "inquirycheck.html"; // 잘못된 접근시 목록 페이지로 이동
+        });
     }
 
     const { data, error } = await supabase
@@ -17,7 +23,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     if (error) {
         console.error('게시글을 불러오는 데 실패했습니다:', error);
-        alert("게시글을 불러오지 못했습니다.");
+        Swal.fire({
+            title: '오류 발생',
+            text: '게시글을 불러오지 못했습니다.',
+            icon: 'error',
+            confirmButtonText: '확인'
+        });
         return;
     }
 
@@ -45,6 +56,46 @@ document.addEventListener('DOMContentLoaded', async function () {
         const content = document.getElementById('write_text').value;
         const secret = document.getElementById('secret-toggle').checked;
         const type = document.querySelector('input[name="type"]:checked').value;
+        const file = document.querySelector('#file').files[0];
+
+        let fileUrl = data.file_url;  // 기존 파일 URL을 사용 (파일을 수정하지 않으면 기존 파일 유지)
+
+        // 파일이 업로드된 경우 새로운 파일을 Supabase에 업로드하고 URL을 가져옴
+        if (file) {
+            const filename = `${crypto.randomUUID()}.${file.name.split('.').pop()}`;
+            const { data: fileData, error: uploadError } = await supabase.storage
+                .from('images/inquiry_images')
+                .upload(filename, file);
+
+            if (uploadError) {
+                console.error('파일 업로드 실패:', uploadError);
+                Swal.fire({
+                    title: '파일 업로드 실패',
+                    text: '파일 업로드에 실패했습니다.',
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+                return;
+            }
+
+            // 파일 업로드 성공 후 URL을 가져옴
+            const { data: fileUrlData, error: getUrlError } = await supabase.storage
+                .from('images/inquiry_images')
+                .getPublicUrl(filename);
+
+            if (getUrlError) {
+                console.error('파일 URL을 가져오는 데 실패했습니다:', getUrlError);
+                Swal.fire({
+                    title: '파일 URL 가져오기 실패',
+                    text: '파일 URL을 가져오는 데 실패했습니다.',
+                    icon: 'error',
+                    confirmButtonText: '확인'
+                });
+                return;
+            }
+
+            fileUrl = fileUrlData.publicUrl;  // 새로운 파일 URL로 업데이트
+        }
 
         // 입력된 데이터를 Supabase에 업데이트
         const { data: updatedData, error: updateError } = await supabase
@@ -55,17 +106,23 @@ document.addEventListener('DOMContentLoaded', async function () {
                 title: title,
                 question_txt: content,
                 secret: secret,
-                type: type
+                type: type,
+                image_url: fileUrl  // 새로운 파일 URL을 저장
             })
             .eq('text_num', textNum);  // 수정할 게시글 ID를 지정
 
         if (updateError) {
-            console.error('수정 실패:', updateError);
-            alert("수정에 실패했습니다.");
+            console.error('수정 실패', updateError);
+            Swal.fire({
+                title: '수정 실패',
+                text: '수정에 실패했습니다.',
+                icon: 'error',
+                confirmButtonText: '확인'
+            });
         } else {
             Swal.fire({
-                title: '수정 완료!',
-                text: '수정이 완료되었습니다.',
+                title: '수정 완료',
+                text: '수정 완료되었습니다.',
                 icon: 'success',
                 confirmButtonText: '확인'
             }).then(() => {
