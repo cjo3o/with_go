@@ -47,7 +47,22 @@ async function post() {
 
     let fileUrl = '';
     // 파일이 있으면 파일 업로드 후 URL 받기
+
+    // 파일 확장자 허용 목록
+    const allowedExtensions = ["jpg", "jpeg", "png", "gif", "bmp"];
+
     if (file) {
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+
+        if (!allowedExtensions.includes(fileExtension)) {
+            await Swal.fire({
+                icon: "error",
+                title: "파일 업로드 실패",
+                html: "지원되지 않는 파일 형식입니다.<br>jpg, jpeg, png, gif, bmp 파일만 업로드 가능합니다.",
+                confirmButtonText: '확인'
+            });
+            return; // 함수 종료
+        }
         fileUrl = await uploadFile(file);
     }
 
@@ -84,7 +99,7 @@ async function savePost(name, pw, title, secret, question_txt, type, fileUrl = '
     }]).select();
 
     console.log(res);
-    
+
     if (res.error) {
         return { success: false, errorMessage: '게시글 등록 중 오류가 발생했습니다.' };
     }

@@ -29,7 +29,7 @@ function setupSearch() {
             Swal.fire({
                 icon: 'error',
                 title: '검색 오류',
-                text: '검색은 2글자 이상이어야 하며, 띄어쓰기만 입력할 수 없습니다.',
+                text: '검색은 2글자 이상이어야 하며, 빈 칸만 입력할 수 없습니다.',
             });
         }
     });

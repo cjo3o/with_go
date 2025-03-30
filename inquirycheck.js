@@ -75,6 +75,9 @@ async function displayPostDetails() {
             </a>
         `;
         }
+    } else {
+        // 첨부된 파일이 없는 경우
+        postHeaderHTML3 = `<p>첨부 파일: 첨부된 파일이 없습니다.</p>`;
     }
 
     document.getElementById('cen_heder2').innerHTML = postHeaderHTML1;
