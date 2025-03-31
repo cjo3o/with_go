@@ -80,7 +80,8 @@ function deliverySubmit() {
             //     title: "알림",
             //     text: `${arr[i].name}을(를) 입력해주세요!`,
             // });
-            window.scrollTo({top: arr[i].offsetTop, behavior: 'smooth'});
+            // window.scrollTo({top: arr[i].offsetTop, behavior: 'smooth'});
+            arr[i].focus();
             return;
         }
     }
@@ -107,6 +108,7 @@ function deliverySubmit() {
         $keep_reservation_check_contents.style.display = 'block';
 
         window.scrollTo({top: 0, behavior: 'smooth'});
+
 
     }
 }
