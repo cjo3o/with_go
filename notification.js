@@ -72,12 +72,5 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     renderTable(notices); // ✅ 초기 공지사항 목록 표시
 
-    // ✅ 검색 기능 추가
-    searchInput.addEventListener("input", function () {
-        const keyword = searchInput.value.trim().toLowerCase();
-        const filteredNotices = notices.filter(notice =>
-            notice.title.toLowerCase().includes(keyword) || notice.created_at.includes(keyword)
-        );
-        renderTable(filteredNotices);
-    });
+
 });
