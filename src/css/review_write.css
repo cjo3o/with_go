@@ -5,14 +5,14 @@
 }
 
 
-.content {
+.content{
     margin-top: 87px;
     height: 250px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-image: url(src/images/review_bg.png);
+    background-image: url(/src/images/review_bg.png);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -37,9 +37,7 @@
         opacity: 1;
     }
 }
-.content h3 {
-    color: white;
-}
+
 .section {
   display: flex;
   justify-content: center;
@@ -177,6 +175,18 @@
   color: #666;
 }
 
+.radio-type > label,
+.radio-type > input  {
+    cursor: pointer;
+}
+
+.radio-type > label {
+    font-size: 0.9rem;
+    width: 40px;
+    font-weight: bold;
+    color: #525f7f;
+}
+
 /* ------------------------------ */
 .button {
   display: flex;
@@ -195,10 +205,10 @@
   line-height: 43px;
   font-weight: 500;
   text-align: center;
-  border-radius: 3px;
   transition: all 0.2s ease-out;
   color: #fff;
   border: 1px solid;
+  border-radius: 3px;
 }
 
 .cancel {
@@ -212,8 +222,8 @@
 }
 
 .input {
-  background-color: #0066cc;
-  border-color: #0066cc;
+  background-color: rgb(0, 102, 204);
+  border-color: rgb(0, 102, 204);
 }
 
 .input:hover {
@@ -226,6 +236,7 @@ em {
   font-style: normal;
   vertical-align: -3px;
 }
+
 
 
 
