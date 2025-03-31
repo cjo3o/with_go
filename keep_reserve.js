@@ -123,7 +123,7 @@ async function paymentSubmit() {
     ]).select();
     console.log(res);
     await Swal.fire({
-        title: "배송예약이 완료되었습니다!",
+        title: "보관예약이 완료되었습니다!",
         icon: "success",
         draggable: true
     })
@@ -225,18 +225,18 @@ startDatePicker.addEventListener('change', function () {
 // });
 
 
-// document.addEventListener('DOMContentLoaded', () => {
-//     const name = localStorage.getItem("reservation_name");
-//     const phone = localStorage.getItem("reservation_phone");
-//     const carrier = localStorage.getItem("reservation_carrier");
-//
-//     if (name) document.getElementById("name").value = name;
-//     if (phone) document.getElementById("phone").value = phone;
-//
-//     // ✅ select 요소에 기본값만 세팅 (사용자 선택 가능)
-//     const $carrierSelect = document.getElementById("carrier");
-//     if ($carrierSelect && carrier) {
-//         const option = [...$carrierSelect.options].find(opt => opt.text === carrier);
-//         if (option) $carrierSelect.value = option.value;
-//     }
-// });
+document.addEventListener('DOMContentLoaded', () => {
+    const name = localStorage.getItem("reservation_name");
+    const phone = localStorage.getItem("reservation_phone");
+    const carrier = localStorage.getItem("reservation_carrier");
+
+    if (name) document.getElementById("name").value = name;
+    if (phone) document.getElementById("phone").value = phone;
+
+    // ✅ select 요소에 기본값만 세팅 (사용자 선택 가능)
+    const $carrierSelect = document.getElementById("carrier");
+    if ($carrierSelect && carrier) {
+        const option = [...$carrierSelect.options].find(opt => opt.text === carrier);
+        if (option) $carrierSelect.value = option.value;
+    }
+});

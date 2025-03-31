@@ -37,7 +37,7 @@
 
 .check_contents {
     overflow: hidden;
-    width: 80%;
+    width: 70%;
     margin: 8rem auto;
     padding: 0 1rem;
 }
@@ -64,7 +64,7 @@
 }
 
 .change_btn_container {
-    width: 1200px;
+    /*width: 1200px;*/
     text-align: right;
     margin: 0 auto;
 }
@@ -256,7 +256,7 @@ hr {
     margin: 1rem 0;
 }
 
-.cancelBtn{
+.cancelReserve{
     padding: 12px 18px;
     border: none;
     background-color: rgb(158, 158, 158);
@@ -267,6 +267,6 @@ hr {
     font-weight: bold;
     font-size: 16px;
 }
-.cancelBtn:hover {
+.cancelReserve:hover {
     background-color: rgb(0, 102, 204);
 }

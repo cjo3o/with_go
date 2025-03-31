@@ -146,6 +146,33 @@ $select_location.addEventListener('click', function () {
     }
 });
 
+const startDatePicker = document.getElementById('date');
+
+// 시작 날짜 선택 제한 설정
+startDatePicker.addEventListener('change', function () {
+    const selectedDate = new Date(this.value);
+    const today = new Date();
+
+    if (selectedDate < today) {
+        const todayFormatted = today.toISOString().split('T')[0];
+        this.value = todayFormatted;
+    }
+});
+
+const today = new Date();
+const todayFormatted = today.toISOString().split('T')[0];
+startDatePicker.setAttribute('min', todayFormatted);
+
+// 종료 날짜 선택 제한 설정 (시작 날짜 이후만 선택 가능하도록)
+endDatePicker.addEventListener('change', function () {
+    const startDate = new Date(startDatePicker.value);
+    const selectedDate = new Date(this.value);
+
+    if (selectedDate < startDate) {
+        this.value = startDatePicker.value;
+    }
+});
+
 document.addEventListener('DOMContentLoaded', async function () {
     const loginData = await supabase.auth.getUser();
     if (loginData?.data?.user?.user_metadata?.name) {

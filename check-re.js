@@ -205,7 +205,7 @@ async function searchReserve() {
     }
 
     if (!hasResults) {
-        tableContainer.innerHTML = '<tr><td colspan="8">검색 결과가 없습니다.</td></tr>';
+        alert('검색 결과가 없습니다.');
     }
 }
 
@@ -214,7 +214,7 @@ function openDetail_st(trTag) {
     const phone = trTag.children[1].innerText;
     const storage_start_date = trTag.children[2].innerText;
     const storage_end_date = trTag.children[3].innerText;
-    const samll = trTag.children[4].innerText;
+    const small = trTag.children[4].innerText;
     const medium = trTag.children[5].innerText;
     const large = trTag.children[6].innerText;
     const price = trTag.children[7].innerText;
@@ -222,18 +222,24 @@ function openDetail_st(trTag) {
 
     $check_detail_contents.innerHTML = `
                                         <span class="close" onclick="closeDetail()">&times;</span>
-                                        <h1>조회 상세 정보</h1>
-                                        <span>이름 : ${name}</span>
-                                        <span>연락처 : ${phone}</span>
-                                        <span>보관일자 : ${storage_start_date}</span>
-                                        <span>보관종료 : ${storage_end_date}</span>
+                                        <h2>조회 상세 정보</h2>
+                                        <div class="data">
+                <div class="info-row"><span class="label">보관일자</span><span class="value">${storage_start_date}</span></div>
+  <div class="info-row"><span class="label">보관종료</span><span class="value">${storage_end_date}</span></div>
+  <div class="info-row"><span class="label">이 름</span><span class="value">${name}</span></div>
+  <div class="info-row"><span class="label">연 락 처</span><span class="value">${phone}</span></div>
+                </div>
                                         <ul>
-                                            <li>소형 : ${samll}</li>
+                                            <li>소형 : ${small}</li>
                                             <li>중형 : ${medium}</li>
                                             <li>대형 : ${large}</li>
                                         </ul>
                                         <hr>
-                                        <p>총합 <span>${price} 원</span></p>
+                                        <div class="d-total">
+                    <strong>총 합</strong>
+                    <span>${price} 원</span>
+<!--                    <span>원</span>-->
+                </div>
                                        `;
     $cancelBtn.innerHTML = `
                             <button class="cancelReserve" onclick="cancelReserve()">
@@ -270,7 +276,7 @@ function openDetail_de(trTag) {
     const phone = trTag.children[2].innerText;
     const start = trTag.children[3].innerText;
     const arrive = trTag.children[4].innerText;
-    const samll = trTag.children[5].innerText;
+    const small = trTag.children[5].innerText;
     const medium = trTag.children[6].innerText;
     const large = trTag.children[7].innerText;
     const price = trTag.children[8].innerText;
@@ -278,19 +284,27 @@ function openDetail_de(trTag) {
 
     $check_detail_contents.innerHTML = `
                                         <span class="close" onclick="closeDetail()">&times;</span>
-                                        <h1>조회 상세 정보</h1>
-                                        <span>배송일자 : ${date}</span>
-                                        <span>출발지 : ${start}</span>
-                                        <span>도착지 : ${arrive}</span>
-                                        <span>이름 : ${name}</span>
-                                        <span>연락처 : ${phone}</span>
-                                        <ul>
-                                            <li>소형 : ${samll}</li>
-                                            <li>중형 : ${medium}</li>
-                                            <li>대형 : ${large}</li>
-                                        </ul>
-                                        <hr>
-                                        <p>총합 <span>${price} 원</span></p>
+                                        <h2>조회 상세 정보</h2>
+                <div class="data">
+                <div class="info-row"><span class="label">배송일자</span><span class="value">${date}</span></div>
+  <div class="info-row"><span class="label">출 발 지</span><span class="value">${start}</span></div>
+  <div class="info-row"><span class="label">도 착 지</span><span class="value">${arrive}</span></div>
+  <div class="info-row"><span class="label">이 름</span><span class="value">${name}</span></div>
+  <div class="info-row"><span class="label">연 락 처</span><span class="value">${phone}</span></div>
+                </div>
+                <hr>
+            
+                <div class="size">
+                <p>ㆍ소형 : ${small}</p>
+                <p>ㆍ중형 : ${medium}</p>
+                <p>ㆍ대형 : ${large}</p>
+                </div>
+                <hr>
+                <div class="d-total">
+                    <strong>총 합</strong>
+                    <span>${price} 원</span>
+<!--                    <span>원</span>-->
+                </div>
                                        `;
     $cancelBtn.innerHTML = `
                             <button class="cancelReserve" onclick="cancelReserve()">

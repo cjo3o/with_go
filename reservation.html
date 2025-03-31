@@ -75,7 +75,7 @@
                             보관 예약
                         </div>
                     </div>
-                    <div class="reservation_infor_contents" id="deliverReserve" onclick="location.href='delivery_reservation.html'">
+                    <div class="reservation_infor_contents" id="deliverReserve">
                         <div class="reservation_infor_contents_main">
                             <div class="reservation_infor_contents_main_section">
                                 <div class="reservation_infor_contents_main_section_img">
@@ -133,19 +133,20 @@
                         <h1>보관/배송 내역 조회, 쉽고 빠르게</h1>
                         <p>보관 내역과 배송 현황을 한눈에! 실시간으로 확인하세요.</p>
                     </div>
-                    <div class="view_table_container" style="display: block">
-                        <div class="change_btn_container">
-                            <div class="change_btn">
-                                <label class="keep_btn active" >
-                                    <input type="checkbox" name="" class="keep_btn" id="keep_btn" style="display: none;" >
-                                    보관
-                                </label>
-                                <label class="delivery_btn">
-                                    <input type="checkbox" name="" class="delivery_btn" id="delivery_btn" style="display: none;">
-                                    배송
-                                </label>
-                            </div>
+                    <div class="change_btn_container">
+                        <div class="change_btn">
+                            <label class="keep_btn active" >
+                                <input type="checkbox" name="" class="keep_btn" id="keep_btn" style="display: none;" checked>
+                                보관
+                            </label>
+                            <label class="delivery_btn">
+                                <input type="checkbox" name="" class="delivery_btn" id="delivery_btn" style="display: none;">
+                                배송
+                            </label>
                         </div>
+                    </div>
+                    <div class="view_table_container" style="display: block">
+
                         <div class="table_container">
                             <div class="storage_table">
 
@@ -157,7 +158,7 @@
                         <div class="alert">
                             <h2>※조회할 내역이 존재하지 않습니다.※</h2>
                         </div>
-                        <p style="width: 1200px; margin: 0 auto; opacity: 0; transform: translateY(100%); animation: slideUp 0.5s forwards; animation-delay: 1.5s" class="click_infor">※ 보관장소를 클릭하시면 상세정보를 볼 수 있습니다.</p>
+
                     </div>
                     <div class="search_check" id="search_checkBox">
                         <input type="text" name="" id="search_reserveBox" placeholder="연락처를 입력해 주세요.">
@@ -165,6 +166,7 @@
                             검색
                         </button>
                     </div>
+                    <p style=" text-align: center; display: flex; justify-content: center; margin-top: 2rem; opacity: 0; transform: translateY(100%); animation: slideUp 0.5s forwards; animation-delay: 1.5s" class="click_infor">※ 클릭하시면 상세정보를 볼 수 있습니다.</p>
                 </div>
             </div>
         </div>
@@ -286,23 +288,6 @@
 <script src="change_btn.js"></script>
 <!--<script src="check.js"></script>-->
 <script src="check-re.js"></script>
-<script>
-    document.querySelector('#storReserve').addEventListener('click', function() {
-        if (localStorage.length === 0) {
-            alert('로그인 후 이용해 주세요.');
-        } else {
-            location.href = 'keep_reservation.html';
-        }
-    });
-
-    document.querySelector('#deliverReserve').addEventListener('click', function() {
-        if (localStorage.length === 0) {
-            alert('로그인 후 이용해 주세요.');
-        } else {
-            location.href = 'delivery_reservation.html';
-        }
-    });
-</script>
 </body>
 
 </html>
