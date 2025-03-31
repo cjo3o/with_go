@@ -72,28 +72,5 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     renderTable(notices); // ✅ 초기 공지사항 목록 표시
 
-    // ✅ 검색 기능 추가
-    searchInput.addEventListener("input", function () {
-        const keyword = searchInput.value.trim().toLowerCase();
-        const filteredNotices = notices.filter(notice =>
-            notice.title.toLowerCase().includes(keyword) || notice.created_at.includes(keyword)
-        );
-        renderTable(filteredNotices);
-    });
-    searchIcon.addEventListener('click', async () => {
-        const inputValue = document.querySelector('#searchinput').value;
 
-        // 검색어가 2글자 이상이고, 띄어쓰기가 아닌 경우만 진행
-        if (inputValue.length >= 2 && inputValue.replace(/\s/g, '').length > 0) {
-            searchQuery = inputValue.toLowerCase();  // 검색어 업데이트
-            currentPage = 1;  // 검색 시 첫 페이지로 리셋
-            await loadSearchResults();  // 검색 결과 로드
-        } else {
-            Swal.fire({
-                icon: 'error',
-                title: '검색 오류',
-                text: '검색은 2글자 이상이어야 하며, 빈 칸만 입력할 수 없습니다.',
-            });
-        }
-});
 });
