@@ -62,9 +62,23 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         // 파일이 업로드된 경우 새로운 파일을 Supabase에 업로드하고 URL을 가져옴
         if (file) {
+
+            const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+            const fileExtension = file.name.split('.').pop().toLowerCase();
+
+            if (!allowedExtensions.includes(fileExtension)) {
+                Swal.fire({
+                    icon: "error",
+                    title: "파일 업로드 실패",
+                    html: "지원되지 않는 파일 형식입니다.<br>jpg, jpeg, png, gif, bmp 파일만 업로드 가능합니다.",
+                    confirmButtonText: '확인'
+                });
+                return;
+            }
+
             const filename = `${crypto.randomUUID()}.${file.name.split('.').pop()}`;
             const { data: fileData, error: uploadError } = await supabase.storage
-                .from('images/inquiry_images')
+                .from('images/question_uploads')
                 .upload(filename, file);
 
             if (uploadError) {
@@ -80,7 +94,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             // 파일 업로드 성공 후 URL을 가져옴
             const { data: fileUrlData, error: getUrlError } = await supabase.storage
-                .from('images/inquiry_images')
+                .from('images/question_uploads')
                 .getPublicUrl(filename);
 
             if (getUrlError) {

@@ -56,7 +56,7 @@ async function displayPostDetails() {
     `;
 
     let postHeaderHTML3 = `
-    <p>첨부 파일: <a href="${postDetails.image_url}" target="_blank">${postDetails.image_url}</a></p>
+    <p>첨부 파일: <a href="${postDetails.image_url}" target="_blank">${postDetails.image_url.split('/').pop()}</a></p>
 `;
 
     // 첨부된 파일이 있는 경우
@@ -75,6 +75,9 @@ async function displayPostDetails() {
             </a>
         `;
         }
+    } else {
+        // 첨부된 파일이 없는 경우
+        postHeaderHTML3 = `<p>첨부 파일: 첨부된 파일이 없습니다.</p>`;
     }
 
     document.getElementById('cen_heder2').innerHTML = postHeaderHTML1;
