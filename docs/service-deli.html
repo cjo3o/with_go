@@ -6,6 +6,13 @@
     <link rel="stylesheet" href="src/css/reset.css">
     <link rel="stylesheet" href="src/css/service-deli.css">
     <script src="https://kit.fontawesome.com/c2939216d2.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const supabaseUrl = "https://zgrjjnifqoactpuqolao.supabase.co";
+        const supabasePassword = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpncmpqbmlmcW9hY3RwdXFvbGFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNDc0NTgsImV4cCI6MjA1NjgyMzQ1OH0._Vl-6CRKdMjeDRyNoxlfect7sgusZ7L0N5OYu0a5hT0";
+
+        var supabase = window.supabase.createClient(supabaseUrl, supabasePassword);
+    </script>
 </head>
 <body>
 <div class="header"></div>
@@ -66,7 +73,7 @@
     <h1 class="title">부담 없이 이용하는 최적의 요금</h1>
     <p class="sub-title">짐의 크기와 목적지에 따라 맞춤 요금을 적용합니다.</p>
     <div class="group-img">
-        <img src="src/images/group.png" alt="">
+    <img src="src/images/group.png" alt="">
     </div>
     <div class="td">
         <table class="price-td">
@@ -76,7 +83,7 @@
                 <th>26"초과</th>
             </tr>
             <tr>
-                <!--            <td>출발지</td>-->
+<!--            <td>출발지</td>-->
                 <td class="price-local">대구전지역</td>
                 <td class="price-local">경주전지역</td>
             </tr>

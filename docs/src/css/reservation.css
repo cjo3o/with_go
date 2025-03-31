@@ -8,7 +8,8 @@
 }
 
 .section1 {
-  background-image: url("/p2-jim/src/images/headerBg.png");
+  background-image: url(/src/images/reservebg1.jpg);
+  background-color: #5e5e5e;
   width: 100%;
   height: 250px;
   background-repeat: no-repeat;
@@ -28,12 +29,12 @@
 }
 
 .section2 {
-  background-image: url("/p2-jim/src/images/reservebg2.jpg");
+  background-image: url("/src/images/reservebg2.jpg");
   background-position: center;
   background-size: cover;
   background-attachment: fixed;
   background-color: #c5c5c5;
-  background-blend-mode: overlay;
+  background-blend-mode: multiply;
 }
 
 .section3 {
@@ -109,22 +110,18 @@
 }
 
 .reservation_infor_contents {
-  background-color: #0066CC;
+  background-color: rgb(0, 102, 204);
   position: relative;
   margin: 3rem 2rem;
   border-radius: 40px;
   padding: 3rem 1rem 3.5rem 1rem;
   cursor: pointer;
-  /*border: solid 2px #787878;*/
-  box-shadow: 0 0 5px #474747;
   transition: all 0.5s;
 
 }
 
 .reservation_infor_contents:hover {
-  box-shadow: 0 0 10px #000;
   transform: translateY(-10px);
-
 }
 
 .reservation_infor_contents:hover > .reservation_infor_contents_btn {
@@ -180,7 +177,7 @@
   width: 25px;
   height: 25px;
   border-radius: 50%;
-  color: #0066CC;
+  color: rgb(0, 102, 204);
   font-weight: bold;
 }
 
@@ -219,6 +216,22 @@
   animation-delay: 0.5s;
 }
 
+.cancelReserve{
+  background-color: #FF9900;
+  margin-top: 10px;
+  padding: 0.8rem 1.5rem;
+  width: 100%;
+  font-size: 1rem;
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: all 0.5s;
+  transform: translateY(100%);
+  animation: slideUp 1s forwards;
+}
+
 .search_check > input {
   padding: 1.1rem 1.2rem;
   width: 60%;
@@ -233,17 +246,18 @@
 .search_check > button {
   background-color: #FF9900;
   padding: 1.1rem 1.2rem;
-  width: 15%;
-  font-size: 1rem;
+  width: 75px;
+  height: 60px;
+  font-size: 18px;
   border: none;
-  border-radius: 20px;
+  border-radius: 10px;
   font-weight: bold;
   color: white;
   cursor: pointer;
   transition: all 0.5s;
 }
 .search_check > button:hover {
-  background-color: #ea8f00;
+  background-color: #e38901;
   scale: 1.1;
 }
 

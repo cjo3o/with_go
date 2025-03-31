@@ -39,7 +39,7 @@ th:first-child, td:first-child {
     margin-top: 87px;
     width: 100%;
     height: 250px;
-    background-image: url('/p2-jim/src/images/service.png');
+    background-image: url('/src/images/service.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

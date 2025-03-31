@@ -1,24 +1,4 @@
 
-@font-face {
-    font-family: "KoPub Dotum";
-    font-weight: 300;
-    font-style: normal;
-    font-display: swap;
-    src: url("https://cdn.jsdelivr.net/gh/fonts-archive/KoPubDotum/KoPubDotum-Light.woff2")
-    format("woff2"),
-    url("https://cdn.jsdelivr.net/gh/fonts-archive/KoPubDotum/KoPubDotum-Light.woff")
-    format("woff"),
-    url("https://cdn.jsdelivr.net/gh/fonts-archive/KoPubDotum/KoPubDotum-Light.otf")
-    format("opentype"),
-    url("https://cdn.jsdelivr.net/gh/fonts-archive/KoPubDotum/KoPubDotum-Light.ttf")
-    format("truetype");
-}
-*{
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-    font-family: "KoPub Dotum", serif ;
-}
 li{
     list-style: none;
 }
@@ -39,7 +19,7 @@ th:first-child, td:first-child {
     margin-top: 87px;
     width: 100%;
     height: 250px;
-    background-image: url('/p2-jim/src/images/header.jpg');
+    background-image: url('/src/images/service.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -200,6 +180,9 @@ th:first-child, td:first-child {
 }
 .map iframe{
     width: 50%;
+}
+.on {
+    display: block;
 }
 .map-under{
     display: flex;

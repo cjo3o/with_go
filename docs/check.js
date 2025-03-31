@@ -1,134 +1,165 @@
-document.addEventListener('DOMContentLoaded', function () {
+
+document.addEventListener("DOMContentLoaded", () => {
+    const supabaseUrl = "https://zgrjjnifqoactpuqolao.supabase.co";
+    const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpncmpqbmlmcW9hY3RwdXFvbGFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNDc0NTgsImV4cCI6MjA1NjgyMzQ1OH0._Vl-6CRKdMjeDRyNoxlfect7sgusZ7L0N5OYu0a5hT0";
+    const client = supabase.createClient(supabaseUrl, supabaseKey);
+
     const $check_detail = document.querySelector('.check_detail');
-    const $check_detail_contents = document.querySelector('.check_detail_contents');
     const $search_check = document.querySelector('.search_check');
-    const $search_checkBox = document.querySelector('#search_checkBox');
-    const $search_check_btn = document.querySelector('.search_check_btn');
     const $view_table_container = document.querySelector('.view_table_container');
-    const $alert = document.querySelector('.alert');
-    const $keep_btn = document.querySelector('.keep_btn');
-    const $delivery_btn = document.querySelector('.delivery_btn');
-    const $keep_table = document.querySelector('.keep_table');
     const $delivery_table = document.querySelector('.delivery_table');
-    const $click_infor = document.querySelector('.click_infor');
-
-    $keep_btn.addEventListener('click', function () {
-        $keep_btn.classList.add('active');
-        $keep_table.classList.add('up');
-        $delivery_btn.classList.remove('active');
-        $delivery_table.classList.remove('up');
-        checkKeepTableVisibility(); // Keep 테이블의 가시성 확인
-    });
-
-    $delivery_btn.addEventListener('click', function () {
-        $keep_btn.classList.remove('active');
-        $keep_table.classList.remove('up');
-        $delivery_btn.classList.add('active');
-        $delivery_table.classList.add('up');
-        checkDeliveryTableVisibility(); // Delivery 테이블의 가시성 확인
-    });
-
-    // close 버튼 클릭 이벤트 리스너
-    function addCloseEvent() {
-        const $close = document.querySelector('.close');
-        if ($close) {
-            $close.addEventListener('click', function () {
-                $check_detail.classList.remove('fade_in');
-                $check_detail_contents.classList.remove('slide_up');
-                console.log('클릭');
-            });
+    const $search_reserveBox = document.querySelector('#search_reserveBox');
+    const $searchBtn = document.querySelector('#searchBtn');
+    const carrier = localStorage.getItem("reservation_carrier");
+    if (carrier) {
+        const select = document.querySelector('select[name="package"]');
+        for (let i = 0; i < select.options.length; i++) {
+            if (select.options[i].text === carrier) {
+                select.selectedIndex = i;
+                break;
+            }
         }
     }
 
-    // openDetail 함수
-    window.openDetail = function (td) {
-        const row = td.parentElement; // 클릭한 td의 부모 tr 요소
-        const location = row.cells[2].innerText; // 보관 장소
-        const date = row.cells[1].innerText; // 보관 일자
-        const number = row.cells[0].innerText; // 수화물 번호
-        const price = row.cells[3].innerText; // 가격
-        const stat = row.cells[4].innerText; // 상태
-        $check_detail_contents.innerHTML = `
-            <span class="close">&times;</span>
-            <h1>조회 상세 정보</h1>
-            <span>${stat}</span>
-            <span style="font-size: 1.3rem;">보관 장소 : ${location}</span>
-            <span>보관 일자 : ${date}</span>
-            <span>수화물 번호 : ${number}</span>
-            <ul>가격
-                <li>소형 1개 1000원</li>
-                <li>중형 1개 2000원</li>
-                <li>대형 1개 3000원</li>
-            </ul>
-            <hr>
-            <p>총합<span>${price}원</span></p>
-        `;
-        $check_detail.classList.add('fade_in');
-        $check_detail_contents.classList.add('slide_up');
+// ✅ 조회 함수
+    async function searchReserve() {
+        const phone = $search_reserveBox.value.trim();
+        if (!phone) return;
 
-        // close 버튼 이벤트 리스너 추가
-        addCloseEvent();
-    };
+        const { data, error } = await client
+            .from('delivery')
+            .select()
+            .eq('phone', phone)
+            .order('delivery_date', { ascending: false });
 
-    function checkSearch() {
-        const searchValue = $search_checkBox.value.toLowerCase(); // 검색 입력값
-        const rows = document.querySelectorAll('table tbody tr'); // 테이블의 모든 행 선택
-        let hasMatchingRows = false;
+        if (error || !data || data.length === 0) {
+            await Swal.fire({
+                icon: "error",
+                title: "조회할 내역이 존재하지 않습니다.",
+                text: "연락처를 확인해 주세요."
+            });
+            return;
+        }
 
-        rows.forEach(row => {
-            const numberCell = row.cells[0]; // 수화물 번호가 있는 셀 선택
-
-            // 수화물 번호가 검색값을 포함하는지 확인
-            if (numberCell.textContent.toLowerCase().includes(searchValue)) {
-                row.style.display = ''; // 행을 표시
-                hasMatchingRows = true; // 검색된 값이 있는 행이 존재함
-            } else {
-                row.style.display = 'none'; // 행을 숨김
-            }
+        let rows = '';
+        data.forEach((item) => {
+            const encoded = encodeURIComponent(JSON.stringify(item));
+            rows += `
+            <tr onclick='openDetailFromString("${encoded}")'>
+                <td>${item.delivery_date}</td>
+                <td>${item.name}</td>
+                <td>${item.phone}</td>
+                <td>${item.delivery_start}</td>
+                <td>${item.delivery_arrive}</td>
+                <td>${item.small}</td>
+                <td>${item.medium}</td>
+                <td>${item.large}</td>
+                <td>${item.price}</td>
+            </tr>`;
         });
 
-        // 검색된 값이 있는 행이 없으면 테이블 숨기기
-        if (!hasMatchingRows) {
-            $view_table_container.style.display = 'none'; // 테이블 숨기기
-            $alert.style.display = "block"; // 경고 메시지 표시
-        } else {
-            $view_table_container.style.display = ''; // 테이블 표시
-            $alert.classList.remove("on");
-        }
+        $delivery_table.innerHTML = `
+            <table>
+                <thead>
+                    <tr>
+                        <th>배송일자</th>
+                        <th>이름</th>
+                        <th>연락처</th>
+                        <th>배송 출발지</th>
+                        <th>배송 도착지</th>
+                        <th>소형</th>
+                        <th>중형</th>
+                        <th>대형</th>
+                        <th>가격</th>
+                    </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+            </table>`;
 
-        // 검색창 관련 로직
+        $view_table_container.style.display = 'block';
         $search_check.style.display = 'none';
-
-        checkKeepTableVisibility();
-        checkDeliveryTableVisibility();
     }
 
-    function checkKeepTableVisibility() {
-        const rows = $keep_table.querySelectorAll('tbody tr'); // Keep 테이블의 모든 행 선택
-        let hasRows = Array.from(rows).some(row => row.style.display !== 'none'); // 표시된 행이 있는지 확인
+// ✅ 문자열 형태 전달값 디코딩
+    window.openDetailFromString = function (itemStr) {
+        const item = JSON.parse(decodeURIComponent(itemStr));
+        openDetail(item);
+    };
 
-        if (!hasRows) {
-            $keep_table.classList.remove("up");// Keep 테이블 숨기기
-            $alert.style.display = "block";
+// ✅ 모달 열기
+    function openDetail(item) {
+        const {
+            id,
+            delivery_date,
+            name,
+            phone,
+            delivery_start,
+            delivery_arrive,
+            small,
+            medium,
+            large,
+            price
+        } = item;
+
+        // 모달 전체 영역 구성
+        $check_detail.innerHTML = `
+        <div class="check_detail_contents slide_up">
+            <div class="detail-modal">
+                <span class="close" style="cursor:pointer; float:right; font-size: 20px;">&times;</span>
+                <h2>조회 상세 정보</h2>
+                <div class="data">
+                <div class="info-row"><span class="label">배송일자</span><span class="value">${delivery_date}</span></div>
+  <div class="info-row"><span class="label">출 발 지</span><span class="value">${delivery_start}</span></div>
+  <div class="info-row"><span class="label">도 착 지</span><span class="value">${delivery_arrive}</span></div>
+  <div class="info-row"><span class="label">이 름</span><span class="value">${name}</span></div>
+  <div class="info-row"><span class="label">연 락 처</span><span class="value">${phone}</span></div>
+                </div>
+                <hr>
+            
+                <div class="size">
+                <p>ㆍ소형 : ${small}</p>
+                <p>ㆍ중형 : ${medium}</p>
+                <p>ㆍ대형 : ${large}</p>
+                </div>
+                <hr>
+                <div class="d-total">
+                    <strong>총 합</strong>
+                    <span>${price} 원</span>
+<!--                    <span>원</span>-->
+                </div>
+            </div>
+        </div>
+        <div class="cancelBtn-wrapper">
+            <button class="cancelBtn" onclick="cancelReservation('${id}')">예약 취소</button>
+        </div>
+    `;
+
+        $check_detail.classList.add('fade_in');
+
+        const $close = $check_detail.querySelector('.close');
+        $close.addEventListener('click', () => {
+            $check_detail.classList.remove('fade_in');
+        });
+    }
+
+    // ✅ 예약 취소
+    window.cancelReservation = async function (id) {
+        const confirmCancel = confirm("정말로 예약을 취소하시겠습니까?");
+        if (!confirmCancel) return;
+
+        const { error } = await client
+            .from("delivery")
+            .delete()
+            .eq("id", id);
+
+        if (error) {
+            alert("취소 실패했습니다");
         } else {
-            $keep_table.style.display = '';// Keep 테이블 표시
-            $alert.style.display = 'none';
+            alert("예약이 취소되었습니다");
+            location.reload();
         }
-    }
+    };
 
-    function checkDeliveryTableVisibility() {
-        const rows = $delivery_table.querySelectorAll('tbody tr'); // Delivery 테이블의 모든 행 선택
-        let hasRows = Array.from(rows).some(row => row.style.display !== 'none'); // 표시된 행이 있는지 확인
-
-        if (!hasRows) {
-            $delivery_table.classList.remove("up"); // Delivery 테이블 숨기기
-            $alert.style.display = "block";
-        } else {
-            $delivery_table.style.display = ''; // Delivery 테이블 표시
-            $alert.style.display = 'none';
-        }
-    }
-
-    // 검색 입력 필드에 이벤트 리스너 추가
-    $search_check_btn.addEventListener('click', checkSearch);
+    // ✅ 검색 버튼 클릭 연결
+    $searchBtn?.addEventListener("click", searchReserve);
 });

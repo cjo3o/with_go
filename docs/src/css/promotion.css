@@ -11,7 +11,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-image: url(src/images/promotion_bg.png);
+    background-image: url(/p2-jim/src/images/promotion_bg.png);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -20,11 +20,31 @@
 .content h1 {
     color:white;
 }
-
 .content h3 {
     color: white;
+    text-align: center;
+    font-size: 30px;
+    line-height: 250px;
+    opacity: 0;
+    animation: slideUp 1.2s forwards;
 }
-
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+.title{
+    text-align: center;
+    color: rgb(0, 102, 204);
+    font-weight: bold;
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+}
 .section {
     display: flex;
     justify-content: flex-start;
@@ -59,16 +79,15 @@
     margin-bottom: 30px;
 }
 .tab_txt li{
-    display: table-cell;
+    /*display: table-cell;*/
     min-width: 20%;
-    vertical-align: middle !important;
 }
 .tab_txt > ul{
     display: flex;
+    align-items: center;
     width: 100%;
-    table-layout: fixed;
+    /*table-layout: fixed;*/
     text-align: center;
-    background-color: #ffffff;
     font-size: 17px;
     list-style: none;
     padding: 0;
