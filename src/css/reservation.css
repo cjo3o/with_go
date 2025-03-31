@@ -224,6 +224,22 @@ body {
   animation-delay: 0.5s;
 }
 
+.cancelReserve{
+  background-color: #FF9900;
+  margin-top: 10px;
+  padding: 0.8rem 1.5rem;
+  width: 100%;
+  font-size: 1rem;
+  border: none;
+  border-radius: 20px;
+  font-weight: bold;
+  color: white;
+  cursor: pointer;
+  transition: all 0.5s;
+  transform: translateY(100%);
+  animation: slideUp 1s forwards;
+}
+
 .search_check > input {
   padding: 1.1rem 1.2rem;
   width: 60%;

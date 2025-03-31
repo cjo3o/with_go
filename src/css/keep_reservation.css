@@ -89,6 +89,7 @@ body {
 .keep_reservation_contents_main {
     overflow: hidden;
     width: 100%;
+    margin-top: 4rem;
     opacity: 0;
     transform: translateY(100%);
     animation: slideUp 1s forwards;

@@ -10,8 +10,12 @@
     <link rel="stylesheet" href="src/css/check.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="check.js" defer></script>
+    <script>
+        const supabaseUrl = "https://zgrjjnifqoactpuqolao.supabase.co";
+        const supabasePassword = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpncmpqbmlmcW9hY3RwdXFvbGFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNDc0NTgsImV4cCI6MjA1NjgyMzQ1OH0._Vl-6CRKdMjeDRyNoxlfect7sgusZ7L0N5OYu0a5hT0";
 
+        var supabase = window.supabase.createClient(supabaseUrl, supabasePassword);
+    </script>
 </head>
 
 <body>
@@ -71,7 +75,7 @@
                             보관 예약
                         </div>
                     </div>
-                    <div class="reservation_infor_contents" id="deliverReserve">
+                    <div class="reservation_infor_contents" id="deliverReserve" onclick="location.href='delivery_reservation.html'">
                         <div class="reservation_infor_contents_main">
                             <div class="reservation_infor_contents_main_section">
                                 <div class="reservation_infor_contents_main_section_img">
@@ -129,35 +133,37 @@
                         <h1>보관/배송 내역 조회, 쉽고 빠르게</h1>
                         <p>보관 내역과 배송 현황을 한눈에! 실시간으로 확인하세요.</p>
                     </div>
-                    <div class="view_table_container" style="display: none">
+                    <div class="view_table_container" style="display: block">
                         <div class="change_btn_container">
                             <div class="change_btn">
-                                <label class="keep_btn active" for="keep_checkBox">
-                                    <input type="radio" name="reserve_type" id="keep_checkBox" checked="checked">
+                                <label class="keep_btn active" >
+                                    <input type="checkbox" name="" class="keep_btn" id="keep_btn" style="display: none;" >
                                     보관
                                 </label>
-                                <label class="delivery_btn" for="delivery_checkBox">
-                                    <input type="radio" name="reserve_type" id="delivery_checkBox">
+                                <label class="delivery_btn">
+                                    <input type="checkbox" name="" class="delivery_btn" id="delivery_btn" style="display: none;">
                                     배송
                                 </label>
                             </div>
                         </div>
                         <div class="table_container">
-                            <div class="delivery_table">
+                            <div class="storage_table">
 
                             </div>
-                            <div class="keep_table">
+                            <div class="delivery_table" style="display: block">
 
                             </div>
                         </div>
                         <div class="alert">
                             <h2>※조회할 내역이 존재하지 않습니다.※</h2>
                         </div>
+                        <p style="width: 1200px; margin: 0 auto; opacity: 0; transform: translateY(100%); animation: slideUp 0.5s forwards; animation-delay: 1.5s" class="click_infor">※ 보관장소를 클릭하시면 상세정보를 볼 수 있습니다.</p>
                     </div>
-                    <div class="search_check">
+                    <div class="search_check" id="search_checkBox">
                         <input type="text" name="" id="search_reserveBox" placeholder="연락처를 입력해 주세요.">
-                        <button id="searchBtn">검색</button>
-
+                        <button onclick="searchReserve()" class="search_check_btn">
+                            검색
+                        </button>
                     </div>
                 </div>
             </div>
@@ -203,7 +209,14 @@
                                onclick="window.open(this.href, '_blank', 'width=710, height=650'); return false;">상세보기</a>
                         </div>
                     </div>
-
+                    <!--                <div class="keep_board_controler">-->
+                    <!--                    <div class="keep_board_controler_btn">-->
+                    <!--                        <p>1</p>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="keep_board_controler_btn">-->
+                    <!--                        <p>2</p>-->
+                    <!--                    </div>-->
+                    <!--                </div>-->
                 </div>
             </div>
             <div class="keep_container">
@@ -252,7 +265,14 @@
                                onclick="window.open(this.href, '_blank', 'width=950, height=650'); return false;">상세보기</a>
                         </div>
                     </div>
-
+                    <!--                <div class="keep_board_controler">-->
+                    <!--                    <div class="keep_board_controler_btn">-->
+                    <!--                        <p>1</p>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="keep_board_controler_btn">-->
+                    <!--                        <p>2</p>-->
+                    <!--                    </div>-->
+                    <!--                </div>-->
                 </div>
             </div>
         </div>
@@ -264,7 +284,8 @@
 </div>
 <script src="dropdown.js"></script>
 <script src="change_btn.js"></script>
-
+<!--<script src="check.js"></script>-->
+<script src="check-re.js"></script>
 <script>
     document.querySelector('#storReserve').addEventListener('click', function() {
         if (localStorage.length === 0) {
@@ -280,24 +301,6 @@
         } else {
             location.href = 'delivery_reservation.html';
         }
-    });
-
-</script>
-<script>
-    window.addEventListener("DOMContentLoaded", () => {
-        // 헤더 넣기
-        fetch("header.html")
-            .then((res) => res.text())
-            .then((data) => {
-                document.querySelector(".header").innerHTML = data;
-            });
-
-        // 푸터 넣기
-        fetch("footer.html")
-            .then((res) => res.text())
-            .then((data) => {
-                document.querySelector(".footer").innerHTML = data;
-            });
     });
 </script>
 </body>
