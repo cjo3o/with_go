@@ -91,6 +91,7 @@
 .review-item:hover{
     transform: translateY(-6px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    cursor: pointer;
 }
 
 .review-content {
@@ -228,7 +229,11 @@
 .page-btn:disabled,
 .group-btn:disabled,
 .arrow-btn:disabled {
-    display: none;
+    background-color: #f0f0f0;
+    color: #aaa;
+    cursor: not-allowed;
+    pointer-events: none; /* 클릭 막기 */
+    opacity: 0.7;
 }
 
 /* 아이콘 전용 버튼 (좌우 화살표 & 그룹 이동) */
@@ -263,6 +268,7 @@
 .button > button:hover {
     background-color: #3e454f;
     border-color: #3e454f;
+    cursor: pointer;
 }
 
 

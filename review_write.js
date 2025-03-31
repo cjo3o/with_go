@@ -71,6 +71,8 @@ document.addEventListener("DOMContentLoaded", async function () {
       const fileExt = file.name.split(".").pop();
       const fileName = crypto.randomUUID() + "." + fileExt;
       const filePath = `review_uploads/${fileName}`;
+      const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp'];
+
 
       const { error: uploadError } = await supabase.storage
           .from("images")
@@ -81,7 +83,17 @@ document.addEventListener("DOMContentLoaded", async function () {
         return;
       }
 
-      const { data: publicUrl } = supabase.storage
+      if (!allowedExtensions.includes(fileExt)) {
+        Swal.fire({
+          icon: "error",
+          title: "파일 업로드 실패",
+          html: "지원되지 않는 파일 형식입니다.<br>jpg, jpeg, png, gif, bmp 파일만 업로드 가능합니다.",
+          confirmButtonText: '확인'
+        });
+        return;
+      }
+
+          const { data: publicUrl } = supabase.storage
           .from("images")
           .getPublicUrl(filePath);
 

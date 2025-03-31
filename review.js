@@ -42,13 +42,13 @@ async function fetchReviews(page = 1, type = 'all') {
 
     let query = supabase
         .from("review")
-        .select("*", { count: "exact" })
-        .order("created_at", { ascending: false })
+        .select("*", {count: "exact"})
+        .order("created_at", {ascending: false})
         .range(from, to);
 
     if (type !== "all") query = query.eq("type", type);
 
-    const { data, error, count } = await query;
+    const {data, error, count} = await query;
     if (error) {
         console.error("데이터 오류:", error.message);
         return;
@@ -93,7 +93,7 @@ function renderReviews(reviews) {
     });
 }
 
-// 모달 열기
+// 수정 버튼
 function openModal(review) {
     const modal = document.getElementById('review-modal');
     const modalBody = document.getElementById('modal-body');
@@ -107,8 +107,8 @@ function openModal(review) {
         ${review.file_url ? `<div class="image-box"><img src="${review.file_url}" /></div>` : ""}
     `;
 
-    document.getElementById('edit-btn').onclick = async () => {
-        const { value: password } = await Swal.fire({
+    document.getElementById('edit-btn').onclick = async function handlePasswordPrompt() {
+        const {value: password} = await Swal.fire({
             title: "비밀번호 확인",
             input: "password",
             inputLabel: "등록한 비밀번호를 입력해주세요",
@@ -124,19 +124,33 @@ function openModal(review) {
             reverseButtons: true
         });
 
-        if (!password) {
-            await Swal.fire("입력 오류", "비밀번호를 입력해주세요.", "warning");
+        if (password === null) return;
+
+        if (password.trim() === "") {
+            await Swal.fire({
+                title: "입력 오류",
+                text: "비밀번호를 입력해주세요.",
+                icon: "warning",
+                confirmButtonText: "확인"
+            });
+            handlePasswordPrompt();
             return;
         }
 
-        const { data, error } = await supabase
+        const {data, error} = await supabase
             .from("review")
             .select("password")
             .eq("review_num", review.review_num)
             .single();
 
         if (error || !data || data.password !== password) {
-            Swal.fire("비밀번호 불일치", "비밀번호가 일치하지 않습니다.", "error");
+            await Swal.fire({
+                title: "비밀번호 불일치",
+                text: "비밀번호가 일치하지 않습니다.",
+                icon: "error",
+                confirmButtonText: "확인"
+            });
+            handlePasswordPrompt();
             return;
         }
 
@@ -144,9 +158,9 @@ function openModal(review) {
     };
 
     // 삭제 버튼
-    document.getElementById('delete-btn').onclick = async () => {
+    document.getElementById('delete-btn').onclick = async function handlePasswordPrompt() {
         // 비밀번호 입력 먼저
-        const { value: password } = await Swal.fire({
+        const {value: password} = await Swal.fire({
             title: "비밀번호 확인",
             input: "password",
             inputLabel: "등록한 비밀번호를 입력해주세요",
@@ -162,19 +176,34 @@ function openModal(review) {
             reverseButtons: true,
         });
 
-        if (!password) {
-            await Swal.fire("입력 오류", "비밀번호를 입력해주세요.", "warning");
+        if (password === null) return;  // 취소 버튼 누른 경우
+
+        if (password.trim() === "") {
+            await Swal.fire({
+                title: "입력 오류",
+                text: "비밀번호를 입력해주세요.",
+                icon: "warning",
+                confirmButtonText: "확인"
+            });
+            handlePasswordPrompt();
             return;
         }
+
         // 비밀번호 검증
-        const { data, error } = await supabase
+        const {data, error} = await supabase
             .from("review")
             .select("password")
             .eq("review_num", review.review_num)
             .single();
 
         if (error || !data || data.password !== password) {
-            Swal.fire("비밀번호 불일치", "비밀번호가 일치하지 않습니다.", "error");
+            await Swal.fire({
+                title: "비밀번호 불일치",
+                text: "비밀번호가 일치하지 않습니다.",
+                icon: "error",
+                confirmButtonText: "확인"
+            });
+            handlePasswordPrompt();
             return;
         }
 
@@ -189,7 +218,7 @@ function openModal(review) {
         });
 
         if (result.isConfirmed) {
-            const { error: deleteError } = await supabase
+            const {error: deleteError} = await supabase
                 .from("review")
                 .delete()
                 .eq("review_num", review.review_num);
@@ -302,7 +331,7 @@ document.querySelectorAll(".filter-btn").forEach((btn) => {
 // 글쓰기 버튼
 document.getElementById("write-btn")?.addEventListener("click", async (e) => {
     e.preventDefault();
-    const { data, error } = await supabase.auth.getUser();
+    const {data, error} = await supabase.auth.getUser();
 
     if (error || !data?.user?.id) {
         await Swal.fire({
