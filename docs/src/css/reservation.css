@@ -29,7 +29,7 @@
 }
 
 .section2 {
-  background-image: url("/src/images/reservebg2.jpg");
+  background-image: url("/with_go/src/images/reservebg2.jpg");
   background-position: center;
   background-size: cover;
   background-attachment: fixed;
