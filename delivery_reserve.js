@@ -63,6 +63,7 @@ function openSelectLocation() {
 function searchAddress() {
     new daum.Postcode({
         oncomplete: function (data) {
+            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
             $arrive.value = data.address;
         }
     }).open();
@@ -73,7 +74,13 @@ function deliverySubmit() {
     for (let i = 0; i < arr.length; i++) {
         if (arr[i].value === '') {
             alert(`${arr[i].name}을(를) 입력해주세요.`);
-            window.scrollTo({ top: arr[i].offsetTop, behavior: 'smooth' });
+            // Swal.fire({
+            //     icon: "error",
+            //     title: "알림",
+            //     text: `${arr[i].name}을(를) 입력해주세요!`,
+            // });
+            // window.scrollTo({top: arr[i].offsetTop, behavior: 'smooth'});
+            arr[i].focus();
             return;
         }
     }
@@ -105,19 +112,22 @@ function deliverySubmit() {
 
 async function paymentSubmit() {
     const res = await supabase.auth.getUser();
-    await supabase.from('delivery').insert([{
-        user_id: res.data.user.id,
-        name: $name.value,
-        phone: $phone.value,
-        delivery_date: $date.value,
-        delivery_start: $start.value,
-        delivery_arrive: $arrive.value,
-        detail_adr: $detail_adr.value,
-        small: small.value,
-        medium: medium.value,
-        large: large.value,
-        price: Number($totalPrice.innerText)
-    }]);
+    await supabase.from('delivery').insert([
+        {
+            user_id: res.data.user.id,
+            name: $name.value,
+            phone: $phone.value,
+            delivery_date: $date.value,
+            delivery_start: $start.value,
+            delivery_arrive: $arrive.value,
+            detail_adr: $detail_adr.value,
+            small: small.value,
+            medium: medium.value,
+            large: large.value,
+            price: Number($totalPrice.innerText)
+        }
+    ]).select();
+
 
     await Swal.fire({
         title: "예약이 완료되었습니다!",
