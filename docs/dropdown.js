@@ -61,7 +61,10 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             document.querySelector('#kakao_login').addEventListener('click', async function () {
                 await supabase.auth.signInWithOAuth({
-                    provider: 'kakao'
+                    provider: 'kakao',
+                    options: {
+                        redirectTo: 'https://username.github.io/project-name/' // 배포 URL로 설정
+                    }
                 })
             });
 
