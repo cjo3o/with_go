@@ -223,7 +223,11 @@ td.title {
 .page-btn:disabled,
 .group-btn:disabled,
 .arrow-btn:disabled {
-    display: none;
+    background-color: #f0f0f0;
+    color: #aaa;
+    cursor: not-allowed;
+    pointer-events: none; /* 클릭 막기 */
+    opacity: 0.7;
 }
 
 /* 아이콘 전용 버튼 (좌우 화살표 & 그룹 이동) */
