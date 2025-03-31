@@ -48,7 +48,7 @@
 }
 
 .check_contents_text > h1 {
-    color: rgb(0, 102, 204);
+    color: white;
     font-size: 1.8rem;
     opacity: 0;
     animation: fadeIn 1s forwards;
@@ -61,6 +61,7 @@
     animation-delay: 0.7s;
     opacity: 0;
     transform: translateY(100%);
+    color: white;
 }
 
 .change_btn_container {

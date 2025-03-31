@@ -38,7 +38,7 @@ li{
     margin-top: 87px;
     width: 100%;
     height: 250px;
-    background-image: url('/p2-jim/src/images/service.png');
+    background-image: url('/src/images/service.png');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -247,7 +247,7 @@ li{
 }
 .host-bg{
     margin: 2rem auto 4rem;
-    background-image: url('/p2-jim/src/images/working.jpg');
+    background-image: url('/src/images/working.jpg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
