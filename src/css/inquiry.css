@@ -79,9 +79,10 @@ i {
 }
 
 .search_sel {
+    width: 100px;
     font-size: 14px;
     height: 35px;
-    padding: 4px 8px;
+    /* padding: 4px 8px; */
     border-radius: 4px;
     border: 1px solid #ccc;
     text-align: center;
