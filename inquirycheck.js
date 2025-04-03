@@ -143,6 +143,7 @@ async function promptForPassword(postId) {
       inputMode: "numeric", // 모바일에서 숫자 키패드로 입력할 수 있도록 설정
       maxlength: 6, // 최대 6자리 입력 가능
       pattern: "^[0-9]{1,6}$",
+      autocomplete: "off",
     },
     showCancelButton: true,
     confirmButtonText: "확인",
