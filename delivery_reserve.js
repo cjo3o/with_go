@@ -85,6 +85,8 @@ function deliverySubmit() {
         }
     }
 
+    if ($arrive.value.includes('대구' || '경주')) {}
+
     if (agree.checked === false) {
         alert('이용약관을 확인해주세요.');
         window.scrollTo({ top: agree.offsetTop, behavior: 'smooth' });
