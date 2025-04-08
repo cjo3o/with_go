@@ -40,7 +40,7 @@
         }
     </script>
     <link rel="stylesheet" href="src/css/reset.css">
-    <link rel="stylesheet" href="src/css/keep_reservation.css">
+    <link rel="stylesheet" href="src/css/delivery_reservation.css">
 </head>
 
 <body>
@@ -256,6 +256,7 @@
                                 </div>
                             </div>
                         </div>
+                        <p style="margin-top: 1rem; text-align: right">※도착지는 대구, 경주 지역만 선택할 수 있습니다.</p>
                     </div>
                     <div class="keep_reservation_contents_main_user">
                         <div class="keep_reservation_contents_main_title">
@@ -298,49 +299,49 @@
                             <p>요금안내</p>
                         </div>
                         <div class="keep_reservation_contents_main_luggage">
+<!--                            <div class="luggage_box_container">-->
+<!--                                <div class="luggage_box">-->
+<!--                                    <div class="luggage_box_img">-->
+<!--                                        <img src="src/images/small.svg" alt="소형">-->
+<!--                                    </div>-->
+<!--                                    <div class="luggage_box_content">-->
+<!--                                        <h2>소형</h2>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="luggage" data-price="1000">-->
+<!--                                    <button class="m" onclick="minus(this)">-</button>-->
+<!--                                    <input type="text" id="small" name="소형" value="0" readonly>-->
+<!--                                    <button class="p" onclick="plus(this)">+</button>-->
+<!--                                </div>-->
+<!--                            </div>-->
                             <div class="luggage_box_container">
                                 <div class="luggage_box">
                                     <div class="luggage_box_img">
-                                        <img src="src/images/small.svg" alt="소형">
+                                        <img src="src/images/under.svg" alt="26미만" width="300" height="300">
                                     </div>
                                     <div class="luggage_box_content">
-                                        <h2>소형</h2>
-                                    </div>
-                                </div>
-                                <div class="luggage" data-price="1000">
-                                    <button class="m" onclick="minus(this)">-</button>
-                                    <input type="text" id="small" name="소형" value="0" readonly>
-                                    <button class="p" onclick="plus(this)">+</button>
-                                </div>
-                            </div>
-                            <div class="luggage_box_container">
-                                <div class="luggage_box">
-                                    <div class="luggage_box_img">
-                                        <img src="src/images/medium.svg" alt="중형">
-                                    </div>
-                                    <div class="luggage_box_content">
-                                        <h2>중형</h2>
+                                        <h2>26인치이하</h2>
                                     </div>
                                 </div>
                                 <div class="luggage" data-price="3000">
-                                    <button class="m" onclick="minus(this)">-</button>
-                                    <input type="text" id="medium" name="중형" value="0" readonly>
-                                    <button class="p" onclick="plus(this)">+</button>
+                                    <button class="m" onclick="underM()">-</button>
+                                    <input type="text" id="under" name="26인치이하" value="0" readonly>
+                                    <button class="p" onclick="underP()">+</button>
                                 </div>
                             </div>
                             <div class="luggage_box_container">
                                 <div class="luggage_box">
                                     <div class="luggage_box_img">
-                                        <img src="src/images/large.svg" alt="대형">
+                                        <img src="src/images/over.svg" alt="대형" width="300" height="300">
                                     </div>
                                     <div class="luggage_box_content">
-                                        <h2>대형</h2>
+                                        <h2>26인치초과</h2>
                                     </div>
                                 </div>
                                 <div class="luggage" data-price="5000">
-                                    <button class="m" onclick="minus(this)">-</button>
-                                    <input type="text" id="large" name="대형" value="0" readonly>
-                                    <button class="p" onclick="plus(this)">+</button>
+                                    <button class="m" onclick="overM()">-</button>
+                                    <input type="text" id="over" name="26인치초과" value="0" readonly>
+                                    <button class="p" onclick="overP()">+</button>
                                 </div>
                             </div>
                         </div>
