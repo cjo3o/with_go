@@ -23,9 +23,9 @@ const $check_name = document.querySelector('#check_name');
 const $check_phone = document.querySelector('#check_phone');
 const $keep_reservation_contents = document.querySelector('.keep_reservation_contents');
 const $keep_reservation_check_contents = document.querySelector('.keep_reservation_check_contents');
-const $check_small = document.querySelector('#check_small');
-const $check_medium = document.querySelector('#check_medium');
-const $check_large = document.querySelector('#check_large');
+// const $check_small = document.querySelector('#check_small');
+const $check_under = document.querySelector('#check_under');
+const $check_over = document.querySelector('#check_over');
 const $check_price = document.querySelector('#check_price');
 
 // function minus(a) {
@@ -39,6 +39,19 @@ const $check_price = document.querySelector('#check_price');
 //     a.parentNode.children[1].value++;
 //     $totalPrice.innerText = Number($totalPrice.innerText) + Number(a.parentNode.getAttribute('data-price'));
 // }
+
+console.log($start, $arrive); // 둘 중 하나라도 null이면 연결 실패
+
+
+$start.addEventListener('input', resetValues);
+$arrive.addEventListener('input', resetValues);
+
+function resetValues() {
+    under.value = 0;
+    over.value = 0;
+    $totalPrice.innerText = 0;
+}
+
 
 function underM() {
     if (under.value > 0) {
@@ -121,6 +134,7 @@ function searchAddress() {
         oncomplete: function (data) {
             // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
             $arrive.value = data.address;
+            $arrive.dispatchEvent(new Event('input'));
         }
     }).open();
 }
@@ -141,11 +155,15 @@ function deliverySubmit() {
         }
     }
 
-    if (!$arrive.value.includes('대구' || '경주')) {
+    if (
+        !$arrive.value.includes('대구') &&
+        !$arrive.value.includes('경주')
+    ) {
         alert('도착지는 대구, 경주 지역만 가능합니다.');
-        window.scrollTo({top: $arrive.offsetTop, behavior: 'smooth'});
+        window.scrollTo({ top: $arrive.offsetTop, behavior: 'smooth' });
         return;
     }
+
 
     if (agree.checked === false) {
         alert('이용약관을 확인해주세요.');
@@ -161,9 +179,8 @@ function deliverySubmit() {
             brr[i].innerHTML = arr[i].value;
         }
 
-        $check_small.innerHTML = small.value;
-        $check_medium.innerHTML = medium.value;
-        $check_large.innerHTML = large.value;
+        $check_under.innerHTML = under.value;
+        $check_over.innerHTML = over.value;
         $check_price.innerHTML = Number($totalPrice.innerText);
         $keep_reservation_contents.style.display = 'none';
         $keep_reservation_check_contents.style.display = 'block';
@@ -183,9 +200,8 @@ async function paymentSubmit() {
             delivery_start: $start.value,
             delivery_arrive: $arrive.value,
             detail_adr: $detail_adr.value,
-            small: small.value,
-            medium: medium.value,
-            large: large.value,
+            under: under.value,
+            over: over.value,
             price: Number($totalPrice.innerText)
         }
     ]).select();
@@ -202,6 +218,7 @@ async function paymentSubmit() {
 $select_location.addEventListener('click', function () {
     if (!!document.querySelector('input[name="start_location"]:checked')) {
         $start.value = document.querySelector('input[name="start_location"]:checked').parentNode.children[1].innerText;
+        $start.dispatchEvent(new Event('input'));
         closeModal();
     } else {
         alert("장소를 선택해주세요.")
