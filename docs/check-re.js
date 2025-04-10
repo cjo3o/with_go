@@ -1,277 +1,332 @@
-let $totalPrice = document.querySelector('#total_price');
+const searchBtn = document.querySelector('#search_btn');
+const changeContainer = document.querySelector('.change_btn_container');
+const tableContainer = document.querySelector('.table_container');
+const $checkbox1 = document.querySelector('#keep_btn');
+const $checkbox2 = document.querySelector('#delivery_btn');
+const $search_reserveBox = document.querySelector('#search_reserveBox');
+const $storage_table = document.querySelector('.storage_table');
+const $delivery_table = document.querySelector('.delivery_table');
+const $view_table_container = document.querySelector('.view_table_container');
+const $search_check = document.querySelector('.search_check');
+const $search_checkBox = document.querySelector('#search_checkBox');
+const $search_check_btn = document.querySelector('.search_check_btn');
+const $check_detail = document.querySelector('.check_detail');
+const $check_detail_contents = document.querySelector('.check_detail_contents');
+const $cancelBtn = document.querySelector('.cancelBtn');
 
-const $close = document.querySelectorAll('.close');
-const $start_location = document.querySelector('.start_location');
-const $start_location_contents = document.querySelector('.start_location_contents');
-const $start = document.querySelector('#start');
-const $select_location = document.querySelector('.select_location');
-const $touModal_container = document.querySelector('.touModal_container');
-const $date = document.querySelector('#date');
-const $arrive = document.querySelector('#arrive');
-const $detail_adr = document.querySelector('#detail_adr');
-const $name = document.querySelector('#name');
-const $phone = document.querySelector('#phone');
-// const small = document.querySelector('#small');
-const under = document.querySelector('#under');
-const over = document.querySelector('#over');
-const agree = document.querySelector('#agree');
-const $check_date = document.querySelector('#check_date');
-const $check_start = document.querySelector('#check_start');
-const $check_arrive = document.querySelector('#check_arrive');
-const $check_detail_adr = document.querySelector('#check_detail_adr');
-const $check_name = document.querySelector('#check_name');
-const $check_phone = document.querySelector('#check_phone');
-const $keep_reservation_contents = document.querySelector('.keep_reservation_contents');
-const $keep_reservation_check_contents = document.querySelector('.keep_reservation_check_contents');
-// const $check_small = document.querySelector('#check_small');
-const $check_under = document.querySelector('#check_under');
-const $check_over = document.querySelector('#check_over');
-const $check_price = document.querySelector('#check_price');
-
-// function minus(a) {
-//     if (a.parentNode.children[1].value > 0) {
-//         a.parentNode.children[1].value--;
-//         $totalPrice.innerText = Number($totalPrice.innerText) - Number(a.parentNode.getAttribute('data-price'));
-//     }
-// }
-//
-// function plus(a) {
-//     a.parentNode.children[1].value++;
-//     $totalPrice.innerText = Number($totalPrice.innerText) + Number(a.parentNode.getAttribute('data-price'));
-// }
-
-console.log($start, $arrive); // 둘 중 하나라도 null이면 연결 실패
-
-
-$start.addEventListener('input', resetValues);
-$arrive.addEventListener('input', resetValues);
-
-function resetValues() {
-    under.value = 0;
-    over.value = 0;
-    $totalPrice.innerText = 0;
-}
-
-
-function underM() {
-    if (under.value > 0) {
-        if (($start.value.includes('대구') && $arrive.value.includes('대구')) || ($start.value.includes('경주') && $arrive.value.includes('경주'))) {
-            under.value--;
-            $totalPrice.innerText = Number($totalPrice.innerText) - Number(10000);
-        } else if (($start.value.includes('대구') && $arrive.value.includes('경주')) || ($start.value.includes('경주') && $arrive.value.includes('대구'))) {
-            under.value--;
-            $totalPrice.innerText = Number($totalPrice.innerText) - Number(20000);
-        } else {
-            alert('출발지와 도착지를 선택해 주세요');
-            window.scrollTo({top: $start.offsetTop, behavior: 'smooth'});
+if ($checkbox1) {
+    $checkbox1.addEventListener('change', function () {
+            if (this.checked) {
+                if ($checkbox2) {
+                    $checkbox2.checked = false;
+                }
+            }
         }
-    }
+    )
+    ;
 }
 
-function underP() {
-    if (($start.value.includes('대구') && $arrive.value.includes('대구')) || ($start.value.includes('경주') && $arrive.value.includes('경주'))) {
-        under.value++;
-        $totalPrice.innerText = Number($totalPrice.innerText) + Number(10000);
-    } else if (($start.value.includes('대구') && $arrive.value.includes('경주')) || ($start.value.includes('경주') && $arrive.value.includes('대구'))) {
-        under.value++;
-        $totalPrice.innerText = Number($totalPrice.innerText) + Number(20000);
-    } else {
-        alert('출발지와 도착지를 선택해 주세요');
-        window.scrollTo({top: $start.offsetTop, behavior: 'smooth'});
-    }
-}
-
-function overM() {
-    if (over.value > 0) {
-        if (($start.value.includes('대구') && $arrive.value.includes('대구')) || ($start.value.includes('경주') && $arrive.value.includes('경주'))) {
-            over.value--;
-            $totalPrice.innerText = Number($totalPrice.innerText) - Number(15000);
-        } else if (($start.value.includes('대구') && $arrive.value.includes('경주')) || ($start.value.includes('경주') && $arrive.value.includes('대구'))) {
-            over.value--;
-            $totalPrice.innerText = Number($totalPrice.innerText) - Number(25000);
-        } else {
-            alert('출발지와 도착지를 선택해 주세요');
-            window.scrollTo({top: $start.offsetTop, behavior: 'smooth'});
+if ($checkbox2) {
+    $checkbox2.addEventListener('change', function () {
+            if (this.checked) {
+                if ($checkbox1) {
+                    $checkbox1.checked = false;
+                }
+            }
         }
+    )
+    ;
+}
+
+const checkboxWrappers = changeContainer ? changeContainer.querySelectorAll('.change_btn') : [];
+if (checkboxWrappers) {
+    checkboxWrappers.forEach(wrapper => {
+        wrapper.addEventListener('click', function () {
+            this.classList.toggle('checked');
+            const checkbox = this.querySelector('input[type="checkbox"]');
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+            }
+        });
+    });
+}
+
+if (searchBtn) {
+    searchBtn.addEventListener('click', async () => {
+        await searchReserve();
+    });
+}
+
+async function searchReserve() {
+    if (!supabase) {
+        console.error('Supabase 클라이언트가 초기화되지 않았습니다.');
+        alert('데이터베이스 연결에 문제가 발생했습니다.');
+        return;
     }
-}
 
-function overP() {
-    if (($start.value.includes('대구') && $arrive.value.includes('대구')) || ($start.value.includes('경주') && $arrive.value.includes('경주'))) {
-        over.value++;
-        $totalPrice.innerText = Number($totalPrice.innerText) + Number(15000);
-    } else if (($start.value.includes('대구') && $arrive.value.includes('경주')) || ($start.value.includes('경주') && $arrive.value.includes('대구'))) {
-        over.value++;
-        $totalPrice.innerText = Number($totalPrice.innerText) + Number(25000);
-    } else {
-        alert('출발지와 도착지를 선택해 주세요');
-        window.scrollTo({top: $start.offsetTop, behavior: 'smooth'});
+    if (!tableContainer) {
+        console.error('테이블 컨테이너 요소를 찾을 수 없습니다.');
+        return;
     }
-}
 
-function openModal() {
-    event.preventDefault();
-    $touModal_container.style.display = 'block';
-}
+    tableContainer.innerHTML = '';
+    let rows = '';
 
-function closeModal() {
-    for (let i = 0; i < 2; i++) {
-        const modal = $close[i].parentNode.parentNode;
-        modal.style.display = 'none';
+    const checkedOptions = [];
+    if ($checkbox1 && $checkbox1.checked) checkedOptions.push('keep_btn');
+    if ($checkbox2 && $checkbox2.checked) checkedOptions.push('delivery_btn');
+
+    if (checkedOptions.length === 0) {
+        alert('검색할 옵션을 선택해주세요.');
+        return;
     }
-}
 
-function openSelectLocation() {
-    if (!!$start_location) {
-        $start_location.classList.add('fade_in');
-        $start_location_contents.classList.add('up');
-        $start_location.style.display = 'flex';
+    if (!$search_reserveBox || !$search_reserveBox.value) {
+        alert('전화번호를 입력해주세요.');
+        return;
     }
-}
 
-function searchAddress() {
-    new daum.Postcode({
-        oncomplete: function (data) {
-            // 팝업에서 검색결과 항목을 클릭했을때 실행할 코드를 작성하는 부분입니다.
-            $arrive.value = data.address;
-            $arrive.dispatchEvent(new Event('input'));
-        }
-    }).open();
-}
+    let hasResults = false;
 
-function deliverySubmit() {
-    const arr = [$date, $start, $arrive, $detail_adr, $name, $phone];
-    for (let i = 0; i < arr.length; i++) {
-        if (arr[i].value === '') {
-            alert(`${arr[i].name}을(를) 입력해주세요.`);
-            // Swal.fire({
-            //     icon: "error",
-            //     title: "알림",
-            //     text: `${arr[i].name}을(를) 입력해주세요!`,
-            // });
-            // window.scrollTo({top: arr[i].offsetTop, behavior: 'smooth'});
-            arr[i].focus();
+    console.log("검색 시작!");
+    console.log("입력된 전화번호:", $search_reserveBox.value);
+
+
+    if (checkedOptions.includes('keep_btn')) {
+        const {data, error} = await supabase
+            .from('storage')
+            .select('*')
+            .eq('phone', $search_reserveBox.value)
+            .order('storage_start_date', {ascending: false});
+
+        console.log("Supabase 응답:", data, error);
+
+        if (error) {
+            console.error('Supabase 데이터 조회 오류 (보관):', error);
+            alert('데이터 조회 중 오류가 발생했습니다 (보관).');
             return;
         }
+
+        if (data && data.length > 0) {
+            hasResults = true;
+            rows = data.map(item => `
+                <tr onclick="openDetail_st(this)">
+                    <td>${item.name}</td>
+                    <td>${item.phone}</td>
+                    <td>${item.storage_start_date}</td>
+                    <td>${item.storage_end_date}</td>
+                    <td>${item.small}</td>
+                    <td>${item.medium}</td>
+                    <td>${item.large}</td>
+                    <td>${item.price}</td>
+                </tr>
+            `).join('');
+
+            if ($storage_table) {
+                $view_table_container.innerHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>이름</th>
+                                <th>연락처</th>
+                                <th>보관일자</th>
+                                <th>보관종료</th>
+                                <th>소형</th>
+                                <th>중형</th>
+                                <th>대형</th>
+                                <th>가격</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rows}
+                        </tbody>
+                    </table>
+                `;
+            }
+        }
     }
 
-    if (
-        !$arrive.value.includes('대구') &&
-        !$arrive.value.includes('경주')
-    ) {
-        alert('도착지는 대구, 경주 지역만 가능합니다.');
-        window.scrollTo({ top: $arrive.offsetTop, behavior: 'smooth' });
-        return;
-    }
+    if (checkedOptions.includes('delivery_btn')) {
+        const {data, error} = await supabase
+            .from('delivery')
+            .select('*')
+            .eq('phone', $search_reserveBox.value)
+            .order('delivery_date', {ascending: false});
 
+        console.log("Supabase 응답:", data, error);
 
-    if (agree.checked === false) {
-        alert('이용약관을 확인해주세요.');
-        window.scrollTo({top: agree.offsetTop, behavior: 'smooth'});
-        return;
-    }
-
-    if (Number($totalPrice.innerText) === 0) {
-        alert('짐 개수를 선택해주세요.');
-    } else {
-        const brr = [$check_date, $check_start, $check_arrive, $check_detail_adr, $check_name, $check_phone];
-        for (let i = 0; i < brr.length; i++) {
-            brr[i].innerHTML = arr[i].value;
+        if (error) {
+            console.error('Supabase 데이터 조회 오류 (배송):', error);
+            alert('데이터 조회 중 오류가 발생했습니다 (배송).');
+            return;
         }
 
-        $check_under.innerHTML = under.value;
-        $check_over.innerHTML = over.value;
-        $check_price.innerHTML = Number($totalPrice.innerText);
-        $keep_reservation_contents.style.display = 'none';
-        $keep_reservation_check_contents.style.display = 'block';
+        if (data && data.length > 0) {
+            hasResults = true;
+            rows = data.map(item => `
+                <tr onclick="openDetail_de(this)">
+                    <td>${item.delivery_date}</td>
+                    <td>${item.name}</td>
+                    <td>${item.phone}</td>
+                    <td>${item.delivery_start}</td>
+                    <td>${item.delivery_arrive}</td>
+                    <td>${item.under}</td>
+                    <td>${item.over}</td>
+                    <td>${item.price}</td>
+                </tr>
+            `).join('');
 
-        window.scrollTo({top: 0, behavior: 'smooth'});
+            if ($delivery_table) {
+                $view_table_container.innerHTML = `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>배송일자</th>
+                                <th>이름</th>
+                                <th>연락처</th>
+                                <th>배송 출발지</th>
+                                <th>배송 도착지</th>
+                                <th>26인치이하</th>
+                                <th>26인치초과</th>
+                                <th>가격</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rows}
+                        </tbody>
+                    </table>
+                `;
+                $delivery_table.style.display = 'block';
+                $search_check.style.display = 'flex';
+            }
+        }
+    }
+
+    if (!hasResults) {
+        alert('검색 결과가 없습니다.');
     }
 }
 
-async function paymentSubmit() {
-    const res = await supabase.auth.getUser();
-    await supabase.from('delivery').insert([
-        {
-            user_id: res.data.user.id,
-            name: $name.value,
-            phone: $phone.value,
-            delivery_date: $date.value,
-            delivery_start: $start.value,
-            delivery_arrive: $arrive.value,
-            detail_adr: $detail_adr.value,
-            under: under.value,
-            over: over.value,
-            price: Number($totalPrice.innerText)
-        }
-    ]).select();
+function openDetail_st(trTag) {
+    const name = trTag.children[0].innerText;
+    const phone = trTag.children[1].innerText;
+    const storage_start_date = trTag.children[2].innerText;
+    const storage_end_date = trTag.children[3].innerText;
+    const small = trTag.children[4].innerText;
+    const medium = trTag.children[5].innerText;
+    const large = trTag.children[6].innerText;
+    const price = trTag.children[7].innerText;
+    // const $cancelBtn = document.querySelector('.cancelBtn');
 
+    $check_detail_contents.innerHTML = `
+                                        <span class="close" onclick="closeDetail()">&times;</span>
+                                        <h2>조회 상세 정보</h2>
+                                        <div class="data">
+                <div class="info-row"><span class="label">보관일자</span><span class="value">${storage_start_date}</span></div>
+  <div class="info-row"><span class="label">보관종료</span><span class="value">${storage_end_date}</span></div>
+  <div class="info-row"><span class="label">이 름</span><span class="value">${name}</span></div>
+  <div class="info-row"><span class="label">연 락 처</span><span class="value">${phone}</span></div>
+                </div>
+                                        <ul>
+                                            <li>소형 : ${small}</li>
+                                            <li>중형 : ${medium}</li>
+                                            <li>대형 : ${large}</li>
+                                        </ul>
+                                        <hr>
+                                        <div class="d-total">
+                    <strong>총 합</strong>
+                    <span>${price} 원</span>
+<!--                    <span>원</span>-->
+                </div>
+                                       `;
+    $cancelBtn.innerHTML = `
+                            <button class="cancelReserve" onclick="cancelReserve()">
+                                예약취소
+                            </button>
+                           `;
+    $check_detail.classList.add('fade_in');
+    $check_detail_contents.classList.add('slide_up');
+    $cancelBtn.classList.add('slide_up');
+}
 
-    await Swal.fire({
-        title: "예약이 완료되었습니다!",
-        icon: "success",
-        draggable: true
+function closeDetail() {
+    $check_detail_contents.classList.remove('slide_up');
+    $cancelBtn.classList.remove('slide_up');
+    $check_detail.classList.remove('fade_in');
+}
+
+async function cancelReserve() {
+    const result = await Swal.fire({
+        title: "정말 취소하시겠습니까?",
+        text: "취소하시면 복구하실 수 없습니다!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "확인",
+        cancelButtonText: "예약취소"
     });
-    location.href = 'index.html';
 }
 
-$select_location.addEventListener('click', function () {
-    if (!!document.querySelector('input[name="start_location"]:checked')) {
-        $start.value = document.querySelector('input[name="start_location"]:checked').parentNode.children[1].innerText;
-        $start.dispatchEvent(new Event('input'));
-        closeModal();
-    } else {
-        alert("장소를 선택해주세요.")
-    }
-});
+function openDetail_de(trTag) {
+    const date = trTag.children[0].innerText;
+    const name = trTag.children[1].innerText;
+    const phone = trTag.children[2].innerText;
+    const start = trTag.children[3].innerText;
+    const arrive = trTag.children[4].innerText;
+    const under = trTag.children[5].innerText;
+    const over = trTag.children[6].innerText;
+    const price = trTag.children[7].innerText;
+    // const $cancelBtn = document.querySelector('.cancelBtn');
 
-const startDatePicker = document.getElementById('date');
+    $check_detail_contents.innerHTML = `
+                                        <span class="close" onclick="closeDetail()">&times;</span>
+                                        <h2>조회 상세 정보</h2>
+                <div class="data">
+                <div class="info-row"><span class="label">배송일자</span><span class="value">${date}</span></div>
+  <div class="info-row"><span class="label">출 발 지</span><span class="value">${start}</span></div>
+  <div class="info-row"><span class="label">도 착 지</span><span class="value">${arrive}</span></div>
+  <div class="info-row"><span class="label">이 름</span><span class="value">${name}</span></div>
+  <div class="info-row"><span class="label">연 락 처</span><span class="value">${phone}</span></div>
+                </div>
+                <hr>
+            
+                <div class="size">
+                <p>ㆍ26인치이하 : ${under}</p>
+                <p>ㆍ26인치초과 : ${over}</p>
+                </div>
+                <hr>
+                <div class="d-total">
+                    <strong>총 합</strong>
+                    <span>${price} 원</span>
+<!--                    <span>원</span>-->
+                </div>
+                                       `;
+    $cancelBtn.innerHTML = `
+                            <button class="cancelReserve" onclick="cancelReserve()">
+                                예약취소
+                            </button>
+                           `;
+    $check_detail.classList.add('fade_in');
+    $check_detail_contents.classList.add('slide_up');
+    $cancelBtn.classList.add('slide_up');
+}
 
-// 시작 날짜 선택 제한 설정
-startDatePicker.addEventListener('change', function () {
-    const selectedDate = new Date(this.value);
-    const today = new Date();
+function closeDetail() {
+    $check_detail_contents.classList.remove('slide_up');
+    $cancelBtn.classList.remove('slide_up');
+    $check_detail.classList.remove('fade_in');
+}
 
-    if (selectedDate < today) {
-        const todayFormatted = today.toISOString().split('T')[0];
-        this.value = todayFormatted;
-    }
-});
-
-const today = new Date();
-const todayFormatted = today.toISOString().split('T')[0];
-startDatePicker.setAttribute('min', todayFormatted);
-
-// 종료 날짜 선택 제한 설정 (시작 날짜 이후만 선택 가능하도록)
-endDatePicker.addEventListener('change', function () {
-    const startDate = new Date(startDatePicker.value);
-    const selectedDate = new Date(this.value);
-
-    if (selectedDate < startDate) {
-        this.value = startDatePicker.value;
-    }
-});
-
-document.addEventListener('DOMContentLoaded', async function () {
-    const loginData = await supabase.auth.getUser();
-    if (loginData?.data?.user?.user_metadata?.name) {
-        $name.value = loginData.data.user.user_metadata.name;
-    }
-
-    // 빠른 예약에서 가져온 값 자동 세팅
-    const name = localStorage.getItem("reservation_name");
-    const phone = localStorage.getItem("reservation_phone");
-    const carrier = localStorage.getItem("reservation_carrier");
-
-    if (name) $name.value = name;
-    if (phone) $phone.value = phone;
-
-    // select box 자동 선택
-    const $carrierSelect = document.getElementById("carrier");
-    if ($carrierSelect && carrier) {
-        const matchedOption = [...$carrierSelect.options].find(opt => opt.text === carrier);
-        if (matchedOption) {
-            $carrierSelect.value = matchedOption.value;
-        }
-    }
-});
+async function cancelReserve() {
+    const result = await Swal.fire({
+        title: "정말 취소하시겠습니까?",
+        text: "취소하시면 복구하실 수 없습니다!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "확인",
+        cancelButtonText: "취소"
+    });
+}
