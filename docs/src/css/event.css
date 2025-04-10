@@ -75,14 +75,10 @@ body {
 
 .event-list {
     display: flex;
-    flex-wrap: wrap;               
-    justify-content: flex-start;  
-    gap: 30px;
+    justify-content: space-between;
+    gap: 20px;
     margin-top: 60px;
-    padding-bottom: 120px;
-    max-width: 1020px;            
-    margin-left: auto;
-    margin-right: auto;
+    padding-bottom: 150px;
 }
 
 .event-item {
@@ -98,9 +94,6 @@ body {
 
 .event-item img {
     width: 100%;
-    height: 200px;
-    object-fit: cover;
-    object-position: top;
     display: block;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;

@@ -10,7 +10,7 @@
 }
 
 .section1 {
-    background-image: url("/p2-jim/src/images/headerBg.png");
+    background-image: url("/with_go/src/images/headerBg.png");
     width: 100%;
     height: 250px;
     background-repeat: no-repeat;
@@ -433,7 +433,7 @@
 }
 
 .card_title > input[type="radio"]:checked {
-    background-image: url("/src/images/checkBox.png");
+    background-image: url("/with_go/src/images/checkBox.png");
     background-repeat: no-repeat;
     background-position: center;
 }

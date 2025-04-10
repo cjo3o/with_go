@@ -63,7 +63,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 await supabase.auth.signInWithOAuth({
                     provider: 'kakao',
                     options: {
-                        redirectTo: 'https://username.github.io/project-name/' // 배포 URL로 설정
+                        redirectTo: 'https://cjo3o.github.io/with_go/' // 배포 URL로 설정
                     }
                 })
             });
