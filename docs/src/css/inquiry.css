@@ -16,7 +16,7 @@
 .con_header {
     margin-top: 87px;
     height: 250px;
-    background-image: url(/with_go/src/images/review_bg.png);
+    background-image: url(/src/images/review_bg.png);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -78,6 +78,16 @@ i {
     cursor: pointer;
 }
 
+.search_sel {
+    width: 100px;
+    font-size: 14px;
+    height: 35px;
+    /* padding: 4px 8px; */
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
 .search {
     font-size: 14px;
     height: 35px;
@@ -113,10 +123,10 @@ th {
 }
 
 .cen_down {
-    margin: 20px 0; 
+    margin: 20px 0;
 }
 
-.cen_down > a {
+.cen_down>a {
     text-decoration: none;
 }
 
@@ -187,7 +197,9 @@ td.title {
 }
 
 /* 페이지 버튼 및 그룹/화살표 버튼 공통 */
-.page-btn, .group-btn, .arrow-btn {
+.page-btn,
+.group-btn,
+.arrow-btn {
     background-color: #fff;
     border: 1px solid #ccc;
     padding: 8px 12px;
@@ -226,7 +238,8 @@ td.title {
     background-color: #f0f0f0;
     color: #aaa;
     cursor: not-allowed;
-    pointer-events: none; /* 클릭 막기 */
+    pointer-events: none;
+    /* 클릭 막기 */
     opacity: 0.7;
 }
 
