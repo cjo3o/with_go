@@ -170,9 +170,8 @@ async function searchReserve() {
                     <td>${item.phone}</td>
                     <td>${item.delivery_start}</td>
                     <td>${item.delivery_arrive}</td>
-                    <td>${item.small}</td>
-                    <td>${item.medium}</td>
-                    <td>${item.large}</td>
+                    <td>${item.under}</td>
+                    <td>${item.over}</td>
                     <td>${item.price}</td>
                 </tr>
             `).join('');
@@ -187,9 +186,8 @@ async function searchReserve() {
                                 <th>연락처</th>
                                 <th>배송 출발지</th>
                                 <th>배송 도착지</th>
-                                <th>소형</th>
-                                <th>중형</th>
-                                <th>대형</th>
+                                <th>26인치이하</th>
+                                <th>26인치초과</th>
                                 <th>가격</th>
                             </tr>
                         </thead>
@@ -276,10 +274,9 @@ function openDetail_de(trTag) {
     const phone = trTag.children[2].innerText;
     const start = trTag.children[3].innerText;
     const arrive = trTag.children[4].innerText;
-    const small = trTag.children[5].innerText;
-    const medium = trTag.children[6].innerText;
-    const large = trTag.children[7].innerText;
-    const price = trTag.children[8].innerText;
+    const under = trTag.children[5].innerText;
+    const over = trTag.children[6].innerText;
+    const price = trTag.children[7].innerText;
     // const $cancelBtn = document.querySelector('.cancelBtn');
 
     $check_detail_contents.innerHTML = `
@@ -295,9 +292,8 @@ function openDetail_de(trTag) {
                 <hr>
             
                 <div class="size">
-                <p>ㆍ소형 : ${small}</p>
-                <p>ㆍ중형 : ${medium}</p>
-                <p>ㆍ대형 : ${large}</p>
+                <p>ㆍ26인치이하 : ${under}</p>
+                <p>ㆍ26인치초과 : ${over}</p>
                 </div>
                 <hr>
                 <div class="d-total">
