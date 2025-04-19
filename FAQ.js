@@ -63,7 +63,10 @@ function renderFAQ(faqData) {
 
         const answer = document.createElement("div");
         answer.classList.add("answer");
-        answer.innerHTML = item.answer;
+        answer.innerHTML = `
+          <span class="label-a">A</span>
+          <span class="answer-text">${item.answer}</span>
+        `;
 
         faqItem.appendChild(question);
         faqItem.appendChild(answer);

@@ -74,44 +74,55 @@ body {
     margin-right: 10px;
 }
 .answer {
-    display: block;  /* ✅ 블록 요소로 변경 */
-    opacity: 0;      /* ✅ 기본적으로 숨겨놓기 */
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    opacity: 0;
     max-height: 0;
     overflow: hidden;
     transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out;
-    font-size: 15px;
-    color: rgb(39, 39, 39);
-    font-weight: normal;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    white-space: normal;
 }
+
 .answer.active {
-    opacity: 1;  /* ✅ 보이게 만들기 */
+    opacity: 1;
     max-height: 500px;
 }
 
-.answer::before {
-    content: 'A';
+.answer .label-a {
+    font-weight: bold;
     font-size: 16px;
     color: rgb(0, 102, 204);
-    font-weight: bold;
-    margin-right: 10px;
+    flex-shrink: 0;
+    line-height: 1.5;
+    padding-top: 2px;
 }
+
+.answer .answer-text {
+    white-space: pre-line;
+    font-size: 15px;
+    color: rgb(39, 39, 39);
+    font-weight: normal;
+    line-height: 1.6;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
 .pagination {
     text-align: center;
     margin: 70px auto 100px;
 }
+
 .page-button {
     width: 35px;
     height: 35px;
     margin: 5px;
     font-weight: bold;
     border: none;
-    background-color: rgb(158, 158, 158) ;
+    background-color: rgb(158, 158, 158);
     color: #ffffff;
     cursor: pointer;
 }
+
 .page-button.active {
-    background-color: rgb(0,102,204);
+    background-color: rgb(0, 102, 204);
 }
