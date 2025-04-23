@@ -40,7 +40,7 @@
         }
     </script>
     <link rel="stylesheet" href="src/css/reset.css">
-    <link rel="stylesheet" href="src/css/keep_reservation.css">
+    <link rel="stylesheet" href="src/css/delivery_reservation.css">
 </head>
 
 <body>
@@ -60,49 +60,49 @@
                 </div>
                 <div class="start_location_contents_body">
                     <div class="card">
-                        <label for="seoul">
+                        <label for="dongdaegu">
                             <div class="card_title">
-                                <input type="radio" name="start_location" id="seoul"/>
-                                <h3>서울역</h3>
+                                <input type="radio" name="start_location" id="dongdaegu"/>
+                                <h3>동대구역</h3>
                             </div>
                             <div class="card_body">
-                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 22:00</p>
+                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 20:00</p>
                                 <p>1번 출구에서 2번출구 방향</p>
                             </div>
                         </label>
                     </div>
                     <div class="card">
-                        <label for="hongdae">
+                        <label for="daeguAirport">
                             <div class="card_title">
-                                <input type="radio" name="start_location" id="hongdae"/>
-                                <h3>홍대입구</h3>
+                                <input type="radio" name="start_location" id="daeguAirport"/>
+                                <h3>대구공항</h3>
                             </div>
                             <div class="card_body">
-                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 22:00</p>
+                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 20:00</p>
                                 <p>2호선 지하1층 공항철도 연결통로 내</p>
                             </div>
                         </label>
                     </div>
+<!--                    <div class="card">-->
+<!--                        <label for="incheon">-->
+<!--                            <div class="card_title">-->
+<!--                                <input type="radio" name="start_location" id="incheon"/>-->
+<!--                                <h3>인천공항</h3>-->
+<!--                            </div>-->
+<!--                            <div class="card_body">-->
+<!--                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 20:00</p>-->
+<!--                                <p>명동역 1,9,10번 출구 내</p>-->
+<!--                            </div>-->
+<!--                        </label>-->
+<!--                    </div>-->
                     <div class="card">
-                        <label for="myeongdong">
+                        <label for="gyeongju">
                             <div class="card_title">
-                                <input type="radio" name="start_location" id="myeongdong"/>
-                                <h3>명동</h3>
+                                <input type="radio" name="start_location" id="gyeongju"/>
+                                <h3>경주역</h3>
                             </div>
                             <div class="card_body">
-                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 22:00</p>
-                                <p>명동역 1,9,10번 출구 내</p>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="card">
-                        <label for="gimpo">
-                            <div class="card_title">
-                                <input type="radio" name="start_location" id="gimpo"/>
-                                <h3>김포공항</h3>
-                            </div>
-                            <div class="card_body">
-                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 22:00</p>
+                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 20:00</p>
                                 <p>5호선 김포공항 지하1층 게이트 방향</p>
                             </div>
                         </label>
@@ -256,6 +256,7 @@
                                 </div>
                             </div>
                         </div>
+                        <p style="margin-top: 1rem; text-align: right">※도착지는 대구, 경주 지역만 선택할 수 있습니다.</p>
                     </div>
                     <div class="keep_reservation_contents_main_user">
                         <div class="keep_reservation_contents_main_title">
@@ -298,49 +299,49 @@
                             <p>요금안내</p>
                         </div>
                         <div class="keep_reservation_contents_main_luggage">
+<!--                            <div class="luggage_box_container">-->
+<!--                                <div class="luggage_box">-->
+<!--                                    <div class="luggage_box_img">-->
+<!--                                        <img src="src/images/small.svg" alt="소형">-->
+<!--                                    </div>-->
+<!--                                    <div class="luggage_box_content">-->
+<!--                                        <h2>소형</h2>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                                <div class="luggage" data-price="1000">-->
+<!--                                    <button class="m" onclick="minus(this)">-</button>-->
+<!--                                    <input type="text" id="small" name="소형" value="0" readonly>-->
+<!--                                    <button class="p" onclick="plus(this)">+</button>-->
+<!--                                </div>-->
+<!--                            </div>-->
                             <div class="luggage_box_container">
                                 <div class="luggage_box">
                                     <div class="luggage_box_img">
-                                        <img src="src/images/small.svg" alt="소형">
+                                        <img src="src/images/under.svg" alt="26미만" width="300" height="300">
                                     </div>
                                     <div class="luggage_box_content">
-                                        <h2>소형</h2>
-                                    </div>
-                                </div>
-                                <div class="luggage" data-price="1000">
-                                    <button class="m" onclick="minus(this)">-</button>
-                                    <input type="text" id="small" name="소형" value="0" readonly>
-                                    <button class="p" onclick="plus(this)">+</button>
-                                </div>
-                            </div>
-                            <div class="luggage_box_container">
-                                <div class="luggage_box">
-                                    <div class="luggage_box_img">
-                                        <img src="src/images/medium.svg" alt="중형">
-                                    </div>
-                                    <div class="luggage_box_content">
-                                        <h2>중형</h2>
+                                        <h2>26인치이하</h2>
                                     </div>
                                 </div>
                                 <div class="luggage" data-price="3000">
-                                    <button class="m" onclick="minus(this)">-</button>
-                                    <input type="text" id="medium" name="중형" value="0" readonly>
-                                    <button class="p" onclick="plus(this)">+</button>
+                                    <button class="m" onclick="underM()">-</button>
+                                    <input type="text" id="under" name="26인치이하" value="0" readonly>
+                                    <button class="p" onclick="underP()">+</button>
                                 </div>
                             </div>
                             <div class="luggage_box_container">
                                 <div class="luggage_box">
                                     <div class="luggage_box_img">
-                                        <img src="src/images/large.svg" alt="대형">
+                                        <img src="src/images/over.svg" alt="대형" width="300" height="300">
                                     </div>
                                     <div class="luggage_box_content">
-                                        <h2>대형</h2>
+                                        <h2>26인치초과</h2>
                                     </div>
                                 </div>
                                 <div class="luggage" data-price="5000">
-                                    <button class="m" onclick="minus(this)">-</button>
-                                    <input type="text" id="large" name="대형" value="0" readonly>
-                                    <button class="p" onclick="plus(this)">+</button>
+                                    <button class="m" onclick="overM()">-</button>
+                                    <input type="text" id="over" name="26인치초과" value="0" readonly>
+                                    <button class="p" onclick="overP()">+</button>
                                 </div>
                             </div>
                         </div>
@@ -408,17 +409,17 @@
                                 </tr>
                                 </thead>
                                 <tbody>
+<!--                                <tr>-->
+<!--                                    <td style="padding-left: 4rem">소형</td>-->
+<!--                                    <td style="text-align: center" id="check_small">0</td>-->
+<!--                                </tr>-->
                                 <tr>
-                                    <td style="padding-left: 4rem">소형</td>
-                                    <td style="text-align: center" id="check_small">0</td>
+                                    <td>26인치이하</td>
+                                    <td style="text-align: center" id="check_under">0</td>
                                 </tr>
                                 <tr>
-                                    <td style="padding-left: 4rem">중형</td>
-                                    <td style="text-align: center" id="check_medium">0</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding-left: 4rem">대형</td>
-                                    <td style="text-align: center" id="check_large">0</td>
+                                    <td>26인치초과</td>
+                                    <td style="text-align: center" id="check_over">0</td>
                                 </tr>
                                 </tbody>
                             </table>

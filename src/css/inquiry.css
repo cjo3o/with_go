@@ -3,6 +3,48 @@
     box-sizing: border-box;
 }
 
+.content {
+    margin-top: 87px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #5e5e5e;
+    background-image: url(/src/images/review_bg.png);
+    background-size: cover;
+}
+.content h1 {
+    color: white;
+    text-align: center;
+    font-size: 30px;
+    line-height: 250px;
+    opacity: 0;
+    animation: slideUp 1.2s forwards;
+}
+
+.section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    position: relative;
+    margin-top: 100px;
+}
+
+.section-text {
+    text-align: center;
+    font-size: 24px;
+}
+.section-text h3 {
+    margin-bottom: 15px;
+    color: rgb(0,102,204);
+}
+.section-text p {
+    font-size: 15px;
+    line-height: 1.3;
+}
+
 .con {
     min-width: 1200px;
     text-align: center;
@@ -78,6 +120,16 @@ i {
     cursor: pointer;
 }
 
+.search_sel {
+    width: 100px;
+    font-size: 14px;
+    height: 35px;
+    /* padding: 4px 8px; */
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
 .search {
     font-size: 14px;
     height: 35px;
@@ -113,10 +165,10 @@ th {
 }
 
 .cen_down {
-    margin: 20px 0; 
+    margin: 20px 0;
 }
 
-.cen_down > a {
+.cen_down>a {
     text-decoration: none;
 }
 
@@ -187,7 +239,9 @@ td.title {
 }
 
 /* 페이지 버튼 및 그룹/화살표 버튼 공통 */
-.page-btn, .group-btn, .arrow-btn {
+.page-btn,
+.group-btn,
+.arrow-btn {
     background-color: #fff;
     border: 1px solid #ccc;
     padding: 8px 12px;
@@ -226,7 +280,8 @@ td.title {
     background-color: #f0f0f0;
     color: #aaa;
     cursor: not-allowed;
-    pointer-events: none; /* 클릭 막기 */
+    pointer-events: none;
+    /* 클릭 막기 */
     opacity: 0.7;
 }
 
