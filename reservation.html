@@ -16,6 +16,34 @@
 
         var supabase = window.supabase.createClient(supabaseUrl, supabasePassword);
     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const { data, error } = await supabase
+                .from("partner_place")  // 테이블명
+                .select("*");           // 모든 컬럼 조회
+
+            if (error) {
+                console.error("불러오기 오류:", error.message);
+                return;
+            }
+
+            console.log("데이터:", data); // 콘솔로 확인
+        });
+    </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const { data, error } = await supabase
+                .from("storage_place")  // 테이블명
+                .select("*");           // 모든 컬럼 조회
+
+            if (error) {
+                console.error("불러오기 오류:", error.message);
+                return;
+            }
+
+            console.log("데이터:", data); // 콘솔로 확인
+        });
+    </script>
 </head>
 
 <body>

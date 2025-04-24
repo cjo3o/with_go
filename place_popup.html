@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PlacePopUp</title>
+    <style>
+        body { font-family: sans-serif; padding: 2rem; }
+        img { max-width: 100%; height: auto; border-radius: 8px; }
+    </style>
+</head>
+<body>
+<h1 id="name"></h1>
+<p><strong>주소:</strong> <span id="address"></span></p>
+<p><strong>전화번호:</strong> <span id="phone"></span></p>
+<p><strong>지도:</strong> <a href="#" id="map_url" target="_blank">지도 열기</a></p>
+<img id="image" alt="장소 이미지">
+
+<script>
+    const params = new URLSearchParams(window.location.search);
+    document.getElementById("name").textContent = params.get("name");
+    document.getElementById("address").textContent = params.get("address");
+    document.getElementById("phone").textContent = params.get("phone");
+    document.getElementById("map_url").href = params.get("map_url");
+    document.getElementById("image").src = params.get("image");
+</script>
+</body>
+</html>
