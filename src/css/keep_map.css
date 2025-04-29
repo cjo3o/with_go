@@ -20,8 +20,12 @@
 }
 
 .map_infor {
-    padding: 1.5rem 0 3rem 0;
+    padding: 1.5rem 0;
     border-bottom: dotted 1px #ccc;
+}
+
+.map_infor > div {
+    margin: 0.4rem 0;
 }
 
 .map_infor > div,
