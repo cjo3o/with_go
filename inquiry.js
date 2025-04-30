@@ -379,7 +379,7 @@ async function loadPage(page) {
 
   const { data } = await supabase
     .from("question")
-    .select("text_num, type, title, name, secret, created_at, stat")
+    .select("text_num, type, title, name, secret, created_at, stat, answer")
     .order("created_at", { ascending: sortDirection === "asc" })
     .range(offset, to);
 
@@ -433,13 +433,14 @@ async function loadPage(page) {
     ) {
       let localTime = new getdate(item.created_at);
       row.innerHTML = `
-            <td>${item.text_num}</td>
-            <td>${item.type}</td>
-            <td class="title"><a href="${inquiryUrl}">${displayTitle}</a></td>
-            <td>${item.name}</td>
-            <td>${localTime.getTime}</td>
-            <td>${item.stat}</td>
-        `;
+             <td>${item.text_num}</td>
+    <td>${item.type}</td>
+    <td class="title"><a href="${inquiryUrl}">${displayTitle}</a></td>
+    <td>${item.name}</td>
+    <td>${localTime.getTime}</td>
+    <td>${item.stat}</td>
+    <td>${item.answer ? item.answer : "-"}</td> <!-- ✅ 답변 추가 -->
+`;
     } else if (item.created_at != null) {
       row.innerHTML = `
             <td>${item.text_num}</td>

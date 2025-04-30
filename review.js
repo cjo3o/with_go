@@ -41,10 +41,11 @@ async function fetchReviews(page = 1, type = 'all') {
     const to = from + perPage - 1;
 
     let query = supabase
-        .from("review")
-        .select("*", {count: "exact"})
-        .order("created_at", {ascending: false})
-        .range(from, to);
+    .from("review")
+    .select("*", { count: "exact" })
+    .order("is_best", { ascending: false }) 
+    .order("created_at", { ascending: false }) 
+    .range(from, to);
 
     if (type !== "all") query = query.eq("type", type);
 
@@ -72,6 +73,7 @@ function renderReviews(reviews) {
         div.innerHTML = `
         <div class="review-content">
             <div class="review-text">
+                ${item.is_best ? `<div class="best-badge"><img src="../src/images/best.png" alt="BEST" class="best-icon" /></div>` : ''}
                 <div class="title">
                     <div class="type">[${item.type}]</div>
                     <div class="title-text">${item.title}</div>
@@ -93,6 +95,7 @@ function renderReviews(reviews) {
     });
 }
 
+
 // 수정 버튼
 function openModal(review) {
     const modal = document.getElementById('review-modal');
@@ -100,12 +103,15 @@ function openModal(review) {
     const createdDate = formatCreatedAt(review.created_at);
 
     modalBody.innerHTML = `
-        <h2>[${review.type}] ${review.title}</h2><br>
-        <p><strong>작성자:</strong> ${review.name}</p>
-        <p><strong>작성일:</strong> ${createdDate}</p>
-        <p>${review.review_txt}</p>
-        ${review.file_url ? `<div class="image-box"><img src="${review.file_url}" /></div>` : ""}
-    `;
+    <h2>
+        ${review.is_best ? `<img src="../src/images/best.png" alt="BEST" class="best-icon" /> ` : ''}
+        [${review.type}] ${review.title}
+    </h2><br>
+    <p><strong>작성자:</strong> ${review.name}</p>
+    <p><strong>작성일:</strong> ${createdDate}</p>
+    <p>${review.review_txt}</p>
+    ${review.file_url ? `<div class="image-box"><img src="${review.file_url}" /></div>` : ""}
+`;
 
     document.getElementById('edit-btn').onclick = async function handlePasswordPrompt() {
         const {value: password} = await Swal.fire({
