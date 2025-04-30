@@ -73,7 +73,7 @@ function renderReviews(reviews) {
         div.innerHTML = `
         <div class="review-content">
             <div class="review-text">
-                ${item.is_best ? `<div class="best-badge"><img src="/src/images/best.png" alt="BEST" class="best-icon" /></div>` : ''}
+                ${item.is_best ? `<div class="best-badge"><img src="/with_go/src/images/best.png" alt="BEST" class="best-icon" /></div>` : ''}
                 <div class="title">
                     <div class="type">[${item.type}]</div>
                     <div class="title-text">${item.title}</div>
