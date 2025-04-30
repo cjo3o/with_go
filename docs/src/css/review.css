@@ -403,3 +403,20 @@
     position: fixed;
     z-index: 999;
 }
+
+.best-badge {
+    display: inline-block;
+    margin-bottom: 5px;
+    margin-right: 8px;
+}
+
+.best-icon {
+    height: 28px;
+    vertical-align: middle;
+}
+
+.modal-content h2 img.best-icon {
+    height: 30px;
+    vertical-align: middle;
+    margin-right: 8px;
+}

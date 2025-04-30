@@ -88,7 +88,7 @@
 
 .cc2 {
     width: 900px;
-    border-bottom: 1px solid rgb(0, 0, 0);
+    border-bottom: 1px solid rgb(180, 180, 180);
     p {
         margin-top: 14px;
         margin-bottom: 11px;
@@ -102,10 +102,22 @@
     }
 }
 
+.cc3 {
+    width: 900px;
+    text-align: left;
+    margin-top: 25px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid rgb(0, 0, 0);
+    h3 {
+        color: rgb(0, 102, 204);
+        margin-bottom: 10px;
+    }
+}
+
 .cf1 {
     width: 900px;
     margin-top: 19px;
-    margin-bottom: 19px;
+    margin-bottom: 180px;
 }
 
 .cf_left {
