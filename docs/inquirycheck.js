@@ -76,7 +76,7 @@ async function displayPostDetails() {
 
   let postHeaderHTML4 = `
     <h3>답변</h3>
-    <pre><p>${postDetails.answer}</p></pre>`;
+    <pre><p>${postDetails.answer === null ? '' : postDetails.answer}</p></pre>`;
 
   // 첨부된 파일이 있는 경우
   if (postDetails.image_url) {
