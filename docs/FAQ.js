@@ -37,10 +37,11 @@ async function loadFAQ() {
     let { data, error } = await supabase
         .from("withgo_faqs")
         .select("*")
+        .eq("status", "공개")
         .order("created_at", { ascending: true });
 
     if (error) {
-        console.error("📌 FAQ 데이터를 불러오는 중 오류 발생:", error);
+        console.error("FAQ 데이터를 불러오는 중 오류 발생:", error);
         return [];
     }
     return data;
@@ -63,7 +64,10 @@ function renderFAQ(faqData) {
 
         const answer = document.createElement("div");
         answer.classList.add("answer");
-        answer.innerHTML = item.answer;
+        answer.innerHTML = `
+          <span class="label-a">A</span>
+          <span class="answer-text">${item.answer}</span>
+        `;
 
         faqItem.appendChild(question);
         faqItem.appendChild(answer);

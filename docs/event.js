@@ -20,8 +20,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
 
     const { data: events, error } = await supabase
-        .from("withgo_event")  // ✅ 이벤트 테이블로 변경!
+        .from("withgo_event")
         .select("*")
+        .eq("status", "이벤트 진행중")
         .order("date", { ascending: false });
 
     if (error) {
