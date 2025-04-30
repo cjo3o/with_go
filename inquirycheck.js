@@ -74,6 +74,10 @@ async function displayPostDetails() {
     }" target="_blank">${postDetails.image_url.split("/").pop()}</a></p>
 `;
 
+  let postHeaderHTML4 = `
+    <h3>답변</h3>
+    <pre><p>${postDetails.answer}</p></pre>`;
+
   // 첨부된 파일이 있는 경우
   if (postDetails.image_url) {
     // 파일 URL을 변수로 저장
@@ -98,6 +102,7 @@ async function displayPostDetails() {
   document.getElementById("cen_heder2").innerHTML = postHeaderHTML1;
   document.getElementById("cen_content").innerHTML = postHeaderHTML2;
   document.getElementById("cen_content2").innerHTML = postHeaderHTML3;
+  document.getElementById("cen_content3").innerHTML = postHeaderHTML4;
 }
 
 async function deletePost(postId) {
