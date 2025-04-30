@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="src/css/reservation.css">
     <link rel="stylesheet" href="src/css/keep.css">
     <link rel="stylesheet" href="src/css/check.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
@@ -135,12 +136,14 @@
                     </div>
                     <div class="change_btn_container">
                         <div class="change_btn">
-                            <label class="keep_btn active" >
-                                <input type="checkbox" name="" class="keep_btn" id="keep_btn" style="display: none;" checked>
+                            <label class="keep_btn active">
+                                <input type="checkbox" name="" class="keep_btn" id="keep_btn" style="display: none;"
+                                       checked>
                                 보관
                             </label>
                             <label class="delivery_btn">
-                                <input type="checkbox" name="" class="delivery_btn" id="delivery_btn" style="display: none;">
+                                <input type="checkbox" name="" class="delivery_btn" id="delivery_btn"
+                                       style="display: none;">
                                 배송
                             </label>
                         </div>
@@ -166,7 +169,8 @@
                             검색
                         </button>
                     </div>
-                    <p style=" text-align: center; color: white; display: flex; justify-content: center; margin-top: 2rem; opacity: 0; transform: translateY(100%); animation: slideUp 0.5s forwards; animation-delay: 1.5s" class="click_infor">※ 클릭하시면 상세정보를 볼 수 있습니다.</p>
+                    <p style=" text-align: center; color: white; display: flex; justify-content: center; margin-top: 2rem; opacity: 0; transform: translateY(100%); animation: slideUp 0.5s forwards; animation-delay: 1.5s"
+                       class="click_infor">※ 클릭하시면 상세정보를 볼 수 있습니다.</p>
                 </div>
             </div>
         </div>
@@ -176,40 +180,11 @@
                     <h1>편리한 보관, 스마트한 여행</h1>
                     <p>짐 걱정 없이 가볍게 떠나고, 머무는 곳에서도 편하게 보관하세요!</p>
                     <div class="keep_search">
-                        <div class="keep_search_container">
-                            <form action="">
-                                <input type="text" name="" id="" placeholder="보관장소">
-                                <div class="search_btn">
-                                    <img src="src/images/search.png" alt="검색" width="18" height="18">
-                                </div>
-                            </form>
-                        </div>
+                        <input type="text" name="search" id="storage_input" class="search" placeholder="검색어를 입력해주세요.">
+                        <i class="fa-solid fa-magnifying-glass search_img" id="storage_search"></i>
                     </div>
                     <div class="keep_adr_container">
-                        <div class="keep_adr">
-                            <div class="keep_adr_infor">
-                                <p class="title">다이소 명덕네거리점</p>
-                                <p class="location">대구 남구 중앙대로 255(대명동)</p>
-                            </div>
-                            <a href="daiso.html"
-                               onclick="window.open(this.href, '_blank', 'width=710, height=650'); return false;">상세보기</a>
-                        </div>
-                        <div class="keep_adr" style="animation-delay: 1s">
-                            <div class="keep_adr_infor">
-                                <p class="title">성동주유소</p>
-                                <p class="location">경상북도 경주시 성동동 179-4</p>
-                            </div>
-                            <a href="seongdong.html"
-                               onclick="window.open(this.href, '_blank', 'width=710, height=650'); return false;">상세보기</a>
-                        </div>
-                        <div class="keep_adr" style="animation-delay: 1.1s">
-                            <div class="keep_adr_infor">
-                                <p class="title">대백프라자</p>
-                                <p class="location">대구 중구 명덕로 333</p>
-                            </div>
-                            <a href="debec.html"
-                               onclick="window.open(this.href, '_blank', 'width=710, height=650'); return false;">상세보기</a>
-                        </div>
+
                     </div>
                     <!--                <div class="keep_board_controler">-->
                     <!--                    <div class="keep_board_controler_btn">-->
@@ -224,48 +199,14 @@
             <div class="keep_container">
                 <div class="keep_contents">
                     <div class="keep_search">
-                        <div class="keep_search_container">
-                            <form action="">
-                                <input type="text" name="" id="" placeholder="제휴숙소">
-                                <div class="search_btn">
-                                    <img src="src/images/search.png" alt="검색" width="18" height="18">
-                                </div>
-                            </form>
-                        </div>
+                        <input type="text" name="search" id="partner_input" class="search" placeholder="검색어를 입력해주세요.">
+                        <i class="fa-solid fa-magnifying-glass search_img" id="partner_search"></i>
                     </div>
                     <div class="keep_adr_container">
-                        <div class="keep_adr">
-                            <div class="keep_adr_infor">
-                                <p class="title">경주황룡유스호스텔</p>
-                                <p class="location">경북 경주시 불국신택지6길 9 (진현동)</p>
-                            </div>
-                            <a href="hwangnyong.html"
-                               onclick="window.open(this.href, '_blank', 'width=800, height=650'); return false;">상세보기</a>
-                        </div>
-                        <div class="keep_adr" style="animation-delay: 1s">
-                            <div class="keep_adr_infor">
-                                <p class="title">호텔라온제나</p>
-                                <p class="location">대구 수성구 범어천로 73 (범어동)</p>
-                            </div>
-                            <a href="laonzenna.html"
-                               onclick="window.open(this.href, '_blank', 'width=800, height=650'); return false;">상세보기</a>
-                        </div>
-                        <div class="keep_adr" style="animation-delay: 1.1s">
-                            <div class="keep_adr_infor">
-                                <p class="title">노보텔 앰배서더 대구</p>
-                                <p class="location">대구 중구 국채보상로 611 (문화동)</p>
-                            </div>
-                            <a href="ambassador.html"
-                               onclick="window.open(this.href, '_blank', 'width=800, height=650'); return false;">상세보기</a>
-                        </div>
-                        <div class="keep_adr" style="animation-delay: 1.2s">
-                            <div class="keep_adr_infor">
-                                <p class="title">호텔 인터불고 대구</p>
-                                <p class="location">대구 수성구 팔현길 212 (만촌동)</p>
-                            </div>
-                            <a href="interbulgo.html"
-                               onclick="window.open(this.href, '_blank', 'width=950, height=650'); return false;">상세보기</a>
-                        </div>
+                        <!--                        <div class="pagination_container">-->
+                        <!--                            <button class="left">왼쪽</button>-->
+                        <!--                            <button class="right">오른쪽</button>-->
+                        <!--                        </div>-->
                     </div>
                     <!--                <div class="keep_board_controler">-->
                     <!--                    <div class="keep_board_controler_btn">-->
@@ -284,9 +225,10 @@
 
     </div>
 </div>
+<script src="storage_place.js"></script>
+<script src="partner_place.js"></script>
 <script src="dropdown.js"></script>
 <script src="change_btn.js"></script>
-<!--<script src="check.js"></script>-->
 <script src="check-re.js"></script>
 </body>
 
