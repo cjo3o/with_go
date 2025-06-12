@@ -240,3 +240,114 @@ document.addEventListener('DOMContentLoaded', () => {
         if (option) $carrierSelect.value = option.value;
     }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const radioButtons = document.querySelectorAll('input[name="kl"]');
+    const keepBox = document.querySelector('.keep_box');
+    const stayBox = document.querySelector('.stay_box');
+
+    radioButtons.forEach((radio, index) => {
+        radio.addEventListener('change', () => {
+            if (radio.checked) {
+                radioButtons.forEach(rb => rb.classList.remove('active'));
+                radio.classList.add('active');
+
+                if (index === 0) {
+                    keepBox.style.display = 'block';
+                    stayBox.style.display = 'none';
+                } else {
+                    keepBox.style.display = 'none';
+                    stayBox.style.display = 'block';
+                }
+            }
+        });
+    });
+
+    // 페이지 진입 시 '보관함'이 기본 선택되도록
+    radioButtons[0].checked = true;
+    radioButtons[0].classList.add('active');
+    keepBox.style.display = 'block';
+    stayBox.style.display = 'none';
+
+    loadStoragePlaces();
+    loadPartnerPlaces();
+});
+
+
+async function loadStoragePlaces() {
+    const { data, error } = await supabase
+        .from("storage_place")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error("보관 장소 불러오기 실패:", error);
+        return;
+    }
+
+    const container = document.querySelector(".keep_box");
+    container.innerHTML = "";
+
+    data.forEach((place) => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+      <label>
+        <div class="card_title">
+          <input type="radio" name="keep_location" value="${place.name}">
+          <h3>${place.name}</h3>
+        </div>
+        <div class="card_body">
+          <p>운영시간 : "오전10시 ~ 오후10시"</p>
+          <p>${place.address}</p>
+        </div>
+      </label>
+    `;
+        container.appendChild(card);
+    });
+}
+
+async function loadPartnerPlaces() {
+    const { data, error } = await supabase
+        .from("partner_place")
+        .select("*")
+        .order("created_at", { ascending: false });
+
+    if (error) {
+        console.error("숙소 목록 불러오기 실패:", error);
+        return;
+    }
+
+    const container = document.querySelector(".stay_box");
+    container.innerHTML = "";
+
+    data.forEach((hotel) => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+      <label>
+        <div class="card_title">
+          <input type="radio" name="keep_location" value="${hotel.name}">
+          <h3>${hotel.name}</h3>
+        </div>
+        <div class="card_body">
+          <p>운영시간 : "오전10시 ~ 오후10시"</p>
+          <p>${hotel.address}</p>
+        </div>
+      </label>
+    `;
+        container.appendChild(card);
+    });
+}
+
+document.getElementById('phone').addEventListener('input', function (e) {
+    let num = e.target.value.replace(/[^0-9]/g, '');
+
+    if (num.length < 4) {
+        e.target.value = num;
+    } else if (num.length < 8) {
+        e.target.value = `${num.slice(0, 3)}-${num.slice(3)}`;
+    } else {
+        e.target.value = `${num.slice(0, 3)}-${num.slice(3, 7)}-${num.slice(7, 11)}`;
+    }
+});
