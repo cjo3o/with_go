@@ -30,7 +30,7 @@
                 total_price: parseInt(document.getElementById("total_price").textContent)
             };
 
-            const { error } = await supabase.from("delivery").insert([data]);
+            const {error} = await supabase.from("delivery").insert([data]);
             if (error) {
                 alert("저장 실패");
             } else {
@@ -56,57 +56,101 @@
             <div class="start_location_contents">
                 <span class="close" onclick="closeModal()">&times;</span>
                 <div class="start_location_contents_header">
-                    <h1>보관 장소 선택</h1>
+                    <h1>배송지 선택</h1>
+                    <div style="display: flex; justify-content: space-around; margin-top: 2rem; ">
+                        <label class="keep_check" style="cursor: pointer;">
+                            <input type="radio" name="kl" class="kl" style="display: none;">
+                            <h2 style="cursor: pointer;">보관함</h2>
+                        </label>
+                        <label style="cursor: pointer;">
+                            <input type="radio" name="kl" class="kl" style="display: none;">
+                            <h2 style="display: inline; margin: 0;">숙소</h2>
+                        </label>
+                    </div>
                 </div>
-                <div class="start_location_contents_body">
-                    <div class="card">
-                        <label for="dongdaegu">
-                            <div class="card_title">
-                                <input type="radio" name="start_location" id="dongdaegu"/>
-                                <h3>동대구역</h3>
-                            </div>
-                            <div class="card_body">
-                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 20:00</p>
-                                <p>1번 출구에서 2번출구 방향</p>
-                            </div>
-                        </label>
-                    </div>
-                    <div class="card">
-                        <label for="daeguAirport">
-                            <div class="card_title">
-                                <input type="radio" name="start_location" id="daeguAirport"/>
-                                <h3>대구공항</h3>
-                            </div>
-                            <div class="card_body">
-                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 20:00</p>
-                                <p>2호선 지하1층 공항철도 연결통로 내</p>
-                            </div>
-                        </label>
-                    </div>
-<!--                    <div class="card">-->
-<!--                        <label for="incheon">-->
-<!--                            <div class="card_title">-->
-<!--                                <input type="radio" name="start_location" id="incheon"/>-->
-<!--                                <h3>인천공항</h3>-->
-<!--                            </div>-->
-<!--                            <div class="card_body">-->
-<!--                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 20:00</p>-->
-<!--                                <p>명동역 1,9,10번 출구 내</p>-->
-<!--                            </div>-->
-<!--                        </label>-->
-<!--                    </div>-->
-                    <div class="card">
-                        <label for="gyeongju">
-                            <div class="card_title">
-                                <input type="radio" name="start_location" id="gyeongju"/>
-                                <h3>경주역</h3>
-                            </div>
-                            <div class="card_body">
-                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 20:00</p>
-                                <p>5호선 김포공항 지하1층 게이트 방향</p>
-                            </div>
-                        </label>
-                    </div>
+                <div class="start_location_contents_body delivery_start_box" id="location">
+                    <template id="card-template">
+                        <div class="card">
+                            <label>
+                                <div class="card_title">
+                                    <input type="radio" name="start_location"/>
+                                    <h3>장소명</h3>
+                                </div>
+                                <div class="card_body">
+                                    <p style="font-size: 1.2rem">운영시간</p>
+                                    <p>주소</p>
+                                </div>
+                            </label>
+                        </div>
+                    </template>
+                    <div class="delivery_start_card_list"></div>
+                </div>
+                <!--                    <div class="card">-->
+                <!--                        <label for="dongdaegu">-->
+                <!--                            <div class="card_title">-->
+                <!--                                <input type="radio" name="start_location" id="dongdaegu"/>-->
+                <!--                                <h3>동대구역</h3>-->
+                <!--                            </div>-->
+                <!--                            <div class="card_body">-->
+                <!--                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 20:00</p>-->
+                <!--                                <p>1번 출구에서 2번출구 방향</p>-->
+                <!--                            </div>-->
+                <!--                        </label>-->
+                <!--                    </div>-->
+                <!--                    <div class="card">-->
+                <!--                        <label for="daeguAirport">-->
+                <!--                            <div class="card_title">-->
+                <!--                                <input type="radio" name="start_location" id="daeguAirport"/>-->
+                <!--                                <h3>대구공항</h3>-->
+                <!--                            </div>-->
+                <!--                            <div class="card_body">-->
+                <!--                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 20:00</p>-->
+                <!--                                <p>2호선 지하1층 공항철도 연결통로 내</p>-->
+                <!--                            </div>-->
+                <!--                        </label>-->
+                <!--                    </div>-->
+                <!--                    <div class="card">-->
+                <!--                        <label for="incheon">-->
+                <!--                            <div class="card_title">-->
+                <!--                                <input type="radio" name="start_location" id="incheon"/>-->
+                <!--                                <h3>인천공항</h3>-->
+                <!--                            </div>-->
+                <!--                            <div class="card_body">-->
+                <!--                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 20:00</p>-->
+                <!--                                <p>명동역 1,9,10번 출구 내</p>-->
+                <!--                            </div>-->
+                <!--                        </label>-->
+                <!--                    </div>-->
+                <!--                    <div class="card">-->
+                <!--                        <label for="gyeongju">-->
+                <!--                            <div class="card_title">-->
+                <!--                                <input type="radio" name="start_location" id="gyeongju"/>-->
+                <!--                                <h3>경주역</h3>-->
+                <!--                            </div>-->
+                <!--                            <div class="card_body">-->
+                <!--                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 20:00</p>-->
+                <!--                                <p>5호선 김포공항 지하1층 게이트 방향</p>-->
+                <!--                            </div>-->
+                <!--                        </label>-->
+                <!--                    </div>-->
+                <!--                </div>-->
+                <div class="start_location_contents_body delivery_start_stay_box" style="display: none;">
+                    <!--                        <h3>숙소 선택 예정 콘텐츠</h3>-->
+                    <template id="partner-card-template">
+                        <div class="card">
+                            <label>
+                                <div class="card_title">
+                                    <input type="radio" name="start_location"/>
+                                    <h3 class="partner-name">숙소명</h3>
+                                </div>
+                                <div class="card_body">
+                                    <p class="partner-hours" style="font-size: 1.2rem">운영시간</p>
+                                    <p class="partner-address">주소</p>
+                                </div>
+                            </label>
+                        </div>
+                    </template>
+                    <div class="delivery_start_stay_card_list"></div>
                 </div>
                 <div class="submit_select">
                     <button class="select_location">선택완료</button>
@@ -299,21 +343,21 @@
                             <p>요금안내</p>
                         </div>
                         <div class="keep_reservation_contents_main_luggage">
-<!--                            <div class="luggage_box_container">-->
-<!--                                <div class="luggage_box">-->
-<!--                                    <div class="luggage_box_img">-->
-<!--                                        <img src="src/images/small.svg" alt="소형">-->
-<!--                                    </div>-->
-<!--                                    <div class="luggage_box_content">-->
-<!--                                        <h2>소형</h2>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <div class="luggage" data-price="1000">-->
-<!--                                    <button class="m" onclick="minus(this)">-</button>-->
-<!--                                    <input type="text" id="small" name="소형" value="0" readonly>-->
-<!--                                    <button class="p" onclick="plus(this)">+</button>-->
-<!--                                </div>-->
-<!--                            </div>-->
+                            <!--                            <div class="luggage_box_container">-->
+                            <!--                                <div class="luggage_box">-->
+                            <!--                                    <div class="luggage_box_img">-->
+                            <!--                                        <img src="src/images/small.svg" alt="소형">-->
+                            <!--                                    </div>-->
+                            <!--                                    <div class="luggage_box_content">-->
+                            <!--                                        <h2>소형</h2>-->
+                            <!--                                    </div>-->
+                            <!--                                </div>-->
+                            <!--                                <div class="luggage" data-price="1000">-->
+                            <!--                                    <button class="m" onclick="minus(this)">-</button>-->
+                            <!--                                    <input type="text" id="small" name="소형" value="0" readonly>-->
+                            <!--                                    <button class="p" onclick="plus(this)">+</button>-->
+                            <!--                                </div>-->
+                            <!--                            </div>-->
                             <div class="luggage_box_container">
                                 <div class="luggage_box">
                                     <div class="luggage_box_img">
@@ -409,10 +453,10 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-<!--                                <tr>-->
-<!--                                    <td style="padding-left: 4rem">소형</td>-->
-<!--                                    <td style="text-align: center" id="check_small">0</td>-->
-<!--                                </tr>-->
+                                <!--                                <tr>-->
+                                <!--                                    <td style="padding-left: 4rem">소형</td>-->
+                                <!--                                    <td style="text-align: center" id="check_small">0</td>-->
+                                <!--                                </tr>-->
                                 <tr>
                                     <td>26인치이하</td>
                                     <td style="text-align: center" id="check_under">0</td>

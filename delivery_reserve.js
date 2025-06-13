@@ -160,7 +160,7 @@ function deliverySubmit() {
         !$arrive.value.includes('경주')
     ) {
         alert('도착지는 대구, 경주 지역만 가능합니다.');
-        window.scrollTo({ top: $arrive.offsetTop, behavior: 'smooth' });
+        window.scrollTo({top: $arrive.offsetTop, behavior: 'smooth'});
         return;
     }
 
@@ -273,5 +273,100 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (matchedOption) {
             $carrierSelect.value = matchedOption.value;
         }
+    }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const radioButtons = document.querySelectorAll('input[name="kl"]');
+    const startBox = document.querySelector('.delivery_start');
+    const stayBox = document.querySelector('.delivery_start_stay_box');
+
+    radioButtons.forEach((radio, index) => {
+        radio.addEventListener('change', () => {
+            if (radio.checked) {
+                radioButtons.forEach(rb => rb.classList.remove('active'));
+                radio.classList.add('active');
+
+                if (index === 0) {
+                    startBox.style.display = 'block';
+                    stayBox.style.display = 'none';
+                } else {
+                    startBox.style.display = 'none';
+                    stayBox.style.display = 'block';
+                }
+            }
+        });
+    });
+
+    // 페이지 진입 시 '보관함'이 기본 선택되도록
+    radioButtons[0].checked = true;
+    radioButtons[0].classList.add('active');
+    startBox.style.display = 'block';
+    stayBox.style.display = 'none';
+
+    loadStoragePlaces();
+    loadPartnerPlaces();
+});
+
+
+async function loadStoragePlaces() {
+    const {data, error} = await supabase
+        .from("storage_place")
+        .select("*")
+        .order("created_at", {ascending: false});
+
+    if (error) {
+        console.error("보관 장소 불러오기 실패:", error);
+        return;
+    }
+
+    const container = document.querySelector(".delivery_start_card_list");
+    container.innerHTML = "";
+
+    data.forEach((place) => {
+        const template = document.querySelector("#card-template");
+        const clone = template.content.cloneNode(true);
+        clone.querySelector('input').value = place.name;
+        clone.querySelector('h3').textContent = place.name;
+        clone.querySelectorAll('p')[0].textContent = `운영시간 : ${place.hours || "오전10시 ~ 오후10시"}`;
+        clone.querySelectorAll('p')[1].textContent = place.address;
+        container.appendChild(clone);
+    });
+}
+
+async function loadPartnerPlaces() {
+    const {data, error} = await supabase
+        .from("partner_place")
+        .select("*")
+        .order("created_at", {ascending: false});
+
+    if (error) {
+        console.error("숙소 목록 불러오기 실패:", error);
+        return;
+    }
+
+    const container = document.querySelector(".delivery_start_stay_card_list");
+    container.innerHTML = "";
+
+    data.forEach((place) => {
+        const template = document.querySelector("#partner-card-template");
+        const clone = template.content.cloneNode(true);
+        clone.querySelector('input').value = place.name;
+        clone.querySelector('h3').textContent = place.name;
+        clone.querySelectorAll('p')[0].textContent = `운영시간 : ${place.hours || "오전10시 ~ 오후10시"}`;
+        clone.querySelectorAll('p')[1].textContent = place.address;
+        container.appendChild(clone);
+    });
+}
+
+document.getElementById('phone').addEventListener('input', function (e) {
+    let num = e.target.value.replace(/[^0-9]/g, '');
+
+    if (num.length < 4) {
+        e.target.value = num;
+    } else if (num.length < 8) {
+        e.target.value = `${num.slice(0, 3)}-${num.slice(3)}`;
+    } else {
+        e.target.value = `${num.slice(0, 3)}-${num.slice(3, 7)}-${num.slice(7, 11)}`;
     }
 });

@@ -123,25 +123,64 @@ async function searchReserve() {
             `).join('');
 
             if ($storage_table) {
-                $view_table_container.innerHTML = `
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>이름</th>
-                                <th>연락처</th>
-                                <th>보관일자</th>
-                                <th>보관종료</th>
-                                <th>소형</th>
-                                <th>중형</th>
-                                <th>대형</th>
-                                <th>가격</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${rows}
-                        </tbody>
-                    </table>
-                `;
+                const itemsPerPage = 10;
+                const totalPages = Math.ceil(data.length / itemsPerPage);
+                let currentPage = 1;
+
+                function displayPage(page) {
+                    const start = (page - 1) * itemsPerPage;
+                    const end = start + itemsPerPage;
+                    const pageRows = data.slice(start, end).map(item => `
+                        <tr onclick="openDetail_st(this)">
+                            <td>${item.name}</td>
+                            <td>${item.phone}</td>
+                            <td>${item.storage_start_date}</td>
+                            <td>${item.storage_end_date}</td>
+                            <td>${item.small}</td>
+                            <td>${item.medium}</td>
+                            <td>${item.large}</td>
+                            <td>${item.price}</td>
+                        </tr>
+                    `).join('');
+
+                    $view_table_container.innerHTML = `
+                        <div class="table-container">
+                            <table class="styled-table">
+                                <thead>
+                                    <tr>
+                                        <th>이름</th>
+                                        <th>연락처</th>
+                                        <th>보관일자</th>
+                                        <th>보관종료</th>
+                                        <th>소형</th>
+                                        <th>중형</th>
+                                        <th>대형</th>
+                                        <th>가격</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    ${pageRows}
+                                </tbody>
+                            </table>
+                            <div class="pagination">
+                                <button onclick="changePage(1)" ${currentPage === 1 ? 'disabled' : ''}>처음</button>
+                                <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>이전</button>
+                                <span>${currentPage} / ${totalPages}</span>
+                                <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>다음</button>
+                                <button onclick="changePage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''}>마지막</button>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                window.changePage = function (page) {
+                    if (page >= 1 && page <= totalPages) {
+                        currentPage = page;
+                        displayPage(currentPage);
+                    }
+                };
+
+                displayPage(1);
             }
         }
     }
@@ -177,8 +216,13 @@ async function searchReserve() {
             `).join('');
 
             if ($delivery_table) {
+                const itemsPerPage = 10;
+                const totalPages = Math.ceil(data.length / itemsPerPage);
+                let currentPage = 1;
+
                 $view_table_container.innerHTML = `
-                    <table>
+                <div class="table-container">
+                    <table class="styled-table">
                         <thead>
                             <tr>
                                 <th>배송일자</th>
@@ -195,10 +239,26 @@ async function searchReserve() {
                             ${rows}
                         </tbody>
                     </table>
+                    <div class="pagination">
+                                <button onclick="changePage(1)" ${currentPage === 1 ? 'disabled' : ''}>처음</button>
+                                <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>이전</button>
+                                <span>${currentPage} / ${totalPages}</span>
+                                <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>다음</button>
+                                <button onclick="changePage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''}>마지막</button>
+                            </div>
+                </div>
                 `;
                 $delivery_table.style.display = 'block';
                 $search_check.style.display = 'flex';
             }
+            window.changePage = function (page) {
+                if (page >= 1 && page <= totalPages) {
+                    currentPage = page;
+                    displayPage(currentPage);
+                }
+            };
+
+            displayPage(1);
         }
     }
 
@@ -330,3 +390,15 @@ async function cancelReserve() {
         cancelButtonText: "취소"
     });
 }
+
+document.getElementById('search_reserveBox').addEventListener('input', function (e) {
+    let num = e.target.value.replace(/[^0-9]/g, '');
+
+    if (num.length < 4) {
+        e.target.value = num;
+    } else if (num.length < 8) {
+        e.target.value = `${num.slice(0, 3)}-${num.slice(3)}`;
+    } else {
+        e.target.value = `${num.slice(0, 3)}-${num.slice(3, 7)}-${num.slice(7, 11)}`;
+    }
+});

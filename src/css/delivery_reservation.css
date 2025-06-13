@@ -395,8 +395,9 @@
     color: #323232;
 }
 
+.start_location_contents_header { border-bottom: solid 1px #ccc; }
+
 .keep_location_contents_header,
-.start_location_contents_header,
 .arrive_location_contents_header {
     padding-bottom: 1.5rem;
     border-bottom: solid 1px #ccc;
