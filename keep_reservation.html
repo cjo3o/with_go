@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://js.tosspayments.com/v1/payment"></script>
     <script>
         const supabaseUrl = "https://zgrjjnifqoactpuqolao.supabase.co";
         const supabasePassword = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpncmpqbmlmcW9hY3RwdXFvbGFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNDc0NTgsImV4cCI6MjA1NjgyMzQ1OH0._Vl-6CRKdMjeDRyNoxlfect7sgusZ7L0N5OYu0a5hT0";
@@ -229,7 +230,7 @@
                                     전화번호
                                 </div>
                                 <div class="input-box_content">
-                                    <input type="text" name="" placeholder="전화번호를 입력해주세요." maxlength="13" required>
+                                    <input type="text" id="phone" name="" placeholder="전화번호를 입력해주세요." maxlength="13" required>
                                 </div>
                             </div>
                             <div class="keep_reservation_contents_main_box_input-box">
@@ -406,7 +407,7 @@
                 </div>
             </div>
             <div class="keep_reserve_btn" style="margin: 4rem 0">
-                <button onclick="paymentSubmit()">
+                <button onclick="startPayment()">
                     결제진행
                 </button>
             </div>

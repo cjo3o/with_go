@@ -374,6 +374,11 @@
     opacity: 0;
 }
 
+.start_location_contents {
+    height: 700px;
+    overflow-y: auto;
+}
+
 .up {
     transform: translateY(0);
     opacity: 1;

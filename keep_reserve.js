@@ -105,30 +105,114 @@ async function storageSelect() {
     }
 }
 
-async function paymentSubmit() {
-    const res = await supabase.from('storage').insert([
-        {
-            name: $name.value,
-            phone: $phone.value,
-            storage_start_date: $dateStart.value,
-            storage_end_date: $dateEnd.value,
-            location: $location_a.value,
-            mail: $mail.value,
-            reservation_country: $country.value,
-            small: small.value,
-            medium: medium.value,
-            large: large.value,
-            price: Number($totalPrice.innerText)
-        }
-    ]).select();
-    console.log(res);
-    await Swal.fire({
-        title: "보관예약이 완료되었습니다!",
-        icon: "success",
-        draggable: true
-    })
-    location.href = 'index.html';
+const tossPayments = TossPayments("test_ck_ZLKGPx4M3MGo5A04daGqrBaWypv1"); // ✅ 반드시 수정
+
+function startPayment() {
+    const name = document.getElementById("name").value;
+    const phone = document.getElementById("phone").value;
+    const mail = document.getElementById("mail").value;
+    const dateStart = document.getElementById("date_start").value;
+    const dateEnd = document.getElementById("date_end").value;
+    const location = document.getElementById("location_a").value;
+    const country = document.getElementById("country").value;
+    const small = document.getElementById("small").value;
+    const medium = document.getElementById("medium").value;
+    const large = document.getElementById("large").value;
+    const price = Number(document.getElementById("total_price").innerText);
+
+    // 1️⃣ 예약 정보 임시 저장 (결제 성공 후 Supabase에 저장 예정)
+    localStorage.setItem("reservationData", JSON.stringify({
+        name, phone, mail, dateStart, dateEnd, location, country,
+        small, medium, large, price
+    }));
+
+    // 2️⃣ 결제창 띄우기
+        tossPayments.requestPayment("카드", {
+            amount: price,
+            orderId: "order_" + new Date().getTime(),
+            orderName: "보관 예약 결제",
+            customerName: name,
+            successUrl: "http://localhost:5173/reservation.html?from=payment", // ✅ 개발 중일 땐 localhost 사용
+            failUrl: "http://localhost:5173/fail.html"
+        });
 }
+
+async function insertReservation() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentKey = urlParams.get("paymentKey");
+    const orderId = urlParams.get("orderId");
+    const amount = urlParams.get("amount");
+
+    // 결제 성공했는지 체크
+    if (!paymentKey || !orderId || !amount) {
+        alert("필수 결제 정보가 누락되었습니다.");
+        return;
+    }
+
+    const reservationData = JSON.parse(localStorage.getItem("reservationData"));
+
+    if (!reservationData) {
+        alert("저장된 예약 정보가 없습니다.");
+        return;
+    }
+
+    const { data, error } = await supabase
+        .from("storage")
+        .insert([{
+            name: reservationData.name,
+            phone: reservationData.phone,
+            mail: reservationData.mail,
+            storage_start_date: reservationData.dateStart,
+            storage_end_date: reservationData.dateEnd,
+            location: reservationData.location,
+            reservation_country: reservationData.country,
+            small: reservationData.small,
+            medium: reservationData.medium,
+            large: reservationData.large,
+            price: reservationData.price
+        }]);
+
+    if (error) {
+        console.error("예약 저장 실패", error);
+        Swal.fire("오류", "예약 저장에 실패했습니다.", "error");
+    } else {
+        Swal.fire({
+            title: "🎉 예약이 완료되었습니다!",
+            text: "홈페이지로 이동합니다.",
+            icon: "success",
+            timer: 2000,
+            showConfirmButton: false
+        }).then(() => {
+            localStorage.removeItem("reservationData"); // 저장정보 삭제
+            window.location.href = "index.html";
+        });
+    }
+}
+
+// async function paymentSubmit() {
+//     const res = await supabase.from('storage').insert([
+//         {
+//             name: $name.value,
+//             phone: $phone.value,
+//             storage_start_date: $dateStart.value,
+//             storage_end_date: $dateEnd.value,
+//             location: $location_a.value,
+//             mail: $mail.value,
+//             reservation_country: $country.value,
+//             small: small.value,
+//             medium: medium.value,
+//             large: large.value,
+//             price: Number($totalPrice.innerText)
+//         }
+//     ]).select();
+//     console.log(res);
+//     await Swal.fire({
+//         title: "보관예약이 완료되었습니다!",
+//         icon: "success",
+//         draggable: true
+//     })
+//     location.href = 'index.html';
+// }
 
 // $close.addEventListener('click',function () {
 //     $keep_location.classList.remove('fade_in');

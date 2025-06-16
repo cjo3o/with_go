@@ -243,14 +243,14 @@ const todayFormatted = today.toISOString().split('T')[0];
 startDatePicker.setAttribute('min', todayFormatted);
 
 // 종료 날짜 선택 제한 설정 (시작 날짜 이후만 선택 가능하도록)
-endDatePicker.addEventListener('change', function () {
-    const startDate = new Date(startDatePicker.value);
-    const selectedDate = new Date(this.value);
-
-    if (selectedDate < startDate) {
-        this.value = startDatePicker.value;
-    }
-});
+// endDatePicker.addEventListener('change', function () {
+//     const startDate = new Date(startDatePicker.value);
+//     const selectedDate = new Date(this.value);
+//
+//     if (selectedDate < startDate) {
+//         this.value = startDatePicker.value;
+//     }
+// });
 
 document.addEventListener('DOMContentLoaded', async function () {
     const loginData = await supabase.auth.getUser();
@@ -278,7 +278,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 document.addEventListener("DOMContentLoaded", () => {
     const radioButtons = document.querySelectorAll('input[name="kl"]');
-    const startBox = document.querySelector('.delivery_start');
+    const startBox = document.querySelector('.delivery_start_box');
     const stayBox = document.querySelector('.delivery_start_stay_box');
 
     radioButtons.forEach((radio, index) => {
@@ -303,6 +303,13 @@ document.addEventListener("DOMContentLoaded", () => {
     radioButtons[0].classList.add('active');
     startBox.style.display = 'block';
     stayBox.style.display = 'none';
+
+    // if (radioButtons[0]) {
+    //     radioButtons[0].checked = true;
+    //     radioButtons[0].classList.add('active');
+    // }
+    // if (startBox) startBox.style.display = 'block';
+    // if (stayBox) stayBox.style.display = 'none';
 
     loadStoragePlaces();
     loadPartnerPlaces();
