@@ -34,6 +34,11 @@ const $check_medium = document.querySelector('#check_medium');
 const $check_large = document.querySelector('#check_large');
 const $check_price = document.querySelector('#check_price');
 
+const supabase = window.supabase.createClient(
+    "https://zgrjjnifqoactpuqolao.supabase.co",           // ✅ 네 프로젝트 URL로 변경
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpncmpqbmlmcW9hY3RwdXFvbGFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNDc0NTgsImV4cCI6MjA1NjgyMzQ1OH0._Vl-6CRKdMjeDRyNoxlfect7sgusZ7L0N5OYu0a5hT0"                        // ✅ anon key만 써야 함 (절대 service_role ❌)
+);
+
 function minus(a) {
     if (a.parentNode.children[1].value > 0) {
         a.parentNode.children[1].value--;
@@ -60,7 +65,7 @@ function closeModal() {
 }
 
 async function storageSelect() {
-    const arr = [$dateStart, $dateEnd, $mail, $location, $country, $name, $phone];
+    const arr = [$dateStart, $dateEnd, $location, $name, $phone];
     for (let i = 0; i < arr.length; i++) {
         if (arr[i].value === '') {
             alert(`${arr[i].name}을(를) 입력해주세요.`);
@@ -83,15 +88,13 @@ async function storageSelect() {
     if (Number($totalPrice.innerText) === 0) {
         alert('짐 개수를 선택해주세요.');
     } else {
-        const brr = [$check_start_date, $check_end_date, $check_location, $check_detail_adr, $check_name, $check_phone, $check_country];
+        const brr = [$check_start_date, $check_end_date, $check_location, $check_name, $check_phone];
         for (let i = 0; i < brr.length; i++) {
             brr[i].innerHTML = arr[i].value;
         }
 
         $check_name.innerHTML = $name.value;
         $check_phone.innerHTML = $phone.value;
-        $check_country.innerHTML = $country.value;
-        $check_detail_adr.innerHTML = $mail.value;
         $check_location.innerHTML = $location_a.value;
         $check_small.innerHTML = small.value;
         $check_medium.innerHTML = medium.value;
@@ -110,11 +113,11 @@ const tossPayments = TossPayments("test_ck_ZLKGPx4M3MGo5A04daGqrBaWypv1"); // �
 function startPayment() {
     const name = document.getElementById("name").value;
     const phone = document.getElementById("phone").value;
-    const mail = document.getElementById("mail").value;
+    // const mail = document.getElementById("mail").value;
     const dateStart = document.getElementById("date_start").value;
     const dateEnd = document.getElementById("date_end").value;
     const location = document.getElementById("location_a").value;
-    const country = document.getElementById("country").value;
+    // const country = document.getElementById("country").value;
     const small = document.getElementById("small").value;
     const medium = document.getElementById("medium").value;
     const large = document.getElementById("large").value;
@@ -122,7 +125,7 @@ function startPayment() {
 
     // 1️⃣ 예약 정보 임시 저장 (결제 성공 후 Supabase에 저장 예정)
     localStorage.setItem("reservationData", JSON.stringify({
-        name, phone, mail, dateStart, dateEnd, location, country,
+        name, phone, dateStart, dateEnd, location,
         small, medium, large, price
     }));
 
@@ -138,16 +141,11 @@ function startPayment() {
 }
 
 async function insertReservation() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const paymentKey = urlParams.get("paymentKey");
-    const orderId = urlParams.get("orderId");
-    const amount = urlParams.get("amount");
-
     // 결제 성공했는지 체크
-    if (!paymentKey || !orderId || !amount) {
-        alert("필수 결제 정보가 누락되었습니다.");
-        return;
-    }
+    // if (!paymentKey || !orderId || !amount) {
+    //     alert("필수 결제 정보가 누락되었습니다.");
+    //     return;
+    // }
 
     const reservationData = JSON.parse(localStorage.getItem("reservationData"));
 
@@ -161,16 +159,15 @@ async function insertReservation() {
         .insert([{
             name: reservationData.name,
             phone: reservationData.phone,
-            mail: reservationData.mail,
             storage_start_date: reservationData.dateStart,
             storage_end_date: reservationData.dateEnd,
             location: reservationData.location,
-            reservation_country: reservationData.country,
             small: reservationData.small,
             medium: reservationData.medium,
             large: reservationData.large,
             price: reservationData.price
         }]);
+    console.log(data);
 
     if (error) {
         console.error("예약 저장 실패", error);
@@ -181,10 +178,11 @@ async function insertReservation() {
             text: "홈페이지로 이동합니다.",
             icon: "success",
             timer: 2000,
-            showConfirmButton: false
-        }).then(() => {
-            localStorage.removeItem("reservationData"); // 저장정보 삭제
-            window.location.href = "index.html";
+            showConfirmButton: false,
+            didClose: () => {
+                localStorage.removeItem("reservationData");
+                window.location.href = "reservation.html";
+            }
         });
     }
 }
@@ -433,5 +431,17 @@ document.getElementById('phone').addEventListener('input', function (e) {
         e.target.value = `${num.slice(0, 3)}-${num.slice(3)}`;
     } else {
         e.target.value = `${num.slice(0, 3)}-${num.slice(3, 7)}-${num.slice(7, 11)}`;
+    }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentKey = urlParams.get("paymentKey");
+    const orderId = urlParams.get("orderId");
+    const amount = urlParams.get("amount");
+
+    // URL에 결제 성공 정보가 포함되어 있으면 insertReservation 실행
+    if (paymentKey && orderId && amount) {
+        insertReservation(); // ✅ 따로 함수로 빼줘야 함
     }
 });

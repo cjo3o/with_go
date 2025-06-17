@@ -1,4 +1,4 @@
-const supabase = supabase.createClient(
+const supabase = window.supabase.createClient(
     "https://zgrjjnifqoactpuqolao.supabase.co",           // ✅ 네 프로젝트 URL로 변경
     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpncmpqbmlmcW9hY3RwdXFvbGFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNDc0NTgsImV4cCI6MjA1NjgyMzQ1OH0._Vl-6CRKdMjeDRyNoxlfect7sgusZ7L0N5OYu0a5hT0"                        // ✅ anon key만 써야 함 (절대 service_role ❌)
 );

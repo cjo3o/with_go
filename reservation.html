@@ -13,10 +13,40 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        const supabaseUrl = "https://zgrjjnifqoactpuqolao.supabase.co";
-        const supabasePassword = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpncmpqbmlmcW9hY3RwdXFvbGFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNDc0NTgsImV4cCI6MjA1NjgyMzQ1OH0._Vl-6CRKdMjeDRyNoxlfect7sgusZ7L0N5OYu0a5hT0";
+        const supabase = window.supabase.createClient(
+            "https://zgrjjnifqoactpuqolao.supabase.co",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpncmpqbmlmcW9hY3RwdXFvbGFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNDc0NTgsImV4cCI6MjA1NjgyMzQ1OH0._Vl-6CRKdMjeDRyNoxlfect7sgusZ7L0N5OYu0a5hT0" // anon key
+        );
 
-        var supabase = window.supabase.createClient(supabaseUrl, supabasePassword);
+        async function insertReservation() {
+            const params = new URLSearchParams(window.location.search);
+            if (!params.get("paymentKey") || !params.get("orderId") || !params.get("amount")) return;
+
+            const data = JSON.parse(localStorage.getItem("reservationData"));
+            if (!data) return;
+
+            const { error } = await supabase
+                .from("storage")
+                .insert([{ ...data }]);
+
+            if (error) {
+                Swal.fire("오류", "예약 저장 실패", "error");
+            } else {
+                Swal.fire({
+                    title: "🎉 예약이 완료되었습니다!",
+                    text: "홈페이지로 이동합니다.",
+                    icon: "success",
+                    timer: 2000,
+                    showConfirmButton: false,
+                    didClose: () => {
+                        localStorage.removeItem("reservationData");
+                        window.location.href = "reservation.html";
+                    }
+                });
+            }
+        }
+
+        insertReservation();
     </script>
 </head>
 
