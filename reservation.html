@@ -33,8 +33,24 @@
                 return;
             }
 
-            const { error } = await supabase.from("storage").insert([
-                {
+            let insertResult;
+
+            if (reservationData.delivery_start) {
+                // 🚚 배송 예약 처리
+                insertResult = await supabase.from("delivery").insert([{
+                    name: reservationData.name,
+                    phone: reservationData.phone,
+                    delivery_date: reservationData.delivery_date,
+                    delivery_start: reservationData.delivery_start,
+                    delivery_arrive: reservationData.delivery_arrive,
+                    detail_adr: reservationData.detail_adr,
+                    under: parseInt(reservationData.under) || 0,
+                    over: parseInt(reservationData.over) || 0,
+                    price: parseInt(reservationData.price) || 0
+                }]);
+            } else {
+                // 📦 보관 예약 처리
+                insertResult = await supabase.from("storage").insert([{
                     name: reservationData.name,
                     phone: reservationData.phone,
                     storage_start_date: reservationData.dateStart,
@@ -44,8 +60,10 @@
                     medium: parseInt(reservationData.medium) || 0,
                     large: parseInt(reservationData.large) || 0,
                     price: parseInt(reservationData.price) || 0
-                }
-            ]);
+                }]);
+            }
+
+            const { error } = insertResult;
 
             if (error) {
                 console.error("💥 Supabase insert 실패:", error);
