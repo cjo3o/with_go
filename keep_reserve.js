@@ -3,16 +3,14 @@ let $totalPrice = document.querySelector('#total_price');
 const $close = document.querySelectorAll('.close');
 const $keep_location = document.querySelector('.keep_location');
 const $keep_location_contents = document.querySelector('.keep_location_contents');
-const $location = document.querySelector('#location');
+const $location = document.querySelectorAll('input[name="keep_location"]');
 const $select_location = document.querySelector('.select_location');
 const $touModal_container = document.querySelector('.touModal_container');
 const $storage_reservation = document.querySelector('#storage_reservation');
 
 const $dateStart = document.querySelector('#date_start');
 const $dateEnd = document.querySelector('#date_end');
-const $mail = document.querySelector('#mail');
 const $location_a = document.querySelector('#location_a');
-const $country = document.querySelector('#country');
 const $name = document.querySelector('#name');
 const $phone = document.querySelector('#phone');
 const small = document.querySelector('#small');
@@ -22,9 +20,7 @@ const agree = document.querySelector('#agree');
 
 const $check_start_date = document.querySelector('#check_start_date');
 const $check_end_date = document.querySelector('#check_end_date');
-const $check_country = document.querySelector('#check_country');
 const $check_location = document.querySelector('#check_location');
-const $check_detail_adr = document.querySelector('#check_detail_adr');
 const $check_name = document.querySelector('#check_name');
 const $check_phone = document.querySelector('#check_phone');
 const $keep_reservation_contents = document.querySelector('.keep_reservation_contents');
@@ -65,7 +61,7 @@ function closeModal() {
 }
 
 async function storageSelect() {
-    const arr = [$dateStart, $dateEnd, $location, $name, $phone];
+    const arr = [$dateStart, $dateEnd, $location_a, $name, $phone];
     for (let i = 0; i < arr.length; i++) {
         if (arr[i].value === '') {
             alert(`${arr[i].name}을(를) 입력해주세요.`);
@@ -113,11 +109,9 @@ const tossPayments = TossPayments("test_ck_ZLKGPx4M3MGo5A04daGqrBaWypv1"); // �
 function startPayment() {
     const name = document.getElementById("name").value;
     const phone = document.getElementById("phone").value;
-    // const mail = document.getElementById("mail").value;
     const dateStart = document.getElementById("date_start").value;
     const dateEnd = document.getElementById("date_end").value;
     const location = document.getElementById("location_a").value;
-    // const country = document.getElementById("country").value;
     const small = document.getElementById("small").value;
     const medium = document.getElementById("medium").value;
     const large = document.getElementById("large").value;
@@ -142,10 +136,10 @@ function startPayment() {
 
 async function insertReservation() {
     // 결제 성공했는지 체크
-    // if (!paymentKey || !orderId || !amount) {
-    //     alert("필수 결제 정보가 누락되었습니다.");
-    //     return;
-    // }
+    if (!paymentKey || !orderId || !amount) {
+        alert("필수 결제 정보가 누락되었습니다.");
+        return;
+    }
 
     const reservationData = JSON.parse(localStorage.getItem("reservationData"));
 
@@ -162,12 +156,24 @@ async function insertReservation() {
             storage_start_date: reservationData.dateStart,
             storage_end_date: reservationData.dateEnd,
             location: reservationData.location,
-            small: reservationData.small,
-            medium: reservationData.medium,
-            large: reservationData.large,
-            price: reservationData.price
+            small: parseInt(reservationData.small) || 0,
+            medium: parseInt(reservationData.medium) || 0,
+            large: parseInt(reservationData.large) || 0,
+            price: parseInt(reservationData.price) || 0
         }]);
     console.log(data);
+    console.log(error);
+    console.log("Insert할 데이터:", {
+        name: reservationData.name,
+        phone: reservationData.phone,
+        storage_start_date: reservationData.dateStart,
+        storage_end_date: reservationData.dateEnd,
+        location: reservationData.location,
+        small: parseInt(reservationData.small),
+        medium: parseInt(reservationData.medium),
+        large: parseInt(reservationData.large),
+        price: parseInt(reservationData.price)
+    });
 
     if (error) {
         console.error("예약 저장 실패", error);
@@ -227,10 +233,15 @@ function openKeepLocation() {
 }
 
 $select_location.addEventListener('click', function () {
-    if (!!document.querySelector('input[name="keep_location"]:checked')) {
-        $location_a.value = document.querySelector('input[name="keep_location"]:checked').parentNode.children[1].innerText;
-
-        closeModal();
+    const selectedRadio = document.querySelector('input[name="keep_location"]:checked');
+    if (selectedRadio) {
+        const selectedTitle = selectedRadio.closest('.card_title')?.querySelector('h3')?.innerText;
+        if (selectedTitle) {
+            $location_a.value = selectedTitle;
+            closeModal();
+        } else {
+            alert("선택된 장소의 이름을 찾을 수 없습니다.");
+        }
     } else {
         alert("보관장소를 선택해주세요.")
     }

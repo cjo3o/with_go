@@ -15,21 +15,40 @@
     <script>
         const supabase = window.supabase.createClient(
             "https://zgrjjnifqoactpuqolao.supabase.co",
-            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpncmpqbmlmcW9hY3RwdXFvbGFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNDc0NTgsImV4cCI6MjA1NjgyMzQ1OH0._Vl-6CRKdMjeDRyNoxlfect7sgusZ7L0N5OYu0a5hT0" // anon key
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpncmpqbmlmcW9hY3RwdXFvbGFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNDc0NTgsImV4cCI6MjA1NjgyMzQ1OH0._Vl-6CRKdMjeDRyNoxlfect7sgusZ7L0N5OYu0a5hT0"
         );
 
         async function insertReservation() {
             const params = new URLSearchParams(window.location.search);
-            if (!params.get("paymentKey") || !params.get("orderId") || !params.get("amount")) return;
+            const paymentKey = params.get("paymentKey");
+            const orderId = params.get("orderId");
+            const amount = params.get("amount");
 
-            const data = JSON.parse(localStorage.getItem("reservationData"));
-            if (!data) return;
+            if (!paymentKey || !orderId || !amount) return;
 
-            const { error } = await supabase
-                .from("storage")
-                .insert([{ ...data }]);
+            const reservationData = JSON.parse(localStorage.getItem("reservationData"));
+
+            if (!reservationData) {
+                Swal.fire("오류", "저장된 예약 정보가 없습니다.", "error");
+                return;
+            }
+
+            const { error } = await supabase.from("storage").insert([
+                {
+                    name: reservationData.name,
+                    phone: reservationData.phone,
+                    storage_start_date: reservationData.dateStart,
+                    storage_end_date: reservationData.dateEnd,
+                    location: reservationData.location,
+                    small: parseInt(reservationData.small) || 0,
+                    medium: parseInt(reservationData.medium) || 0,
+                    large: parseInt(reservationData.large) || 0,
+                    price: parseInt(reservationData.price) || 0
+                }
+            ]);
 
             if (error) {
+                console.error("💥 Supabase insert 실패:", error);
                 Swal.fire("오류", "예약 저장 실패", "error");
             } else {
                 Swal.fire({
@@ -46,8 +65,9 @@
             }
         }
 
-        insertReservation();
+        insertReservation(); // ✅ 호출
     </script>
+
 </head>
 
 <body>

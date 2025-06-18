@@ -137,19 +137,25 @@ document.addEventListener("DOMContentLoaded", async function () {
             document.querySelector(".footer").innerHTML = data;
         });
 
-    document.querySelector('#storReserve').addEventListener('click', function() {
-        if (res.data.user === null) {
-            alert('로그인 후 이용해 주세요.');
-        } else {
-            location.href = 'keep_reservation.html';
-        }
-    });
+    const $storReserve = document.querySelector('#storReserve');
+    if ($storReserve) {
+        $storReserve.addEventListener('click', function() {
+            if (res.data.user === null) {
+                alert('로그인 후 이용해 주세요.');
+            } else {
+                location.href = 'keep_reservation.html';
+            }
+        });
+    }
 
-    document.querySelector('#deliverReserve').addEventListener('click', function() {
-        if (res.data.user === null) {
-            alert('로그인 후 이용해 주세요.');
-        } else {
-            location.href = 'delivery_reservation.html';
-        }
-    });
+    const $deliverReserve = document.querySelector('#deliverReserve');
+    if ($deliverReserve) {
+        $deliverReserve.addEventListener('click', function() {
+            if (res.data.user === null) {
+                alert('로그인 후 이용해 주세요.');
+            } else {
+                location.href = 'delivery_reservation.html';
+            }
+        });
+    }
 });
