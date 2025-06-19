@@ -13,6 +13,12 @@
 
         var supabase = window.supabase.createClient(supabaseUrl, supabasePassword);
     </script>
+    <script>
+        // 모바일 기기 판별 (간단하게 userAgent 체크)
+        if (/Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop/i.test(navigator.userAgent)) {
+          window.location.replace("https://with-go-mobile.vercel.app/login");
+        }
+      </script>
 </head>
 
 <body>
