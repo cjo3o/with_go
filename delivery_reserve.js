@@ -220,36 +220,73 @@ function deliverySubmit() {
 //     location.href = 'index.html';
 // }
 
-const tossPayments = TossPayments("test_ck_ZLKGPx4M3MGo5A04daGqrBaWypv1"); // ✅ 반드시 수정
+// const tossPayments = TossPayments("test_ck_ZLKGPx4M3MGo5A04daGqrBaWypv1"); // ✅ 반드시 수정
+//
+// function startPayment() {
+//     const name = document.getElementById("name").value;
+//     const phone = document.getElementById("phone").value;
+//     // const mail = document.getElementById("mail").value;
+//     const delivery_date = document.getElementById("date").value;
+//     const delivery_start = document.getElementById("start").value;
+//     const delivery_arrive = document.getElementById("arrive").value;
+//     const detail_adr = document.getElementById("detail_adr").value;
+//     // const small = document.getElementById("small").value;
+//     const under = document.getElementById("under").value;
+//     const over = document.getElementById("over").value;
+//     const price = Number(document.getElementById("total_price").innerText);
+//
+//     // 1️⃣ 예약 정보 임시 저장 (결제 성공 후 Supabase에 저장 예정)
+//     localStorage.setItem("reservationData", JSON.stringify({
+//         name, phone, delivery_date, delivery_start, delivery_arrive,
+//         detail_adr, under, over, price
+//     }));
+//
+//     // 2️⃣ 결제창 띄우기
+//     tossPayments.requestPayment("카드", {
+//         amount: price,
+//         orderId: "order_" + new Date().getTime(),
+//         orderName: "보관 예약 결제",
+//         customerName: name,
+//         successUrl: "http://localhost:5173/reservation.html?from=payment", // ✅ 개발 중일 땐 localhost 사용
+//         failUrl: "http://localhost:5173/fail.html"
+//     });
+// }
 
-function startPayment() {
+async function startPayment() {
     const name = document.getElementById("name").value;
     const phone = document.getElementById("phone").value;
-    // const mail = document.getElementById("mail").value;
     const delivery_date = document.getElementById("date").value;
     const delivery_start = document.getElementById("start").value;
     const delivery_arrive = document.getElementById("arrive").value;
     const detail_adr = document.getElementById("detail_adr").value;
-    // const small = document.getElementById("small").value;
     const under = document.getElementById("under").value;
     const over = document.getElementById("over").value;
     const price = Number(document.getElementById("total_price").innerText);
 
-    // 1️⃣ 예약 정보 임시 저장 (결제 성공 후 Supabase에 저장 예정)
-    localStorage.setItem("reservationData", JSON.stringify({
+    const reservationData = {
         name, phone, delivery_date, delivery_start, delivery_arrive,
         detail_adr, under, over, price
-    }));
+    };
 
-    // 2️⃣ 결제창 띄우기
-    tossPayments.requestPayment("카드", {
-        amount: price,
-        orderId: "order_" + new Date().getTime(),
-        orderName: "보관 예약 결제",
-        customerName: name,
-        successUrl: "http://localhost:5173/reservation.html?from=payment", // ✅ 개발 중일 땐 localhost 사용
-        failUrl: "http://localhost:5173/fail.html"
+    localStorage.setItem("reservationData", JSON.stringify(reservationData));
+
+    const response = await fetch("http://localhost:4000/toss/pay", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            orderId: "order_" + new Date().getTime(),
+            amount: price,
+            orderName: "배송 예약 결제",
+            customerName: name
+        })
     });
+
+    const result = await response.json();
+    if (result.url) {
+        window.location.href = result.url;
+    } else {
+        alert("결제 요청 실패");
+    }
 }
 
 async function insertReservation() {
@@ -460,5 +497,17 @@ document.getElementById('phone').addEventListener('input', function (e) {
         e.target.value = `${num.slice(0, 3)}-${num.slice(3)}`;
     } else {
         e.target.value = `${num.slice(0, 3)}-${num.slice(3, 7)}-${num.slice(7, 11)}`;
+    }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentKey = urlParams.get("paymentKey");
+    const orderId = urlParams.get("orderId");
+    const amount = urlParams.get("amount");
+
+    // URL에 결제 성공 정보가 포함되어 있으면 insertReservation 실행
+    if (paymentKey && orderId && amount) {
+        insertReservation(); // ✅ 따로 함수로 빼줘야 함
     }
 });

@@ -104,9 +104,36 @@ async function storageSelect() {
     }
 }
 
-const tossPayments = TossPayments("test_ck_ZLKGPx4M3MGo5A04daGqrBaWypv1"); // ✅ 반드시 수정
+// const tossPayments = TossPayments("test_ck_ZLKGPx4M3MGo5A04daGqrBaWypv1"); // ✅ 반드시 수정
 
-function startPayment() {
+// function startPayment() {
+//     const name = document.getElementById("name").value;
+//     const phone = document.getElementById("phone").value;
+//     const dateStart = document.getElementById("date_start").value;
+//     const dateEnd = document.getElementById("date_end").value;
+//     const location = document.getElementById("location_a").value;
+//     const small = document.getElementById("small").value;
+//     const medium = document.getElementById("medium").value;
+//     const large = document.getElementById("large").value;
+//     const price = Number(document.getElementById("total_price").innerText);
+//
+//     // 1️⃣ 예약 정보 임시 저장 (결제 성공 후 Supabase에 저장 예정)
+//     localStorage.setItem("reservationData", JSON.stringify({
+//         name, phone, dateStart, dateEnd, location,
+//         small, medium, large, price
+//     }));
+//
+//     // 2️⃣ 결제창 띄우기
+//         tossPayments.requestPayment("카드", {
+//             amount: price,
+//             orderId: "order_" + new Date().getTime(),
+//             orderName: "보관 예약 결제",
+//             customerName: name,
+//             successUrl: "http://localhost:5173/reservation.html?from=payment", // ✅ 개발 중일 땐 localhost 사용
+//             failUrl: "http://localhost:5173/fail.html"
+//         });
+// }
+async function startPayment() {
     const name = document.getElementById("name").value;
     const phone = document.getElementById("phone").value;
     const dateStart = document.getElementById("date_start").value;
@@ -117,21 +144,30 @@ function startPayment() {
     const large = document.getElementById("large").value;
     const price = Number(document.getElementById("total_price").innerText);
 
-    // 1️⃣ 예약 정보 임시 저장 (결제 성공 후 Supabase에 저장 예정)
-    localStorage.setItem("reservationData", JSON.stringify({
+    const reservationData = {
         name, phone, dateStart, dateEnd, location,
         small, medium, large, price
-    }));
+    };
 
-    // 2️⃣ 결제창 띄우기
-        tossPayments.requestPayment("카드", {
+    localStorage.setItem("reservationData", JSON.stringify(reservationData));
+
+    const response = await fetch("http://localhost:4000/toss/pay", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            orderId: "order_" + new Date().getTime() + "_" + Math.floor(Math.random() * 10000),
             amount: price,
-            orderId: "order_" + new Date().getTime(),
             orderName: "보관 예약 결제",
-            customerName: name,
-            successUrl: "http://localhost:5173/reservation.html?from=payment", // ✅ 개발 중일 땐 localhost 사용
-            failUrl: "http://localhost:5173/fail.html"
-        });
+            customerName: name
+        })
+    });
+
+    const result = await response.json();
+    if (result.url) {
+        window.location.href = result.url;
+    } else {
+        alert("결제 요청 실패");
+    }
 }
 
 async function insertReservation() {
