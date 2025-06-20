@@ -24,6 +24,12 @@
             const orderId = params.get("orderId");
             const amount = params.get("amount");
 
+            await fetch("http://localhost:4000/toss/confirm", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ paymentKey, orderId, amount })
+            });
+
             if (!paymentKey || !orderId || !amount) return;
 
             const reservationData = JSON.parse(localStorage.getItem("reservationData"));
@@ -70,7 +76,7 @@
                 Swal.fire("오류", "예약 저장 실패", "error");
             } else {
                 Swal.fire({
-                    title: "🎉 예약이 완료되었습니다!",
+                    title: "예약이 완료되었습니다!",
                     text: "홈페이지로 이동합니다.",
                     icon: "success",
                     timer: 2000,
