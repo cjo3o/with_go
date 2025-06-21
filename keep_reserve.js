@@ -161,6 +161,12 @@ async function startPayment() {
             customerName: name
         })
     });
+    console.log("결제 요청 데이터:", {
+        orderId: "order_" + new Date().getTime() + "_" + Math.floor(Math.random() * 10000),
+        amount: price,
+        orderName: "보관 예약 결제",
+        customerName: name
+    });
 
     const result = await response.json();
     if (result.url) {
