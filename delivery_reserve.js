@@ -220,7 +220,7 @@ function deliverySubmit() {
 //     location.href = 'index.html';
 // }
 
-// const tossPayments = TossPayments("test_ck_ZLKGPx4M3MGo5A04daGqrBaWypv1"); // ✅ 반드시 수정
+const tossPayments = TossPayments("test_ck_ZLKGPx4M3MGo5A04daGqrBaWypv1"); // ✅ 반드시 수정
 //
 // function startPayment() {
 //     const name = document.getElementById("name").value;
@@ -270,23 +270,15 @@ async function startPayment() {
 
     localStorage.setItem("reservationData", JSON.stringify(reservationData));
 
-    const response = await fetch("http://localhost:4000/toss/pay", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            orderId: "order_" + new Date().getTime(),
-            amount: price,
-            orderName: "배송 예약 결제",
-            customerName: name
-        })
+    // ✅ 결제창 딩우기
+    tossPayments.requestPayment("카드", {
+        amount: price,
+        orderId: "order_" + new Date().getTime(),
+        orderName: "배송 예약 결제",
+        customerName: name,
+        successUrl: "http://localhost:5173/reservation.html?from=payment",
+        failUrl: "http://localhost:5173/fail.html"
     });
-
-    const result = await response.json();
-    if (result.url) {
-        window.location.href = result.url;
-    } else {
-        alert("결제 요청 실패");
-    }
 }
 
 async function insertReservation() {
@@ -318,23 +310,6 @@ async function insertReservation() {
         }]);
     console.log(data);
     console.log(error);
-
-    if (error) {
-        console.error("예약 저장 실패", error);
-        Swal.fire("오류", "예약 저장에 실패했습니다.", "error");
-    } else {
-        Swal.fire({
-            title: "🎉 예약이 완료되었습니다!",
-            text: "홈페이지로 이동합니다.",
-            icon: "success",
-            timer: 2000,
-            showConfirmButton: false,
-            didClose: () => {
-                localStorage.removeItem("reservationData");
-                window.location.href = "reservation.html";
-            }
-        });
-    }
 }
 
 $select_location.addEventListener('click', function () {

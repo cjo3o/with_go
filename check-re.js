@@ -57,6 +57,55 @@ if (searchBtn) {
     });
 }
 
+if ($checkbox1) {
+    $checkbox1.addEventListener('change', async function () {
+        if (this.checked) {
+            if ($checkbox2) $checkbox2.checked = false;
+            $storage_table.style.display = 'block';
+            $delivery_table.style.display = 'none';
+
+            const { data: { user } } = await supabase.auth.getUser();
+            const userEmail = user?.email;
+            if (userEmail) await autoLoadUserReservations(userEmail, 'storage');
+        }
+    });
+}
+
+if ($checkbox2) {
+    $checkbox2.addEventListener('change', async function () {
+        if (this.checked) {
+            if ($checkbox1) $checkbox1.checked = false;
+            $delivery_table.style.display = 'block';
+            $storage_table.style.display = 'none';
+
+            const { data: { user } } = await supabase.auth.getUser();
+            const userEmail = user?.email;
+            if (userEmail) await autoLoadUserReservations(userEmail, 'delivery');
+        }
+    });
+}
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const { data: { user }, error } = await supabase.auth.getUser();
+
+    const userId = user?.id;
+    const userEmail = user?.email;
+
+    if (!userEmail || !userId) {
+        console.warn("로그인 정보가 없습니다. 자동 조회 불가");
+        return;
+    }
+
+    // 체크박스 기본값: 보관만 체크된 상태로 설정
+    if ($checkbox1) $checkbox1.checked = true;
+    if ($checkbox2) $checkbox2.checked = false;
+
+    $storage_table.style.display = 'block';
+    $delivery_table.style.display = 'none';
+
+    await autoLoadUserReservations(userEmail, 'storage');
+});
+
 // async function searchReserve() {
 //     if (!supabase) {
 //         console.error('Supabase 클라이언트가 초기화되지 않았습니다.');
@@ -287,6 +336,45 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 async function autoLoadUserReservations(userEmail, type) {
+    const itemsPerPage = 10;
+    let currentPage = 1;
+
+    function renderPagination(totalPages, table) {
+        return `
+            <div class="pagination">
+                <button onclick="changePage(1)" ${currentPage === 1 ? 'disabled' : ''}>처음</button>
+                <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>이전</button>
+                <span>${currentPage} / ${totalPages}</span>
+                <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>다음</button>
+                <button onclick="changePage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''}>마지막</button>
+            </div>
+        `;
+    }
+
+    function displayPage(data, page, container, renderRow, headerHtml) {
+        const start = (page - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        const pageRows = data.slice(start, end).map(renderRow).join('');
+        const totalPages = Math.ceil(data.length / itemsPerPage);
+
+        container.innerHTML = `
+            <table class="styled-table">
+                ${headerHtml}
+                <tbody>
+                    ${pageRows}
+                </tbody>
+            </table>
+            ${renderPagination(totalPages)}
+        `;
+
+        window.changePage = function (page) {
+            if (page >= 1 && page <= totalPages) {
+                currentPage = page;
+                displayPage(data, currentPage, container, renderRow, headerHtml);
+            }
+        };
+    }
+
     if (type === 'storage') {
         const { data, error } = await supabase
             .from('storage')
@@ -301,8 +389,8 @@ async function autoLoadUserReservations(userEmail, type) {
 
         document.querySelector(".alert").style.display = 'none';
 
-        const rows = data.map(item => `
-            <tr onclick="openDetail_st(this)">
+        const renderRow = item => `
+            <tr onclick="openDetail_st(this)" data-id="${item.reservation_number}">
                 <td>${item.name}</td>
                 <td>${item.phone}</td>
                 <td>${item.storage_start_date}</td>
@@ -312,27 +400,25 @@ async function autoLoadUserReservations(userEmail, type) {
                 <td>${item.large}</td>
                 <td>${item.price}</td>
             </tr>
-        `).join('');
-
-        $storage_table.innerHTML = `
-            <table class="styled-table">
-                <thead>
-                    <tr>
-                        <th>이름</th>
-                        <th>연락처</th>
-                        <th>보관일자</th>
-                        <th>보관종료</th>
-                        <th>소형</th>
-                        <th>중형</th>
-                        <th>대형</th>
-                        <th>가격</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${rows}
-                </tbody>
-            </table>
         `;
+
+        const headerHtml = `
+            <thead>
+                <tr>
+                    <th>이름</th>
+                    <th>연락처</th>
+                    <th>보관일자</th>
+                    <th>보관종료</th>
+                    <th>소형</th>
+                    <th>중형</th>
+                    <th>대형</th>
+                    <th>가격</th>
+                </tr>
+            </thead>
+        `;
+
+        displayPage(data, currentPage, $storage_table, renderRow, headerHtml);
+
     } else if (type === 'delivery') {
         const { data, error } = await supabase
             .from('delivery')
@@ -347,8 +433,8 @@ async function autoLoadUserReservations(userEmail, type) {
 
         document.querySelector(".alert").style.display = 'none';
 
-        const rows = data.map(item => `
-            <tr onclick="openDetail_de(this)">
+        const renderRow = item => `
+            <tr onclick="openDetail_de(this)" data-id="${item.re_num}">
                 <td>${item.delivery_date}</td>
                 <td>${item.name}</td>
                 <td>${item.phone}</td>
@@ -358,32 +444,33 @@ async function autoLoadUserReservations(userEmail, type) {
                 <td>${item.over}</td>
                 <td>${item.price}</td>
             </tr>
-        `).join('');
-
-        $delivery_table.innerHTML = `
-            <table class="styled-table">
-                <thead>
-                    <tr>
-                        <th>배송일자</th>
-                        <th>이름</th>
-                        <th>연락처</th>
-                        <th>배송 출발지</th>
-                        <th>배송 도착지</th>
-                        <th>26인치이하</th>
-                        <th>26인치초과</th>
-                        <th>가격</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${rows}
-                </tbody>
-            </table>
         `;
+
+        const headerHtml = `
+            <thead>
+                <tr>
+                    <th>배송일자</th>
+                    <th>이름</th>
+                    <th>연락처</th>
+                    <th>배송 출발지</th>
+                    <th>배송 도착지</th>
+                    <th>26인치이하</th>
+                    <th>26인치초과</th>
+                    <th>가격</th>
+                </tr>
+            </thead>
+        `;
+
+        displayPage(data, currentPage, $delivery_table, renderRow, headerHtml);
     }
 }
 
 
+
 function openDetail_st(trTag) {
+    const id = trTag.getAttribute("data-id");
+    window.selectedReservationId = id; // storage_id 저장
+
     const name = trTag.children[0].innerText;
     const phone = trTag.children[1].innerText;
     const storage_start_date = trTag.children[2].innerText;
@@ -392,34 +479,76 @@ function openDetail_st(trTag) {
     const medium = trTag.children[5].innerText;
     const large = trTag.children[6].innerText;
     const price = trTag.children[7].innerText;
-    // const $cancelBtn = document.querySelector('.cancelBtn');
 
     $check_detail_contents.innerHTML = `
-                                        <span class="close" onclick="closeDetail()">&times;</span>
-                                        <h2>조회 상세 정보</h2>
-                                        <div class="data">
-                <div class="info-row"><span class="label">보관일자</span><span class="value">${storage_start_date}</span></div>
-  <div class="info-row"><span class="label">보관종료</span><span class="value">${storage_end_date}</span></div>
-  <div class="info-row"><span class="label">이 름</span><span class="value">${name}</span></div>
-  <div class="info-row"><span class="label">연 락 처</span><span class="value">${phone}</span></div>
-                </div>
-                                        <ul>
-                                            <li>소형 : ${small}</li>
-                                            <li>중형 : ${medium}</li>
-                                            <li>대형 : ${large}</li>
-                                        </ul>
-                                        <hr>
-                                        <div class="d-total">
-                    <strong>총 합</strong>
-                    <span>${price} 원</span>
-<!--                    <span>원</span>-->
-                </div>
-                                       `;
+        <span class="close" onclick="closeDetail()">&times;</span>
+        <h2>조회 상세 정보</h2>
+        <div class="data">
+            <div class="info-row"><span class="label">보관일자</span><span class="value">${storage_start_date}</span></div>
+            <div class="info-row"><span class="label">보관종료</span><span class="value">${storage_end_date}</span></div>
+            <div class="info-row"><span class="label">이 름</span><span class="value">${name}</span></div>
+            <div class="info-row"><span class="label">연 락 처</span><span class="value">${phone}</span></div>
+        </div>
+        <ul>
+            <li>소형 : ${small}</li>
+            <li>중형 : ${medium}</li>
+            <li>대형 : ${large}</li>
+        </ul>
+        <hr>
+        <div class="d-total">
+            <strong>총 합</strong>
+            <span>${price} 원</span>
+        </div>
+    `;
     $cancelBtn.innerHTML = `
-                            <button class="cancelReserve" onclick="cancelReserve()">
-                                예약취소
-                            </button>
-                           `;
+        <button class="cancelReserve" onclick="cancelReserve()">
+            예약취소
+        </button>
+    `;
+    $check_detail.classList.add('fade_in');
+    $check_detail_contents.classList.add('slide_up');
+    $cancelBtn.classList.add('slide_up');
+}
+
+function openDetail_de(trTag) {
+    const id = trTag.getAttribute("data-id");
+    window.selectedReservationId = id; // delivery_id 저장
+
+    const date = trTag.children[0].innerText;
+    const name = trTag.children[1].innerText;
+    const phone = trTag.children[2].innerText;
+    const start = trTag.children[3].innerText;
+    const arrive = trTag.children[4].innerText;
+    const under = trTag.children[5].innerText;
+    const over = trTag.children[6].innerText;
+    const price = trTag.children[7].innerText;
+
+    $check_detail_contents.innerHTML = `
+        <span class="close" onclick="closeDetail()">&times;</span>
+        <h2>조회 상세 정보</h2>
+        <div class="data">
+            <div class="info-row"><span class="label">배송일자</span><span class="value">${date}</span></div>
+            <div class="info-row"><span class="label">출 발 지</span><span class="value">${start}</span></div>
+            <div class="info-row"><span class="label">도 착 지</span><span class="value">${arrive}</span></div>
+            <div class="info-row"><span class="label">이 름</span><span class="value">${name}</span></div>
+            <div class="info-row"><span class="label">연 락 처</span><span class="value">${phone}</span></div>
+        </div>
+        <hr>
+        <div class="size">
+            <p>ㆍ26인치이하 : ${under}</p>
+            <p>ㆍ26인치초과 : ${over}</p>
+        </div>
+        <hr>
+        <div class="d-total">
+            <strong>총 합</strong>
+            <span>${price} 원</span>
+        </div>
+    `;
+    $cancelBtn.innerHTML = `
+        <button class="cancelReserve" onclick="cancelReserve()">
+            예약취소
+        </button>
+    `;
     $check_detail.classList.add('fade_in');
     $check_detail_contents.classList.add('slide_up');
     $cancelBtn.classList.add('slide_up');
@@ -442,70 +571,36 @@ async function cancelReserve() {
         confirmButtonText: "확인",
         cancelButtonText: "예약취소"
     });
+
+    if (result.isConfirmed) {
+        const id = window.selectedReservationId;
+        if (!id) {
+            Swal.fire("오류", "예약 ID가 없습니다.", "error");
+            return;
+        }
+
+        const isStorage = $checkbox1?.checked;
+        const table = isStorage ? "storage" : "delivery";
+        const idColumn = isStorage ? "reservation_number" : "re_num";
+
+        const { error } = await supabase
+            .from(table)
+            .delete()
+            .eq(idColumn, id);
+
+        if (error) {
+            Swal.fire("오류", "삭제 중 문제가 발생했습니다.", "error");
+        } else {
+            Swal.fire("삭제 완료", "예약이 성공적으로 취소되었습니다.", "success");
+            closeDetail();
+
+            const { data: { user } } = await supabase.auth.getUser();
+            const userEmail = user?.email;
+            await autoLoadUserReservations(userEmail, table);
+        }
+    }
 }
 
-function openDetail_de(trTag) {
-    const date = trTag.children[0].innerText;
-    const name = trTag.children[1].innerText;
-    const phone = trTag.children[2].innerText;
-    const start = trTag.children[3].innerText;
-    const arrive = trTag.children[4].innerText;
-    const under = trTag.children[5].innerText;
-    const over = trTag.children[6].innerText;
-    const price = trTag.children[7].innerText;
-    // const $cancelBtn = document.querySelector('.cancelBtn');
-
-    $check_detail_contents.innerHTML = `
-                                        <span class="close" onclick="closeDetail()">&times;</span>
-                                        <h2>조회 상세 정보</h2>
-                <div class="data">
-                <div class="info-row"><span class="label">배송일자</span><span class="value">${date}</span></div>
-  <div class="info-row"><span class="label">출 발 지</span><span class="value">${start}</span></div>
-  <div class="info-row"><span class="label">도 착 지</span><span class="value">${arrive}</span></div>
-  <div class="info-row"><span class="label">이 름</span><span class="value">${name}</span></div>
-  <div class="info-row"><span class="label">연 락 처</span><span class="value">${phone}</span></div>
-                </div>
-                <hr>
-            
-                <div class="size">
-                <p>ㆍ26인치이하 : ${under}</p>
-                <p>ㆍ26인치초과 : ${over}</p>
-                </div>
-                <hr>
-                <div class="d-total">
-                    <strong>총 합</strong>
-                    <span>${price} 원</span>
-<!--                    <span>원</span>-->
-                </div>
-                                       `;
-    $cancelBtn.innerHTML = `
-                            <button class="cancelReserve" onclick="cancelReserve()">
-                                예약취소
-                            </button>
-                           `;
-    $check_detail.classList.add('fade_in');
-    $check_detail_contents.classList.add('slide_up');
-    $cancelBtn.classList.add('slide_up');
-}
-
-function closeDetail() {
-    $check_detail_contents.classList.remove('slide_up');
-    $cancelBtn.classList.remove('slide_up');
-    $check_detail.classList.remove('fade_in');
-}
-
-async function cancelReserve() {
-    const result = await Swal.fire({
-        title: "정말 취소하시겠습니까?",
-        text: "취소하시면 복구하실 수 없습니다!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "확인",
-        cancelButtonText: "취소"
-    });
-}
 
 // document.getElementById('search_reserveBox').addEventListener('input', function (e) {
 //     let num = e.target.value.replace(/[^0-9]/g, '');
