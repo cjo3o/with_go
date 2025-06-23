@@ -52,7 +52,8 @@
                     detail_adr: reservationData.detail_adr,
                     under: parseInt(reservationData.under) || 0,
                     over: parseInt(reservationData.over) || 0,
-                    price: parseInt(reservationData.price) || 0
+                    price: parseInt(reservationData.price) || 0,
+                    user_email: userEmail
                 }]);
             } else {
                 // 📦 보관 예약 처리
@@ -65,7 +66,8 @@
                     small: parseInt(reservationData.small) || 0,
                     medium: parseInt(reservationData.medium) || 0,
                     large: parseInt(reservationData.large) || 0,
-                    price: parseInt(reservationData.price) || 0
+                    price: parseInt(reservationData.price) || 0,
+                    user_email: userEmail
                 }]);
             }
 
@@ -234,15 +236,15 @@
                             </div>
                         </div>
                         <div class="alert">
-                            <h2>※조회할 내역이 존재하지 않습니다.※</h2>
+                            <h2 style="color: white">※예약 내역이 존재하지 않습니다.※</h2>
                         </div>
 
                     </div>
                     <div class="search_check" id="search_checkBox">
-                        <input type="text" name="" class="phone" id="search_reserveBox" placeholder="연락처를 입력해 주세요.">
-                        <button onclick="searchReserve()" class="search_check_btn">
-                            검색
-                        </button>
+<!--                        <input type="text" name="" class="phone" id="search_reserveBox" placeholder="연락처를 입력해 주세요.">-->
+<!--                        <button onclick="searchReserve()" class="search_check_btn">-->
+<!--                            검색-->
+<!--                        </button>-->
                     </div>
                     <p style=" text-align: center; color: white; display: flex; justify-content: center; margin-top: 2rem; opacity: 0; transform: translateY(100%); animation: slideUp 0.5s forwards; animation-delay: 1.5s"
                        class="click_infor">※ 클릭하시면 상세정보를 볼 수 있습니다.</p>

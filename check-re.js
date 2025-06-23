@@ -57,215 +57,331 @@ if (searchBtn) {
     });
 }
 
-async function searchReserve() {
-    if (!supabase) {
-        console.error('Supabase 클라이언트가 초기화되지 않았습니다.');
-        alert('데이터베이스 연결에 문제가 발생했습니다.');
+// async function searchReserve() {
+//     if (!supabase) {
+//         console.error('Supabase 클라이언트가 초기화되지 않았습니다.');
+//         alert('데이터베이스 연결에 문제가 발생했습니다.');
+//         return;
+//     }
+//
+//     if (!tableContainer) {
+//         console.error('테이블 컨테이너 요소를 찾을 수 없습니다.');
+//         return;
+//     }
+//
+//     tableContainer.innerHTML = '';
+//     let rows = '';
+//
+//     const checkedOptions = [];
+//     if ($checkbox1 && $checkbox1.checked) checkedOptions.push('keep_btn');
+//     if ($checkbox2 && $checkbox2.checked) checkedOptions.push('delivery_btn');
+//
+//     if (checkedOptions.length === 0) {
+//         alert('검색할 옵션을 선택해주세요.');
+//         return;
+//     }
+//
+//     if (!$search_reserveBox || !$search_reserveBox.value) {
+//         alert('전화번호를 입력해주세요.');
+//         return;
+//     }
+//
+//     let hasResults = false;
+//
+//     console.log("검색 시작!");
+//     console.log("입력된 전화번호:", $search_reserveBox.value);
+//
+//
+//     if (checkedOptions.includes('keep_btn')) {
+//         const {data, error} = await supabase
+//             .from('storage')
+//             .select('*')
+//             .eq('phone', $search_reserveBox.value)
+//             .order('storage_start_date', {ascending: false});
+//
+//         console.log("Supabase 응답:", data, error);
+//
+//         if (error) {
+//             console.error('Supabase 데이터 조회 오류 (보관):', error);
+//             alert('데이터 조회 중 오류가 발생했습니다 (보관).');
+//             return;
+//         }
+//
+//         if (data && data.length > 0) {
+//             hasResults = true;
+//             rows = data.map(item => `
+//                 <tr onclick="openDetail_st(this)">
+//                     <td>${item.name}</td>
+//                     <td>${item.phone}</td>
+//                     <td>${item.storage_start_date}</td>
+//                     <td>${item.storage_end_date}</td>
+//                     <td>${item.small}</td>
+//                     <td>${item.medium}</td>
+//                     <td>${item.large}</td>
+//                     <td>${item.price}</td>
+//                 </tr>
+//             `).join('');
+//
+//             if ($storage_table) {
+//                 const itemsPerPage = 10;
+//                 const totalPages = Math.ceil(data.length / itemsPerPage);
+//                 let currentPage = 1;
+//
+//                 function displayPage(page) {
+//                     const start = (page - 1) * itemsPerPage;
+//                     const end = start + itemsPerPage;
+//                     const pageRows = data.slice(start, end).map(item => `
+//                         <tr onclick="openDetail_st(this)">
+//                             <td>${item.name}</td>
+//                             <td>${item.phone}</td>
+//                             <td>${item.storage_start_date}</td>
+//                             <td>${item.storage_end_date}</td>
+//                             <td>${item.small}</td>
+//                             <td>${item.medium}</td>
+//                             <td>${item.large}</td>
+//                             <td>${item.price}</td>
+//                         </tr>
+//                     `).join('');
+//
+//                     $view_table_container.innerHTML = `
+//                         <div class="table-container">
+//                             <table class="styled-table">
+//                                 <thead>
+//                                     <tr>
+//                                         <th>이름</th>
+//                                         <th>연락처</th>
+//                                         <th>보관일자</th>
+//                                         <th>보관종료</th>
+//                                         <th>소형</th>
+//                                         <th>중형</th>
+//                                         <th>대형</th>
+//                                         <th>가격</th>
+//                                     </tr>
+//                                 </thead>
+//                                 <tbody>
+//                                     ${pageRows}
+//                                 </tbody>
+//                             </table>
+//                             <div class="pagination">
+//                                 <button onclick="changePage(1)" ${currentPage === 1 ? 'disabled' : ''}>처음</button>
+//                                 <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>이전</button>
+//                                 <span>${currentPage} / ${totalPages}</span>
+//                                 <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>다음</button>
+//                                 <button onclick="changePage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''}>마지막</button>
+//                             </div>
+//                         </div>
+//                     `;
+//                 }
+//
+//                 window.changePage = function (page) {
+//                     if (page >= 1 && page <= totalPages) {
+//                         currentPage = page;
+//                         displayPage(currentPage);
+//                     }
+//                 };
+//
+//                 displayPage(1);
+//             }
+//         }
+//     }
+//
+//     if (checkedOptions.includes('delivery_btn')) {
+//         const {data, error} = await supabase
+//             .from('delivery')
+//             .select('*')
+//             .eq('phone', $search_reserveBox.value)
+//             .order('delivery_date', {ascending: false});
+//
+//         console.log("Supabase 응답:", data, error);
+//
+//         if (error) {
+//             console.error('Supabase 데이터 조회 오류 (배송):', error);
+//             alert('데이터 조회 중 오류가 발생했습니다 (배송).');
+//             return;
+//         }
+//
+//         if (data && data.length > 0) {
+//             hasResults = true;
+//             rows = data.map(item => `
+//                 <tr onclick="openDetail_de(this)">
+//                     <td>${item.delivery_date}</td>
+//                     <td>${item.name}</td>
+//                     <td>${item.phone}</td>
+//                     <td>${item.delivery_start}</td>
+//                     <td>${item.delivery_arrive}</td>
+//                     <td>${item.under}</td>
+//                     <td>${item.over}</td>
+//                     <td>${item.price}</td>
+//                 </tr>
+//             `).join('');
+//
+//             if ($delivery_table) {
+//                 const itemsPerPage = 10;
+//                 const totalPages = Math.ceil(data.length / itemsPerPage);
+//                 let currentPage = 1;
+//
+//                 $view_table_container.innerHTML = `
+//                 <div class="table-container">
+//                     <table class="styled-table">
+//                         <thead>
+//                             <tr>
+//                                 <th>배송일자</th>
+//                                 <th>이름</th>
+//                                 <th>연락처</th>
+//                                 <th>배송 출발지</th>
+//                                 <th>배송 도착지</th>
+//                                 <th>26인치이하</th>
+//                                 <th>26인치초과</th>
+//                                 <th>가격</th>
+//                             </tr>
+//                         </thead>
+//                         <tbody>
+//                             ${rows}
+//                         </tbody>
+//                     </table>
+//                     <div class="pagination">
+//                                 <button onclick="changePage(1)" ${currentPage === 1 ? 'disabled' : ''}>처음</button>
+//                                 <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>이전</button>
+//                                 <span>${currentPage} / ${totalPages}</span>
+//                                 <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>다음</button>
+//                                 <button onclick="changePage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''}>마지막</button>
+//                             </div>
+//                 </div>
+//                 `;
+//                 $delivery_table.style.display = 'block';
+//                 $search_check.style.display = 'flex';
+//             }
+//             window.changePage = function (page) {
+//                 if (page >= 1 && page <= totalPages) {
+//                     currentPage = page;
+//                     displayPage(currentPage);
+//                 }
+//             };
+//
+//             displayPage(1);
+//         }
+//     }
+//
+//     if (!hasResults) {
+//         alert('검색 결과가 없습니다.');
+//     }
+// }
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const { data: { user }, error } = await supabase.auth.getUser();
+
+    const userId = user?.id;
+    const userEmail = user?.email;
+
+    if (!userEmail || !userId) {
+        console.warn("로그인 정보가 없습니다. 자동 조회 불가");
         return;
     }
 
-    if (!tableContainer) {
-        console.error('테이블 컨테이너 요소를 찾을 수 없습니다.');
-        return;
-    }
+    // 체크박스 기본값: 보관만 체크된 상태로 설정
+    if ($checkbox1) $checkbox1.checked = true;
+    if ($checkbox2) $checkbox2.checked = false;
 
-    tableContainer.innerHTML = '';
-    let rows = '';
+    const selectedType = $checkbox1?.checked ? 'storage' : 'delivery';
+    await autoLoadUserReservations(userEmail, selectedType);
+});
 
-    const checkedOptions = [];
-    if ($checkbox1 && $checkbox1.checked) checkedOptions.push('keep_btn');
-    if ($checkbox2 && $checkbox2.checked) checkedOptions.push('delivery_btn');
-
-    if (checkedOptions.length === 0) {
-        alert('검색할 옵션을 선택해주세요.');
-        return;
-    }
-
-    if (!$search_reserveBox || !$search_reserveBox.value) {
-        alert('전화번호를 입력해주세요.');
-        return;
-    }
-
-    let hasResults = false;
-
-    console.log("검색 시작!");
-    console.log("입력된 전화번호:", $search_reserveBox.value);
-
-
-    if (checkedOptions.includes('keep_btn')) {
-        const {data, error} = await supabase
+async function autoLoadUserReservations(userEmail, type) {
+    if (type === 'storage') {
+        const { data, error } = await supabase
             .from('storage')
             .select('*')
-            .eq('phone', $search_reserveBox.value)
-            .order('storage_start_date', {ascending: false});
+            .eq('user_email', userEmail)
+            .order('storage_start_date', { ascending: false });
 
-        console.log("Supabase 응답:", data, error);
-
-        if (error) {
-            console.error('Supabase 데이터 조회 오류 (보관):', error);
-            alert('데이터 조회 중 오류가 발생했습니다 (보관).');
+        if (error || !data || data.length === 0) {
+            document.querySelector(".alert").style.display = 'block';
             return;
         }
 
-        if (data && data.length > 0) {
-            hasResults = true;
-            rows = data.map(item => `
-                <tr onclick="openDetail_st(this)">
-                    <td>${item.name}</td>
-                    <td>${item.phone}</td>
-                    <td>${item.storage_start_date}</td>
-                    <td>${item.storage_end_date}</td>
-                    <td>${item.small}</td>
-                    <td>${item.medium}</td>
-                    <td>${item.large}</td>
-                    <td>${item.price}</td>
-                </tr>
-            `).join('');
+        document.querySelector(".alert").style.display = 'none';
 
-            if ($storage_table) {
-                const itemsPerPage = 10;
-                const totalPages = Math.ceil(data.length / itemsPerPage);
-                let currentPage = 1;
+        const rows = data.map(item => `
+            <tr onclick="openDetail_st(this)">
+                <td>${item.name}</td>
+                <td>${item.phone}</td>
+                <td>${item.storage_start_date}</td>
+                <td>${item.storage_end_date}</td>
+                <td>${item.small}</td>
+                <td>${item.medium}</td>
+                <td>${item.large}</td>
+                <td>${item.price}</td>
+            </tr>
+        `).join('');
 
-                function displayPage(page) {
-                    const start = (page - 1) * itemsPerPage;
-                    const end = start + itemsPerPage;
-                    const pageRows = data.slice(start, end).map(item => `
-                        <tr onclick="openDetail_st(this)">
-                            <td>${item.name}</td>
-                            <td>${item.phone}</td>
-                            <td>${item.storage_start_date}</td>
-                            <td>${item.storage_end_date}</td>
-                            <td>${item.small}</td>
-                            <td>${item.medium}</td>
-                            <td>${item.large}</td>
-                            <td>${item.price}</td>
-                        </tr>
-                    `).join('');
-
-                    $view_table_container.innerHTML = `
-                        <div class="table-container">
-                            <table class="styled-table">
-                                <thead>
-                                    <tr>
-                                        <th>이름</th>
-                                        <th>연락처</th>
-                                        <th>보관일자</th>
-                                        <th>보관종료</th>
-                                        <th>소형</th>
-                                        <th>중형</th>
-                                        <th>대형</th>
-                                        <th>가격</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${pageRows}
-                                </tbody>
-                            </table>
-                            <div class="pagination">
-                                <button onclick="changePage(1)" ${currentPage === 1 ? 'disabled' : ''}>처음</button>
-                                <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>이전</button>
-                                <span>${currentPage} / ${totalPages}</span>
-                                <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>다음</button>
-                                <button onclick="changePage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''}>마지막</button>
-                            </div>
-                        </div>
-                    `;
-                }
-
-                window.changePage = function (page) {
-                    if (page >= 1 && page <= totalPages) {
-                        currentPage = page;
-                        displayPage(currentPage);
-                    }
-                };
-
-                displayPage(1);
-            }
-        }
-    }
-
-    if (checkedOptions.includes('delivery_btn')) {
-        const {data, error} = await supabase
+        $storage_table.innerHTML = `
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>이름</th>
+                        <th>연락처</th>
+                        <th>보관일자</th>
+                        <th>보관종료</th>
+                        <th>소형</th>
+                        <th>중형</th>
+                        <th>대형</th>
+                        <th>가격</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${rows}
+                </tbody>
+            </table>
+        `;
+    } else if (type === 'delivery') {
+        const { data, error } = await supabase
             .from('delivery')
             .select('*')
-            .eq('phone', $search_reserveBox.value)
-            .order('delivery_date', {ascending: false});
+            .eq('user_email', userEmail)
+            .order('delivery_date', { ascending: false });
 
-        console.log("Supabase 응답:", data, error);
-
-        if (error) {
-            console.error('Supabase 데이터 조회 오류 (배송):', error);
-            alert('데이터 조회 중 오류가 발생했습니다 (배송).');
+        if (error || !data || data.length === 0) {
+            document.querySelector(".alert").style.display = 'block';
             return;
         }
 
-        if (data && data.length > 0) {
-            hasResults = true;
-            rows = data.map(item => `
-                <tr onclick="openDetail_de(this)">
-                    <td>${item.delivery_date}</td>
-                    <td>${item.name}</td>
-                    <td>${item.phone}</td>
-                    <td>${item.delivery_start}</td>
-                    <td>${item.delivery_arrive}</td>
-                    <td>${item.under}</td>
-                    <td>${item.over}</td>
-                    <td>${item.price}</td>
-                </tr>
-            `).join('');
+        document.querySelector(".alert").style.display = 'none';
 
-            if ($delivery_table) {
-                const itemsPerPage = 10;
-                const totalPages = Math.ceil(data.length / itemsPerPage);
-                let currentPage = 1;
+        const rows = data.map(item => `
+            <tr onclick="openDetail_de(this)">
+                <td>${item.delivery_date}</td>
+                <td>${item.name}</td>
+                <td>${item.phone}</td>
+                <td>${item.delivery_start}</td>
+                <td>${item.delivery_arrive}</td>
+                <td>${item.under}</td>
+                <td>${item.over}</td>
+                <td>${item.price}</td>
+            </tr>
+        `).join('');
 
-                $view_table_container.innerHTML = `
-                <div class="table-container">
-                    <table class="styled-table">
-                        <thead>
-                            <tr>
-                                <th>배송일자</th>
-                                <th>이름</th>
-                                <th>연락처</th>
-                                <th>배송 출발지</th>
-                                <th>배송 도착지</th>
-                                <th>26인치이하</th>
-                                <th>26인치초과</th>
-                                <th>가격</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${rows}
-                        </tbody>
-                    </table>
-                    <div class="pagination">
-                                <button onclick="changePage(1)" ${currentPage === 1 ? 'disabled' : ''}>처음</button>
-                                <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>이전</button>
-                                <span>${currentPage} / ${totalPages}</span>
-                                <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>다음</button>
-                                <button onclick="changePage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''}>마지막</button>
-                            </div>
-                </div>
-                `;
-                $delivery_table.style.display = 'block';
-                $search_check.style.display = 'flex';
-            }
-            window.changePage = function (page) {
-                if (page >= 1 && page <= totalPages) {
-                    currentPage = page;
-                    displayPage(currentPage);
-                }
-            };
-
-            displayPage(1);
-        }
-    }
-
-    if (!hasResults) {
-        alert('검색 결과가 없습니다.');
+        $delivery_table.innerHTML = `
+            <table class="styled-table">
+                <thead>
+                    <tr>
+                        <th>배송일자</th>
+                        <th>이름</th>
+                        <th>연락처</th>
+                        <th>배송 출발지</th>
+                        <th>배송 도착지</th>
+                        <th>26인치이하</th>
+                        <th>26인치초과</th>
+                        <th>가격</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${rows}
+                </tbody>
+            </table>
+        `;
     }
 }
+
 
 function openDetail_st(trTag) {
     const name = trTag.children[0].innerText;
@@ -391,14 +507,14 @@ async function cancelReserve() {
     });
 }
 
-document.getElementById('search_reserveBox').addEventListener('input', function (e) {
-    let num = e.target.value.replace(/[^0-9]/g, '');
-
-    if (num.length < 4) {
-        e.target.value = num;
-    } else if (num.length < 8) {
-        e.target.value = `${num.slice(0, 3)}-${num.slice(3)}`;
-    } else {
-        e.target.value = `${num.slice(0, 3)}-${num.slice(3, 7)}-${num.slice(7, 11)}`;
-    }
-});
+// document.getElementById('search_reserveBox').addEventListener('input', function (e) {
+//     let num = e.target.value.replace(/[^0-9]/g, '');
+//
+//     if (num.length < 4) {
+//         e.target.value = num;
+//     } else if (num.length < 8) {
+//         e.target.value = `${num.slice(0, 3)}-${num.slice(3)}`;
+//     } else {
+//         e.target.value = `${num.slice(0, 3)}-${num.slice(3, 7)}-${num.slice(7, 11)}`;
+//     }
+// });

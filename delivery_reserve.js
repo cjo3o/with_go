@@ -511,3 +511,5 @@ document.addEventListener("DOMContentLoaded", () => {
         insertReservation(); // ✅ 따로 함수로 빼줘야 함
     }
 });
+
+

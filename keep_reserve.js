@@ -151,30 +151,32 @@ async function startPayment() {
 
     localStorage.setItem("reservationData", JSON.stringify(reservationData));
 
-    const response = await fetch("http://localhost:4000/toss/pay", {
+    // const response = await fetch("http://localhost:4000/toss/pay", {
+    const response = await fetch("https://port-0-with-go-back-manag68qe4cb4639.sel4.cloudtype.app/", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
-            orderId: "order_" + new Date().getTime() + "_" + Math.floor(Math.random() * 10000),
+            // orderId: "order_" + new Date().getTime() + "_" + Math.floor(Math.random() * 10000),
             amount: price,
             orderName: "보관 예약 결제",
             customerName: name
         })
-    });
-    console.log("결제 요청 데이터:", {
-        orderId: "order_" + new Date().getTime() + "_" + Math.floor(Math.random() * 10000),
-        amount: price,
-        orderName: "보관 예약 결제",
-        customerName: name
-    });
+    })
+};
+console.log("결제 요청 데이터:", {
+    // orderId: "order_" + new Date().getTime() + "_" + Math.floor(Math.random() * 10000),
+    amount: price,
+    orderName: "보관 예약 결제",
+    customerName: name
+});
 
-    const result = await response.json();
-    if (result.url) {
-        window.location.href = result.url;
-    } else {
-        alert("결제 요청 실패");
-    }
+const result = await response.json();
+if (result.url) {
+    window.location.href = result.url;
+} else {
+    alert("결제 요청 실패");
 }
+
 
 async function insertReservation() {
     // 결제 성공했는지 체크
@@ -190,7 +192,7 @@ async function insertReservation() {
         return;
     }
 
-    const { data, error } = await supabase
+    const {data, error} = await supabase
         .from("storage")
         .insert([{
             name: reservationData.name,
@@ -410,10 +412,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 async function loadStoragePlaces() {
-    const { data, error } = await supabase
+    const {data, error} = await supabase
         .from("storage_place")
         .select("*")
-        .order("created_at", { ascending: false });
+        .order("created_at", {ascending: false});
 
     if (error) {
         console.error("보관 장소 불러오기 실패:", error);
@@ -443,10 +445,10 @@ async function loadStoragePlaces() {
 }
 
 async function loadPartnerPlaces() {
-    const { data, error } = await supabase
+    const {data, error} = await supabase
         .from("partner_place")
         .select("*")
-        .order("created_at", { ascending: false });
+        .order("created_at", {ascending: false});
 
     if (error) {
         console.error("숙소 목록 불러오기 실패:", error);
@@ -496,5 +498,19 @@ document.addEventListener("DOMContentLoaded", () => {
     // URL에 결제 성공 정보가 포함되어 있으면 insertReservation 실행
     if (paymentKey && orderId && amount) {
         insertReservation(); // ✅ 따로 함수로 빼줘야 함
+    }
+});
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const {data: {user}} = await supabase.auth.getUser();
+
+    if (user) {
+        const nickname = user?.user_metadata?.name || user?.email;
+        const nameInput = document.getElementById("name");
+
+        // 입력창에 이미 값이 없을 때만 자동 입력
+        if (nameInput && !nameInput.value) {
+            nameInput.value = nickname;
+        }
     }
 });
