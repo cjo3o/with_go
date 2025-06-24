@@ -35,17 +35,15 @@
             //     body: JSON.stringify({ paymentKey, orderId, amount })
             // });
 
-            if (!paymentKey || !orderId || !amount) return;
-
-            if (sessionStorage.getItem(`reservationSaved-${orderId}`)) {
-                console.log("이미 저장된 예약입니다.");
+            if (!paymentKey || !orderId || !amount) {
+                Swal.fire("필수 결제 정보가 누락되었습니다.");
                 return;
             }
 
             const reservationData = JSON.parse(localStorage.getItem("reservationData"));
 
             if (!reservationData) {
-                Swal.fire("오류", "저장된 예약 정보가 없습니다.", "error");
+                Swal.fire("이미 예약이 처리되었거나, 저장된 예약 정보가 없습니다.");
                 return;
             }
 
@@ -63,7 +61,8 @@
                     under: parseInt(reservationData.under) || 0,
                     over: parseInt(reservationData.over) || 0,
                     price: parseInt(reservationData.price) || 0,
-                    user_email: userEmail
+                    user_email: userEmail,
+                    situation: "접수",
                 }]);
             } else {
                 // 📦 보관 예약 처리
@@ -77,11 +76,14 @@
                     medium: parseInt(reservationData.medium) || 0,
                     large: parseInt(reservationData.large) || 0,
                     price: parseInt(reservationData.price) || 0,
-                    user_email: userEmail
+                    user_email: userEmail,
+                    situation: "접수",
                 }]);
             }
 
             const { error } = insertResult;
+
+            localStorage.removeItem("reservationData");
 
             if (error) {
                 console.error("💥 Supabase insert 실패:", error);
@@ -101,10 +103,10 @@
                     //     window.location.href = "reservation.html";
                     // }
                 })
-                    .then(() => {
-                    localStorage.removeItem("reservationData");
-                    location.replace("reservation.html");
-                });
+                //     .then(() => {
+                //     localStorage.removeItem("reservationData");
+                //     location.replace("reservation.html");
+                // });
             }
         }
 

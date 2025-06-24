@@ -229,7 +229,7 @@
                                     전화번호
                                 </div>
                                 <div class="input-box_content">
-                                    <input type="text" id="phone" name="" placeholder="전화번호를 입력해주세요." maxlength="13" required>
+                                    <input type="text" id="phone" name="" placeholder="전화번호" maxlength="13" required>
                                 </div>
                             </div>
 <!--                            <div class="keep_reservation_contents_main_box_input-box">-->
@@ -325,7 +325,7 @@
                             <h2>KRW <span id="total_price">0</span></h2>
                         </div>
                         <div class="keep_reserve_btn">
-                            <button id="storage-reservation" onclick="storageSelect()">
+                            <button id="storage-reservation" type="button" onclick="storageSelect(event)">
                                 보관 예약
                             </button>
                         </div>
@@ -406,7 +406,12 @@
                 </div>
             </div>
             <div class="keep_reserve_btn" style="margin: 4rem 0">
-                <button onclick="startPayment()">
+                <input type="checkbox" id="essential">
+                <label for="essential" style="cursor: pointer; color: #e74c3c; font-weight: bold;">
+                    배송이 시작되면 예약취소/환불 불가합니다.
+                </label>
+                </input><br/>
+                <button onclick="startPayment()" style="margin-top: 20px">
                     결제진행
                 </button>
             </div>
