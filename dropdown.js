@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
             if (res.data.user !== null) {
                 const $select_login = document.querySelector('.select_login');
-                const nick = res.data.user.email.split('@').slice(0, 1);
+                const nick = res.data.user.user_metadata.name;
                 const $logout = document.querySelector('.logout');
                 const $login_container = document.querySelector('.login_container');
                 $select_login.innerHTML = `${nick} 님`;
