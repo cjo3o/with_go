@@ -61,28 +61,31 @@ function closeModal() {
 }
 
 async function storageSelect() {
+    if (event) event.preventDefault(); // 혹시라도 submit 막기!
+
     const arr = [$dateStart, $dateEnd, $location_a, $name, $phone];
+    const arrStr = ["날짜를 입력하세요", "출발지를 선택해주세요", "도착지를 선택해주세요", "이름을 입력해주세요", "전화번호를 입력해주세요"];
     for (let i = 0; i < arr.length; i++) {
         if (arr[i].value === '') {
-            alert(`${arr[i].name}을(를) 입력해주세요.`);
-            // Swal.fire({
-            //     icon: "error",
-            //     title: "알림",
-            //     text: `${arr[i].name}을(를) 입력해주세요!`,
-            // });
+            await Swal.fire({
+                icon: "error",
+                title: "알림",
+                text: `${arr[i].placeholder || arr[i].name}을(를) 입력해주세요!`
+            });
             window.scrollTo({top: arr[i].offsetTop, behavior: 'smooth'});
+            arr[i].focus();
             return;
         }
     }
 
     if (agree.checked === false) {
-        alert('이용약관을 확인해주세요.');
+        Swal.fire('이용약관을 확인해주세요.');
         window.scrollTo({top: agree.offsetTop, behavior: 'smooth'});
         return;
     }
 
     if (Number($totalPrice.innerText) === 0) {
-        alert('짐 개수를 선택해주세요.');
+        Swal.fire('짐 개수를 선택해주세요.');
     } else {
         const brr = [$check_start_date, $check_end_date, $check_location, $check_name, $check_phone];
         for (let i = 0; i < brr.length; i++) {
@@ -105,7 +108,7 @@ async function storageSelect() {
 }
 
 // const tossPayments = TossPayments("test_ck_ZLKGPx4M3MGo5A04daGqrBaWypv1"); // ✅ 반드시 수정
-
+//
 // function startPayment() {
 //     const name = document.getElementById("name").value;
 //     const phone = document.getElementById("phone").value;
@@ -133,7 +136,18 @@ async function storageSelect() {
 //             failUrl: "http://localhost:5173/fail.html"
 //         });
 // }
-async function startPayment() {
+const tossPayments = TossPayments("test_ck_ZLKGPx4M3MGo5A04daGqrBaWypv1");
+
+function startPayment() {
+    const essential = document.getElementById('essential');
+    if (!essential.checked) {
+        Swal.fire({
+            icon: 'warning',
+            title: '안내',
+            text: '필수 안내에 동의해야 결제 진행이 가능합니다!',
+        });
+        return;
+    }
     const name = document.getElementById("name").value;
     const phone = document.getElementById("phone").value;
     const dateStart = document.getElementById("date_start").value;
@@ -144,47 +158,37 @@ async function startPayment() {
     const large = document.getElementById("large").value;
     const price = Number(document.getElementById("total_price").innerText);
 
-    const reservationData = {
+    localStorage.setItem("reservationData", JSON.stringify({
         name, phone, dateStart, dateEnd, location,
         small, medium, large, price
-    };
+    }));
 
-    localStorage.setItem("reservationData", JSON.stringify(reservationData));
-
-    const response = await fetch("http://localhost:4000/toss/pay", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            orderId: "order_" + new Date().getTime() + "_" + Math.floor(Math.random() * 10000),
-            amount: price,
-            orderName: "보관 예약 결제",
-            customerName: name
-        })
+    tossPayments.requestPayment("카드", {
+        amount: price,
+        orderId: "order_" + new Date().getTime(),
+        orderName: "보관 예약 결제",
+        customerName: name,
+        successUrl: "http://localhost:5173/reservation.html?from=payment",
+        failUrl: "http://localhost:5173/fail.html"
     });
-
-    const result = await response.json();
-    if (result.url) {
-        window.location.href = result.url;
-    } else {
-        alert("결제 요청 실패");
-    }
 }
+
 
 async function insertReservation() {
     // 결제 성공했는지 체크
     if (!paymentKey || !orderId || !amount) {
-        alert("필수 결제 정보가 누락되었습니다.");
+        Swal.fire("필수 결제 정보가 누락되었습니다.");
         return;
     }
 
     const reservationData = JSON.parse(localStorage.getItem("reservationData"));
 
     if (!reservationData) {
-        alert("저장된 예약 정보가 없습니다.");
+        Swal.fire("저장된 예약 정보가 없습니다.");
         return;
     }
 
-    const { data, error } = await supabase
+    const {data, error} = await supabase
         .from("storage")
         .insert([{
             name: reservationData.name,
@@ -195,7 +199,8 @@ async function insertReservation() {
             small: parseInt(reservationData.small) || 0,
             medium: parseInt(reservationData.medium) || 0,
             large: parseInt(reservationData.large) || 0,
-            price: parseInt(reservationData.price) || 0
+            price: parseInt(reservationData.price) || 0,
+            situation: "접수",
         }]);
     console.log(data);
     console.log(error);
@@ -210,23 +215,6 @@ async function insertReservation() {
         large: parseInt(reservationData.large),
         price: parseInt(reservationData.price)
     });
-
-    if (error) {
-        console.error("예약 저장 실패", error);
-        Swal.fire("오류", "예약 저장에 실패했습니다.", "error");
-    } else {
-        Swal.fire({
-            title: "🎉 예약이 완료되었습니다!",
-            text: "홈페이지로 이동합니다.",
-            icon: "success",
-            timer: 2000,
-            showConfirmButton: false,
-            didClose: () => {
-                localStorage.removeItem("reservationData");
-                window.location.href = "reservation.html";
-            }
-        });
-    }
 }
 
 // async function paymentSubmit() {
@@ -276,10 +264,10 @@ $select_location.addEventListener('click', function () {
             $location_a.value = selectedTitle;
             closeModal();
         } else {
-            alert("선택된 장소의 이름을 찾을 수 없습니다.");
+            Swal.fire("선택된 장소의 이름을 찾을 수 없습니다.");
         }
     } else {
-        alert("보관장소를 선택해주세요.")
+        Swal.fire("보관장소를 선택해주세요.")
     }
 });
 
@@ -404,10 +392,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 async function loadStoragePlaces() {
-    const { data, error } = await supabase
+    const {data, error} = await supabase
         .from("storage_place")
         .select("*")
-        .order("created_at", { ascending: false });
+        .order("created_at", {ascending: false});
 
     if (error) {
         console.error("보관 장소 불러오기 실패:", error);
@@ -437,10 +425,10 @@ async function loadStoragePlaces() {
 }
 
 async function loadPartnerPlaces() {
-    const { data, error } = await supabase
+    const {data, error} = await supabase
         .from("partner_place")
         .select("*")
-        .order("created_at", { ascending: false });
+        .order("created_at", {ascending: false});
 
     if (error) {
         console.error("숙소 목록 불러오기 실패:", error);
@@ -490,5 +478,19 @@ document.addEventListener("DOMContentLoaded", () => {
     // URL에 결제 성공 정보가 포함되어 있으면 insertReservation 실행
     if (paymentKey && orderId && amount) {
         insertReservation(); // ✅ 따로 함수로 빼줘야 함
+    }
+});
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const {data: {user}} = await supabase.auth.getUser();
+
+    if (user) {
+        const nickname = user?.user_metadata?.name || user?.email;
+        const nameInput = document.getElementById("name");
+
+        // 입력창에 이미 값이 없을 때만 자동 입력
+        if (nameInput && !nameInput.value) {
+            nameInput.value = nickname;
+        }
     }
 });

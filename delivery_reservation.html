@@ -42,7 +42,7 @@
     </script>
     <link rel="stylesheet" href="src/css/reset.css">
     <link rel="stylesheet" href="src/css/delivery_reservation.css">
-    <link rel="icon" href="/favicon.ico" />
+    <link rel="icon" href="/favicon.ico"/>
 </head>
 
 <body>
@@ -80,62 +80,13 @@
                                 </div>
                                 <div class="card_body">
                                     <p style="font-size: 1.2rem">운영시간</p>
-                                    <p>주소</p>
+                                    <p class="partner-address">주소</p>
                                 </div>
                             </label>
                         </div>
                     </template>
                     <div class="delivery_start_card_list"></div>
                 </div>
-                <!--                    <div class="card">-->
-                <!--                        <label for="dongdaegu">-->
-                <!--                            <div class="card_title">-->
-                <!--                                <input type="radio" name="start_location" id="dongdaegu"/>-->
-                <!--                                <h3>동대구역</h3>-->
-                <!--                            </div>-->
-                <!--                            <div class="card_body">-->
-                <!--                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 20:00</p>-->
-                <!--                                <p>1번 출구에서 2번출구 방향</p>-->
-                <!--                            </div>-->
-                <!--                        </label>-->
-                <!--                    </div>-->
-                <!--                    <div class="card">-->
-                <!--                        <label for="daeguAirport">-->
-                <!--                            <div class="card_title">-->
-                <!--                                <input type="radio" name="start_location" id="daeguAirport"/>-->
-                <!--                                <h3>대구공항</h3>-->
-                <!--                            </div>-->
-                <!--                            <div class="card_body">-->
-                <!--                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 20:00</p>-->
-                <!--                                <p>2호선 지하1층 공항철도 연결통로 내</p>-->
-                <!--                            </div>-->
-                <!--                        </label>-->
-                <!--                    </div>-->
-                <!--                    <div class="card">-->
-                <!--                        <label for="incheon">-->
-                <!--                            <div class="card_title">-->
-                <!--                                <input type="radio" name="start_location" id="incheon"/>-->
-                <!--                                <h3>인천공항</h3>-->
-                <!--                            </div>-->
-                <!--                            <div class="card_body">-->
-                <!--                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 20:00</p>-->
-                <!--                                <p>명동역 1,9,10번 출구 내</p>-->
-                <!--                            </div>-->
-                <!--                        </label>-->
-                <!--                    </div>-->
-                <!--                    <div class="card">-->
-                <!--                        <label for="gyeongju">-->
-                <!--                            <div class="card_title">-->
-                <!--                                <input type="radio" name="start_location" id="gyeongju"/>-->
-                <!--                                <h3>경주역</h3>-->
-                <!--                            </div>-->
-                <!--                            <div class="card_body">-->
-                <!--                                <p style="font-size: 1.2rem">운영시간 : 09:00 ~ 20:00</p>-->
-                <!--                                <p>5호선 김포공항 지하1층 게이트 방향</p>-->
-                <!--                            </div>-->
-                <!--                        </label>-->
-                <!--                    </div>-->
-                <!--                </div>-->
                 <div class="start_location_contents_body delivery_start_stay_box" style="display: none;">
                     <!--                        <h3>숙소 선택 예정 콘텐츠</h3>-->
                     <template id="partner-card-template">
@@ -280,29 +231,36 @@
                         <div class="keep_reservation_contents_main_title">
                             <p>배송 장소</p>
                         </div>
-                        <div class="keep_reservation_contents_main_box">
+                        <div class="keep_reservation_contents_main_box_second">
                             <div class="keep_reservation_contents_main_box_input-box">
                                 <div class="input-box_title">
                                     출발지
                                 </div>
                                 <div class="input-box_content">
                                     <input type="text" name="출발지" id="start" placeholder="출발지"
-                                           onclick="openSelectLocation()" readonly>
+                                           onclick="openSelectLocation('start')" readonly>
                                 </div>
                             </div>
+                            <button class="swap" onclick="swap()">
+                                <img src="./images/swap.svg" alt="" style="width: 30px; height: 30px; margin-top: 20px">
+                            </button>
                             <div class="keep_reservation_contents_main_box_input-box">
                                 <div class="input-box_title">
                                     도착지
                                 </div>
-                                <div class="input-box_content"
-                                     style="display: flex; align-items: center; justify-content: center;">
-                                    <input type="text" name="도착지" id="arrive" placeholder="배송 받을 주소를 입력해주세요."
-                                           onclick="searchAddress()" readonly>
-                                    <input type="text" name="상세주소" id="detail_adr" placeholder="상세주소를 입력해주세요.">
+                                <!--                                <div class="input-box_content"-->
+                                <!--                                     style="display: flex; align-items: center; justify-content: center;">-->
+                                <!--                                    <input type="text" name="도착지" id="arrive" placeholder="배송 받을 주소를 입력해주세요."-->
+                                <!--                                           onclick="searchAddress()" readonly>-->
+                                <!--                                    <input type="text" name="상세주소" id="detail_adr" placeholder="상세주소를 입력해주세요.">-->
+                                <!--                                </div>-->
+                                <div class="input-box_content">
+                                    <input type="text" name="도착지" id="arrive" placeholder="도착지"
+                                           onclick="openSelectLocation('arrive')" readonly>
                                 </div>
                             </div>
                         </div>
-                        <p style="margin-top: 1rem; text-align: right">※도착지는 대구, 경주 지역만 선택할 수 있습니다.</p>
+                        <!--                        <p style="margin-top: 1rem; text-align: right">※도착지는 대구, 경주 지역만 선택할 수 있습니다.</p>-->
                     </div>
                     <div class="keep_reservation_contents_main_user">
                         <div class="keep_reservation_contents_main_title">
@@ -398,7 +356,7 @@
                             <h2>KRW <span id="total_price">0</span></h2>
                         </div>
                         <div class="keep_reserve_btn">
-                            <button onclick="deliverySubmit()">
+                            <button onclick="deliverySubmit(event)">
                                 배송 예약
                             </button>
                         </div>
@@ -476,7 +434,12 @@
                         </div>
                     </div>
                     <div class="keep_reserve_btn" style="margin: 4rem 0">
-                        <button onclick="startPayment()">
+                        <input type="checkbox" id="essential">
+                        <label for="essential" style="cursor: pointer; color: #e74c3c; font-weight: bold;">
+                            배송이 시작되면 예약취소/환불 불가합니다.
+                        </label>
+                        </input><br/>
+                        <button onclick="startPayment()" style="margin-top: 20px">
                             결제진행
                         </button>
                     </div>
@@ -486,8 +449,10 @@
 
             </div>
         </div>
-        <script src="dropdown.js"></script>
-        <script src="delivery_reserve.js"></script>
+    </div>
+</div>
+<script src="dropdown.js"></script>
+<script src="delivery_reserve.js"></script>
 </body>
 
 </html>
