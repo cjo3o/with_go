@@ -20,9 +20,9 @@
 
         async function insertReservation() {
             const {
-                data: { user },
+                data: {user},
             } = await supabase.auth.getUser();
-            const userEmail = user?.email || null;
+            const userId = user?.id;
 
             const params = new URLSearchParams(window.location.search);
             const paymentKey = params.get("paymentKey");
@@ -36,14 +36,14 @@
             // });
 
             if (!paymentKey || !orderId || !amount) {
-                Swal.fire("필수 결제 정보가 누락되었습니다.");
+                // Swal.fire("필수 결제 정보가 누락되었습니다.");
                 return;
             }
 
             const reservationData = JSON.parse(localStorage.getItem("reservationData"));
 
             if (!reservationData) {
-                Swal.fire("이미 예약이 처리되었거나, 저장된 예약 정보가 없습니다.");
+                // Swal.fire("이미 예약이 처리되었거나, 저장된 예약 정보가 없습니다.");
                 return;
             }
 
@@ -52,6 +52,7 @@
             if (reservationData.delivery_start) {
                 // 🚚 배송 예약 처리
                 insertResult = await supabase.from("delivery").insert([{
+                    user_id: userId,
                     name: reservationData.name,
                     phone: reservationData.phone,
                     delivery_date: reservationData.delivery_date,
@@ -61,12 +62,13 @@
                     under: parseInt(reservationData.under) || 0,
                     over: parseInt(reservationData.over) || 0,
                     price: parseInt(reservationData.price) || 0,
-                    user_email: userEmail,
+                    // user_email: userEmail,
                     situation: "접수",
                 }]);
             } else {
                 // 📦 보관 예약 처리
                 insertResult = await supabase.from("storage").insert([{
+                    user_id: userId,
                     name: reservationData.name,
                     phone: reservationData.phone,
                     storage_start_date: reservationData.dateStart,
@@ -76,12 +78,12 @@
                     medium: parseInt(reservationData.medium) || 0,
                     large: parseInt(reservationData.large) || 0,
                     price: parseInt(reservationData.price) || 0,
-                    user_email: userEmail,
+                    // user_email: userEmail,
                     situation: "접수",
                 }]);
             }
 
-            const { error } = insertResult;
+            const {error} = insertResult;
 
             localStorage.removeItem("reservationData");
 
@@ -96,21 +98,16 @@
                     title: "예약이 완료되었습니다!",
                     text: "홈페이지로 이동합니다.",
                     icon: "success",
-                    // timer: 2000,
                     showConfirmButton: true,
-                    // didClose: () => {
-                    //     localStorage.removeItem("reservationData");
-                    //     window.location.href = "reservation.html";
-                    // }
                 })
-                //     .then(() => {
-                //     localStorage.removeItem("reservationData");
-                //     location.replace("reservation.html");
-                // });
             }
         }
 
         insertReservation(); // ✅ 호출
+
+        function moveTop() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
     </script>
 
 </head>
@@ -260,10 +257,10 @@
 
                     </div>
                     <div class="search_check" id="search_checkBox">
-<!--                        <input type="text" name="" class="phone" id="search_reserveBox" placeholder="연락처를 입력해 주세요.">-->
-<!--                        <button onclick="searchReserve()" class="search_check_btn">-->
-<!--                            검색-->
-<!--                        </button>-->
+                        <!--                        <input type="text" name="" class="phone" id="search_reserveBox" placeholder="연락처를 입력해 주세요.">-->
+                        <!--                        <button onclick="searchReserve()" class="search_check_btn">-->
+                        <!--                            검색-->
+                        <!--                        </button>-->
                     </div>
                     <p style=" text-align: center; color: white; display: flex; justify-content: center; margin-top: 2rem; opacity: 0; transform: translateY(100%); animation: slideUp 0.5s forwards; animation-delay: 1.5s"
                        class="click_infor">※ 클릭하시면 상세정보를 볼 수 있습니다.</p>

@@ -29,28 +29,9 @@ const $check_under = document.querySelector('#check_under');
 const $check_over = document.querySelector('#check_over');
 const $check_price = document.querySelector('#check_price');
 
-// function minus(a) {
-//     if (a.parentNode.children[1].value > 0) {
-//         a.parentNode.children[1].value--;
-//         $totalPrice.innerText = Number($totalPrice.innerText) - Number(a.parentNode.getAttribute('data-price'));
-//     }
-// }
-//
-// function plus(a) {
-//     a.parentNode.children[1].value++;
-//     $totalPrice.innerText = Number($totalPrice.innerText) + Number(a.parentNode.getAttribute('data-price'));
-// }
-
-// const supabase = window.supabase.createClient(
-//     "https://zgrjjnifqoactpuqolao.supabase.co",
-//     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpncmpqbmlmcW9hY3RwdXFvbGFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNDc0NTgsImV4cCI6MjA1NjgyMzQ1OH0._Vl-6CRKdMjeDRyNoxlfect7sgusZ7L0N5OYu0a5hT0"                        // ✅ anon key만 써야 함 (절대 service_role ❌)
-// );
-
-// console.log($start, $arrive); // 둘 중 하나라도 null이면 연결 실패
-
-
 $start.addEventListener('input', resetValues);
 $arrive.addEventListener('input', resetValues);
+
 
 function resetValues() {
     under.value = 0;
@@ -60,13 +41,18 @@ function resetValues() {
 
 
 function underM() {
+    const startAddress = $start.getAttribute('data-address') || '';
+    const arriveAddress = $arrive.getAttribute('data-address') || '';
+
     if (under.value > 0) {
-        if (($start.value.includes('대구') && $arrive.value.includes('대구')) || ($start.value.includes('경주') && $arrive.value.includes('경주'))) {
+        if ((startAddress.includes('대구') && arriveAddress.includes('대구')) ||
+            (startAddress.includes('경주') && arriveAddress.includes('경주'))) {
             under.value--;
-            $totalPrice.innerText = Number($totalPrice.innerText) - Number(10000);
-        } else if (($start.value.includes('대구') && $arrive.value.includes('경주')) || ($start.value.includes('경주') && $arrive.value.includes('대구'))) {
+            $totalPrice.innerText = Number($totalPrice.innerText) - 10000;
+        } else if ((startAddress.includes('대구') && arriveAddress.includes('경주')) ||
+            (startAddress.includes('경주') && arriveAddress.includes('대구'))) {
             under.value--;
-            $totalPrice.innerText = Number($totalPrice.innerText) - Number(20000);
+            $totalPrice.innerText = Number($totalPrice.innerText) - 20000;
         } else {
             Swal.fire('출발지와 도착지를 선택해 주세요');
             window.scrollTo({top: $start.offsetTop, behavior: 'smooth'});
@@ -75,12 +61,17 @@ function underM() {
 }
 
 function underP() {
-    if (($start.value.includes('대구') && $arrive.value.includes('대구')) || ($start.value.includes('경주') && $arrive.value.includes('경주'))) {
+    const startAddress = $start.getAttribute('data-address') || '';
+    const arriveAddress = $arrive.getAttribute('data-address') || '';
+
+    if ((startAddress.includes('대구') && arriveAddress.includes('대구')) ||
+        (startAddress.includes('경주') && arriveAddress.includes('경주'))) {
         under.value++;
-        $totalPrice.innerText = Number($totalPrice.innerText) + Number(10000);
-    } else if (($start.value.includes('대구') && $arrive.value.includes('경주')) || ($start.value.includes('경주') && $arrive.value.includes('대구'))) {
+        $totalPrice.innerText = Number($totalPrice.innerText) + 10000;
+    } else if ((startAddress.includes('대구') && arriveAddress.includes('경주')) ||
+        (startAddress.includes('경주') && arriveAddress.includes('대구'))) {
         under.value++;
-        $totalPrice.innerText = Number($totalPrice.innerText) + Number(20000);
+        $totalPrice.innerText = Number($totalPrice.innerText) + 20000;
     } else {
         Swal.fire('출발지와 도착지를 선택해 주세요');
         window.scrollTo({top: $start.offsetTop, behavior: 'smooth'});
@@ -88,13 +79,18 @@ function underP() {
 }
 
 function overM() {
+    const startAddress = $start.getAttribute('data-address') || '';
+    const arriveAddress = $arrive.getAttribute('data-address') || '';
+
     if (over.value > 0) {
-        if (($start.value.includes('대구') && $arrive.value.includes('대구')) || ($start.value.includes('경주') && $arrive.value.includes('경주'))) {
+        if ((startAddress.includes('대구') && arriveAddress.includes('대구')) ||
+            (startAddress.includes('경주') && arriveAddress.includes('경주'))) {
             over.value--;
-            $totalPrice.innerText = Number($totalPrice.innerText) - Number(15000);
-        } else if (($start.value.includes('대구') && $arrive.value.includes('경주')) || ($start.value.includes('경주') && $arrive.value.includes('대구'))) {
+            $totalPrice.innerText = Number($totalPrice.innerText) - 15000;
+        } else if ((startAddress.includes('대구') && arriveAddress.includes('경주')) ||
+            (startAddress.includes('경주') && arriveAddress.includes('대구'))) {
             over.value--;
-            $totalPrice.innerText = Number($totalPrice.innerText) - Number(25000);
+            $totalPrice.innerText = Number($totalPrice.innerText) - 25000;
         } else {
             Swal.fire('출발지와 도착지를 선택해 주세요');
             window.scrollTo({top: $start.offsetTop, behavior: 'smooth'});
@@ -103,17 +99,23 @@ function overM() {
 }
 
 function overP() {
-    if (($start.value.includes('대구') && $arrive.value.includes('대구')) || ($start.value.includes('경주') && $arrive.value.includes('경주'))) {
+    const startAddress = $start.getAttribute('data-address') || '';
+    const arriveAddress = $arrive.getAttribute('data-address') || '';
+
+    if ((startAddress.includes('대구') && arriveAddress.includes('대구')) ||
+        (startAddress.includes('경주') && arriveAddress.includes('경주'))) {
         over.value++;
-        $totalPrice.innerText = Number($totalPrice.innerText) + Number(15000);
-    } else if (($start.value.includes('대구') && $arrive.value.includes('경주')) || ($start.value.includes('경주') && $arrive.value.includes('대구'))) {
+        $totalPrice.innerText = Number($totalPrice.innerText) + 15000;
+    } else if ((startAddress.includes('대구') && arriveAddress.includes('경주')) ||
+        (startAddress.includes('경주') && arriveAddress.includes('대구'))) {
         over.value++;
-        $totalPrice.innerText = Number($totalPrice.innerText) + Number(25000);
+        $totalPrice.innerText = Number($totalPrice.innerText) + 25000;
     } else {
         Swal.fire('출발지와 도착지를 선택해 주세요');
         window.scrollTo({top: $start.offsetTop, behavior: 'smooth'});
     }
 }
+
 
 function openModal() {
     event.preventDefault();
@@ -141,24 +143,39 @@ function openSelectLocation(target) {
         let valueToCheck = (target === 'start') ? $start.value : $arrive.value;
 
         if (valueToCheck.includes('호텔') || valueToCheck.includes('숙소')) {
-            // 숙소인 경우
             radioButtons[1].checked = true;
             radioButtons[1].classList.add('active');
             radioButtons[0].classList.remove('active');
             startBox.style.display = 'none';
             stayBox.style.display = 'block';
         } else {
-            // 보관함으로 간주
             radioButtons[0].checked = true;
             radioButtons[0].classList.add('active');
             radioButtons[1].classList.remove('active');
             startBox.style.display = 'block';
             stayBox.style.display = 'none';
         }
+
+        // ✅ 모달 열 때 스크롤 최상단으로 이동
+        $start_location_contents.scrollTo({ top: 0, behavior: 'instant' });
+
+        // ✅ 기존 선택값 자동 체크
+        const cardList = document.querySelectorAll('input[name="start_location"]');
+        cardList.forEach(input => {
+            const placeName = input.parentNode.querySelector('h3')?.innerText.trim();
+            if (placeName === valueToCheck) {
+                input.checked = true;
+
+                // 선택된 카드 중앙에 오도록
+                const card = input.closest('.card');
+                card?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
     }
 }
 
-function swap(){
+
+function swap() {
     const temp = $start.value;
     $start.value = $arrive.value;
     $arrive.value = temp;
@@ -200,6 +217,9 @@ function swap(){
 // }
 
 async function deliverySubmit() {
+    const startAddress = $start.getAttribute('data-address') || '';
+    const arriveAddress = $arrive.getAttribute('data-address') || '';
+
     if (event) event.preventDefault();
 
     const arr = [$date, $start, $arrive, $name, $phone];
@@ -211,16 +231,17 @@ async function deliverySubmit() {
                 icon: "error",
                 title: "알림",
                 text: `${arrStr[i]}`
+            }).then(() => {
+                // arr[i].focus();
+                window.scrollTo({top: arr[i].offsetTop, behavior: 'smooth'});
             });
-            window.scrollTo({top: arr[i].offsetTop, behavior: 'smooth'});
-            // arr[i].focus();
             return;
         }
     }
 
     if (
-        !$arrive.value.includes('대구') &&
-        !$arrive.value.includes('경주')
+        !arriveAddress.includes('대구') &&
+        !arriveAddress.includes('경주')
     ) {
         Swal.fire('도착지는 대구, 경주 지역만 가능합니다.');
         window.scrollTo({top: $arrive.offsetTop, behavior: 'smooth'});
@@ -252,71 +273,20 @@ async function deliverySubmit() {
     }
 }
 
-// async function paymentSubmit() {
-//     const res = await supabase.auth.getUser();
-//     await supabase.from('delivery').insert([
-//         {
-//             user_id: res.data.user.id,
-//             name: $name.value,
-//             phone: $phone.value,
-//             delivery_date: $date.value,
-//             delivery_start: $start.value,
-//             delivery_arrive: $arrive.value,
-//             detail_adr: $detail_adr.value,
-//             under: under.value,
-//             over: over.value,
-//             price: Number($totalPrice.innerText)
-//         }
-//     ]).select();
-//
-//
-//     await Swal.fire({
-//         title: "예약이 완료되었습니다!",
-//         icon: "success",
-//         draggable: true
-//     });
-//     location.href = 'index.html';
-// }
-
 const tossPayments = TossPayments("test_ck_ZLKGPx4M3MGo5A04daGqrBaWypv1"); // ✅ 반드시 수정
-//
-// function startPayment() {
-//     const name = document.getElementById("name").value;
-//     const phone = document.getElementById("phone").value;
-//     // const mail = document.getElementById("mail").value;
-//     const delivery_date = document.getElementById("date").value;
-//     const delivery_start = document.getElementById("start").value;
-//     const delivery_arrive = document.getElementById("arrive").value;
-//     const detail_adr = document.getElementById("detail_adr").value;
-//     // const small = document.getElementById("small").value;
-//     const under = document.getElementById("under").value;
-//     const over = document.getElementById("over").value;
-//     const price = Number(document.getElementById("total_price").innerText);
-//
-//     // 1️⃣ 예약 정보 임시 저장 (결제 성공 후 Supabase에 저장 예정)
-//     localStorage.setItem("reservationData", JSON.stringify({
-//         name, phone, delivery_date, delivery_start, delivery_arrive,
-//         detail_adr, under, over, price
-//     }));
-//
-//     // 2️⃣ 결제창 띄우기
-//     tossPayments.requestPayment("카드", {
-//         amount: price,
-//         orderId: "order_" + new Date().getTime(),
-//         orderName: "보관 예약 결제",
-//         customerName: name,
-//         successUrl: "http://localhost:5173/reservation.html?from=payment", // ✅ 개발 중일 땐 localhost 사용
-//         failUrl: "http://localhost:5173/fail.html"
-//     });
-// }
 
-async function startPayment() {
-    const essential = document.getElementById('essential');
+function startPayment(event) {
+    event.preventDefault(); // ✅ 기본 버튼 동작 차단
+
+    const essential = document.getElementById("essential");
     if (!essential.checked) {
         Swal.fire({
-            icon: 'warning',
-            title: '안내',
-            text: '필수 안내에 동의해야 결제 진행이 가능합니다!',
+            icon: "warning",
+            title: "안내",
+            text: "필수 안내에 동의해야 결제 진행이 가능합니다!",
+        }).then(() => {
+            document.activeElement.blur(); // ✅ 포커스 제거
+            window.scrollTo({ top: essential.offsetTop - 10, behavior: 'smooth' }); // ✅ 정확한 위치로 이동
         });
         return;
     }
@@ -363,7 +333,7 @@ async function insertReservation() {
         return;
     }
 
-    const { data, error } = await supabase
+    const {data, error} = await supabase
         .from("delivery")
         .insert([{
             name: reservationData.name,
@@ -395,12 +365,15 @@ $select_location.addEventListener('click', function () {
     }
 
     const selectedName = selected.parentNode.children[1].innerText;
+    const selectedAddress = selected.closest('.card').querySelector('.partner-address')?.innerText || '';
 
     if (currentTarget === 'start') {
         $start.value = selectedName;
+        $start.setAttribute('data-address', selectedAddress);  // 주소 저장
         $start.dispatchEvent(new Event('input'));
     } else if (currentTarget === 'arrive') {
         $arrive.value = selectedName;
+        $arrive.setAttribute('data-address', selectedAddress); // 주소 저장
         $arrive.dispatchEvent(new Event('input'));
     }
 

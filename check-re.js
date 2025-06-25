@@ -65,8 +65,8 @@ if ($checkbox1) {
             $delivery_table.style.display = 'none';
 
             const { data: { user } } = await supabase.auth.getUser();
-            const userEmail = user?.email;
-            if (userEmail) await autoLoadUserReservations(userEmail, 'storage');
+            const userId = user?.id;
+            if (userId) await autoLoadUserReservations(userId, 'storage');
         }
     });
 }
@@ -79,8 +79,8 @@ if ($checkbox2) {
             $storage_table.style.display = 'none';
 
             const { data: { user } } = await supabase.auth.getUser();
-            const userEmail = user?.email;
-            if (userEmail) await autoLoadUserReservations(userEmail, 'delivery');
+            const userId = user?.id;
+            if (userId) await autoLoadUserReservations(userId, 'delivery');
         }
     });
 }
@@ -89,9 +89,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     const { data: { user }, error } = await supabase.auth.getUser();
 
     const userId = user?.id;
-    const userEmail = user?.email;
+    // const userEmail = user?.email;
 
-    if (!userEmail || !userId) {
+    if (!userId) {
         console.warn("로그인 정보가 없습니다. 자동 조회 불가");
         return;
     }
@@ -100,246 +100,37 @@ document.addEventListener("DOMContentLoaded", async () => {
     if ($checkbox1) $checkbox1.checked = true;
     if ($checkbox2) $checkbox2.checked = false;
 
-    $storage_table.style.display = 'block';
-    $delivery_table.style.display = 'none';
-
-    await autoLoadUserReservations(userEmail, 'storage');
-});
-
-// async function searchReserve() {
-//     if (!supabase) {
-//         console.error('Supabase 클라이언트가 초기화되지 않았습니다.');
-//         alert('데이터베이스 연결에 문제가 발생했습니다.');
-//         return;
-//     }
-//
-//     if (!tableContainer) {
-//         console.error('테이블 컨테이너 요소를 찾을 수 없습니다.');
-//         return;
-//     }
-//
-//     tableContainer.innerHTML = '';
-//     let rows = '';
-//
-//     const checkedOptions = [];
-//     if ($checkbox1 && $checkbox1.checked) checkedOptions.push('keep_btn');
-//     if ($checkbox2 && $checkbox2.checked) checkedOptions.push('delivery_btn');
-//
-//     if (checkedOptions.length === 0) {
-//         alert('검색할 옵션을 선택해주세요.');
-//         return;
-//     }
-//
-//     if (!$search_reserveBox || !$search_reserveBox.value) {
-//         alert('전화번호를 입력해주세요.');
-//         return;
-//     }
-//
-//     let hasResults = false;
-//
-//     console.log("검색 시작!");
-//     console.log("입력된 전화번호:", $search_reserveBox.value);
-//
-//
-//     if (checkedOptions.includes('keep_btn')) {
-//         const {data, error} = await supabase
-//             .from('storage')
-//             .select('*')
-//             .eq('phone', $search_reserveBox.value)
-//             .order('storage_start_date', {ascending: false});
-//
-//         console.log("Supabase 응답:", data, error);
-//
-//         if (error) {
-//             console.error('Supabase 데이터 조회 오류 (보관):', error);
-//             alert('데이터 조회 중 오류가 발생했습니다 (보관).');
-//             return;
-//         }
-//
-//         if (data && data.length > 0) {
-//             hasResults = true;
-//             rows = data.map(item => `
-//                 <tr onclick="openDetail_st(this)">
-//                     <td>${item.name}</td>
-//                     <td>${item.phone}</td>
-//                     <td>${item.storage_start_date}</td>
-//                     <td>${item.storage_end_date}</td>
-//                     <td>${item.small}</td>
-//                     <td>${item.medium}</td>
-//                     <td>${item.large}</td>
-//                     <td>${item.price}</td>
-//                 </tr>
-//             `).join('');
-//
-//             if ($storage_table) {
-//                 const itemsPerPage = 10;
-//                 const totalPages = Math.ceil(data.length / itemsPerPage);
-//                 let currentPage = 1;
-//
-//                 function displayPage(page) {
-//                     const start = (page - 1) * itemsPerPage;
-//                     const end = start + itemsPerPage;
-//                     const pageRows = data.slice(start, end).map(item => `
-//                         <tr onclick="openDetail_st(this)">
-//                             <td>${item.name}</td>
-//                             <td>${item.phone}</td>
-//                             <td>${item.storage_start_date}</td>
-//                             <td>${item.storage_end_date}</td>
-//                             <td>${item.small}</td>
-//                             <td>${item.medium}</td>
-//                             <td>${item.large}</td>
-//                             <td>${item.price}</td>
-//                         </tr>
-//                     `).join('');
-//
-//                     $view_table_container.innerHTML = `
-//                         <div class="table-container">
-//                             <table class="styled-table">
-//                                 <thead>
-//                                     <tr>
-//                                         <th>이름</th>
-//                                         <th>연락처</th>
-//                                         <th>보관일자</th>
-//                                         <th>보관종료</th>
-//                                         <th>소형</th>
-//                                         <th>중형</th>
-//                                         <th>대형</th>
-//                                         <th>가격</th>
-//                                     </tr>
-//                                 </thead>
-//                                 <tbody>
-//                                     ${pageRows}
-//                                 </tbody>
-//                             </table>
-//                             <div class="pagination">
-//                                 <button onclick="changePage(1)" ${currentPage === 1 ? 'disabled' : ''}>처음</button>
-//                                 <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>이전</button>
-//                                 <span>${currentPage} / ${totalPages}</span>
-//                                 <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>다음</button>
-//                                 <button onclick="changePage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''}>마지막</button>
-//                             </div>
-//                         </div>
-//                     `;
-//                 }
-//
-//                 window.changePage = function (page) {
-//                     if (page >= 1 && page <= totalPages) {
-//                         currentPage = page;
-//                         displayPage(currentPage);
-//                     }
-//                 };
-//
-//                 displayPage(1);
-//             }
-//         }
-//     }
-//
-//     if (checkedOptions.includes('delivery_btn')) {
-//         const {data, error} = await supabase
-//             .from('delivery')
-//             .select('*')
-//             .eq('phone', $search_reserveBox.value)
-//             .order('delivery_date', {ascending: false});
-//
-//         console.log("Supabase 응답:", data, error);
-//
-//         if (error) {
-//             console.error('Supabase 데이터 조회 오류 (배송):', error);
-//             alert('데이터 조회 중 오류가 발생했습니다 (배송).');
-//             return;
-//         }
-//
-//         if (data && data.length > 0) {
-//             hasResults = true;
-//             rows = data.map(item => `
-//                 <tr onclick="openDetail_de(this)">
-//                     <td>${item.delivery_date}</td>
-//                     <td>${item.name}</td>
-//                     <td>${item.phone}</td>
-//                     <td>${item.delivery_start}</td>
-//                     <td>${item.delivery_arrive}</td>
-//                     <td>${item.under}</td>
-//                     <td>${item.over}</td>
-//                     <td>${item.price}</td>
-//                 </tr>
-//             `).join('');
-//
-//             if ($delivery_table) {
-//                 const itemsPerPage = 10;
-//                 const totalPages = Math.ceil(data.length / itemsPerPage);
-//                 let currentPage = 1;
-//
-//                 $view_table_container.innerHTML = `
-//                 <div class="table-container">
-//                     <table class="styled-table">
-//                         <thead>
-//                             <tr>
-//                                 <th>배송일자</th>
-//                                 <th>이름</th>
-//                                 <th>연락처</th>
-//                                 <th>배송 출발지</th>
-//                                 <th>배송 도착지</th>
-//                                 <th>26인치이하</th>
-//                                 <th>26인치초과</th>
-//                                 <th>가격</th>
-//                             </tr>
-//                         </thead>
-//                         <tbody>
-//                             ${rows}
-//                         </tbody>
-//                     </table>
-//                     <div class="pagination">
-//                                 <button onclick="changePage(1)" ${currentPage === 1 ? 'disabled' : ''}>처음</button>
-//                                 <button onclick="changePage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>이전</button>
-//                                 <span>${currentPage} / ${totalPages}</span>
-//                                 <button onclick="changePage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>다음</button>
-//                                 <button onclick="changePage(${totalPages})" ${currentPage === totalPages ? 'disabled' : ''}>마지막</button>
-//                             </div>
-//                 </div>
-//                 `;
-//                 $delivery_table.style.display = 'block';
-//                 $search_check.style.display = 'flex';
-//             }
-//             window.changePage = function (page) {
-//                 if (page >= 1 && page <= totalPages) {
-//                     currentPage = page;
-//                     displayPage(currentPage);
-//                 }
-//             };
-//
-//             displayPage(1);
-//         }
-//     }
-//
-//     if (!hasResults) {
-//         alert('검색 결과가 없습니다.');
-//     }
-// }
-
-document.addEventListener("DOMContentLoaded", async () => {
-    const { data: { user }, error } = await supabase.auth.getUser();
-
-    const userId = user?.id;
-    const userEmail = user?.email;
-
-    if (!userEmail || !userId) {
-        console.warn("로그인 정보가 없습니다. 자동 조회 불가");
-        return;
-    }
-
-    // 체크박스 기본값: 보관만 체크된 상태로 설정
-    if ($checkbox1) $checkbox1.checked = true;
-    if ($checkbox2) $checkbox2.checked = false;
+    // $storage_table.style.display = 'block';
+    // $delivery_table.style.display = 'none';
 
     const selectedType = $checkbox1?.checked ? 'storage' : 'delivery';
-    await autoLoadUserReservations(userEmail, selectedType);
+    await autoLoadUserReservations(userId, selectedType);
 });
 
-async function autoLoadUserReservations(userEmail, type) {
+// document.addEventListener("DOMContentLoaded", async () => {
+//     const { data: { user }, error } = await supabase.auth.getUser();
+//
+//     const userId = user?.id;
+//     const userEmail = user?.email;
+//
+//     if (!userEmail || !userId) {
+//         console.warn("로그인 정보가 없습니다. 자동 조회 불가");
+//         return;
+//     }
+//
+//     // 체크박스 기본값: 보관만 체크된 상태로 설정
+//     if ($checkbox1) $checkbox1.checked = true;
+//     if ($checkbox2) $checkbox2.checked = false;
+//
+//     const selectedType = $checkbox1?.checked ? 'storage' : 'delivery';
+//     await autoLoadUserReservations(userEmail, selectedType);
+// });
+
+async function autoLoadUserReservations(userId, type) {
     const itemsPerPage = 10;
     let currentPage = 1;
 
-    function renderPagination(totalPages, table) {
+    function renderPagination(totalPages) {
         return `
             <div class="pagination">
                 <button onclick="changePage(1)" ${currentPage === 1 ? 'disabled' : ''}>처음</button>
@@ -376,10 +167,12 @@ async function autoLoadUserReservations(userEmail, type) {
     }
 
     if (type === 'storage') {
+        $storage_table.innerHTML = ''; // ✅ 기존 목록 초기화
+
         const { data, error } = await supabase
             .from('storage')
             .select('*')
-            .eq('user_email', userEmail)
+            .eq('user_id', userId)
             .neq('situation', '취소')
             .order('storage_start_date', { ascending: false });
 
@@ -423,10 +216,12 @@ async function autoLoadUserReservations(userEmail, type) {
         displayPage(data, currentPage, $storage_table, renderRow, headerHtml);
 
     } else if (type === 'delivery') {
+        $delivery_table.innerHTML = ''; // ✅ 기존 목록 초기화
+
         const { data, error } = await supabase
             .from('delivery')
             .select('*')
-            .eq('user_email', userEmail)
+            .eq('user_id', userId)
             .neq('situation', '취소')
             .order('delivery_date', { ascending: false });
 
@@ -477,8 +272,6 @@ async function autoLoadUserReservations(userEmail, type) {
                     <th>26인치이하</th>
                     <th>26인치초과</th>
                     <th>가격</th>
-<!--                    <th>배정기사</th>-->
-<!--                    <th>기사번호</th>-->
                 </tr>
             </thead>
         `;
@@ -486,6 +279,7 @@ async function autoLoadUserReservations(userEmail, type) {
         displayPage(mergedData, currentPage, $delivery_table, renderRow, headerHtml);
     }
 }
+
 
 
 
@@ -612,7 +406,7 @@ async function cancelReserve() {
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
         confirmButtonText: "확인",
-        cancelButtonText: "예약취소"
+        cancelButtonText: "취소"
     });
 
     if (result.isConfirmed) {
@@ -638,8 +432,8 @@ async function cancelReserve() {
             closeDetail();
 
             const { data: { user } } = await supabase.auth.getUser();
-            const userEmail = user?.email;
-            await autoLoadUserReservations(userEmail, table);
+            const userId = user?.id;
+            await autoLoadUserReservations(userId, table);
         }
     }
 }
