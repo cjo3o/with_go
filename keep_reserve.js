@@ -61,19 +61,19 @@ function closeModal() {
 }
 
 async function storageSelect() {
-    if (event) event.preventDefault(); // 혹시라도 submit 막기!
 
     const arr = [$dateStart, $dateEnd, $location_a, $name, $phone];
-    const arrStr = ["날짜를 입력하세요", "출발지를 선택해주세요", "도착지를 선택해주세요", "이름을 입력해주세요", "전화번호를 입력해주세요"];
+    const arrStr = ["맡길 날짜를 선택하세요", "찾을 날짜를 선택하세요", "보관지를 선택해주세요", "이름을 입력해주세요", "전화번호"];
     for (let i = 0; i < arr.length; i++) {
         if (arr[i].value === '') {
             await Swal.fire({
                 icon: "error",
                 title: "알림",
                 text: `${arr[i].placeholder || arr[i].name}을(를) 입력해주세요!`
+            }).then(() => {
+                // arr[i].focus();
+                window.scrollTo({top: arr[i].offsetTop, behavior: 'smooth'});
             });
-            window.scrollTo({top: arr[i].offsetTop, behavior: 'smooth'});
-            arr[i].focus();
             return;
         }
     }
@@ -138,13 +138,18 @@ async function storageSelect() {
 // }
 const tossPayments = TossPayments("test_ck_ZLKGPx4M3MGo5A04daGqrBaWypv1");
 
-function startPayment() {
-    const essential = document.getElementById('essential');
+function startPayment(event) {
+    event.preventDefault(); // ✅ 기본 버튼 동작 차단
+
+    const essential = document.getElementById("essential");
     if (!essential.checked) {
         Swal.fire({
-            icon: 'warning',
-            title: '안내',
-            text: '필수 안내에 동의해야 결제 진행이 가능합니다!',
+            icon: "warning",
+            title: "안내",
+            text: "필수 안내에 동의해야 결제 진행이 가능합니다!",
+        }).then(() => {
+            document.activeElement.blur(); // ✅ 포커스 제거
+            window.scrollTo({ top: essential.offsetTop - 10, behavior: 'smooth' }); // ✅ 정확한 위치로 이동
         });
         return;
     }
@@ -202,51 +207,7 @@ async function insertReservation() {
             price: parseInt(reservationData.price) || 0,
             situation: "접수",
         }]);
-    console.log(data);
-    console.log(error);
-    console.log("Insert할 데이터:", {
-        name: reservationData.name,
-        phone: reservationData.phone,
-        storage_start_date: reservationData.dateStart,
-        storage_end_date: reservationData.dateEnd,
-        location: reservationData.location,
-        small: parseInt(reservationData.small),
-        medium: parseInt(reservationData.medium),
-        large: parseInt(reservationData.large),
-        price: parseInt(reservationData.price)
-    });
 }
-
-// async function paymentSubmit() {
-//     const res = await supabase.from('storage').insert([
-//         {
-//             name: $name.value,
-//             phone: $phone.value,
-//             storage_start_date: $dateStart.value,
-//             storage_end_date: $dateEnd.value,
-//             location: $location_a.value,
-//             mail: $mail.value,
-//             reservation_country: $country.value,
-//             small: small.value,
-//             medium: medium.value,
-//             large: large.value,
-//             price: Number($totalPrice.innerText)
-//         }
-//     ]).select();
-//     console.log(res);
-//     await Swal.fire({
-//         title: "보관예약이 완료되었습니다!",
-//         icon: "success",
-//         draggable: true
-//     })
-//     location.href = 'index.html';
-// }
-
-// $close.addEventListener('click',function () {
-//     $keep_location.classList.remove('fade_in');
-//     $keep_location_contents.classList.remove('up');
-//     $keep_location.style.display = 'block';
-// })
 
 function openKeepLocation() {
     if (!!$keep_location) {
@@ -309,37 +270,6 @@ startDatePicker.addEventListener('change', function () {
         endDatePicker.value = this.value;
     }
 });
-
-// const startDatePicker = document.getElementById('date_start');
-// const endDatePicker = document.getElementById('date_end');
-//
-// startDatePicker.addEventListener('focus', function () {
-//     if (this.value === 'YYYY-MM-DD') {
-//         this.value = '';
-//         this.style.color = 'black';
-//     }
-// });
-//
-// startDatePicker.addEventListener('blur', function () {
-//     if (this.value === '') {
-//         this.value = 'YYYY-MM-DD';
-//         this.style.color = 'gray';
-//     }
-// });
-//
-// endDatePicker.addEventListener('focus', function () {
-//     if (this.value === 'YYYY-MM-DD') {
-//         this.value = '';
-//         this.style.color = 'black';
-//     }
-// });
-//
-// endDatePicker.addEventListener('blur', function () {
-//     if (this.value === '') {
-//         this.value = 'YYYY-MM-DD';
-//         this.style.color = 'gray';
-//     }
-// });
 
 
 document.addEventListener('DOMContentLoaded', () => {
