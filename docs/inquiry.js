@@ -607,12 +607,6 @@ async function loadMyList(page = 1) {
   if (error || !data || data.length === 0) {
     myListResults = [];
     totalMyListResults = 0;
-    Swal.fire({
-      icon: "info",
-      title: "등록된 게시글이 없습니다.",
-      text: "내가 쓴 글이 없습니다.",
-      confirmButtonText: "확인",
-    });
   } else {
     myListResults = data;
     totalMyListResults = data.length;
@@ -631,6 +625,11 @@ function renderMyListPage(page) {
   boardList.innerHTML = "";
 
   const pageResults = myListResults.slice(offset, to + 1);
+
+  if (pageResults.length === 0) {
+    boardList.innerHTML = `<tr><td colspan="6">등록된 게시글이 없습니다.</td></tr>`;
+    return;
+  }
 
   let today = new getdate();
   pageResults.forEach((item) => {
