@@ -10,7 +10,7 @@
 }
 
 .section1 {
-    background-image: url("/with_go/src/images/headerBg.png");
+    background-image: url("/with_go/src/images/headerbg.png");
     width: 100%;
     height: 250px;
     background-repeat: no-repeat;
@@ -378,6 +378,11 @@
     opacity: 0;
 }
 
+.keep_location_contents{
+    height: 700px;
+    overflow-y: auto;
+}
+
 .up {
     transform: translateY(0);
     opacity: 1;
@@ -399,7 +404,8 @@
     color: #323232;
 }
 
-.keep_location_contents_header,
+.keep_location_contents_header{border-bottom: solid 1px #ccc;}
+
 .start_location_contents_header,
 .arrive_location_contents_header {
     padding-bottom: 1.5rem;
