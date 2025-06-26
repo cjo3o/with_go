@@ -125,7 +125,7 @@
 }
 
 .location::before {
-    content: url("../images/location.png");
+    content: url("/src/images/location.png");
     margin-right: 7px;
 }
 
