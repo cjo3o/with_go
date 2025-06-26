@@ -205,7 +205,28 @@ th {
     float: right;
 }
 
+.cf_left {
+    float: left;
+    padding: 0 30px;
+    border-radius: 3px;
+    transition: all 0.2s ease-out;
+    color: #fff;
+    border: 1px solid;
+    height: 45px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
 
+.cf_left {
+    background-color: #0066cc;
+    border-color: #0066cc;
+}
+
+.cf_left:hover {
+    background-color: #3e454f;
+    border-color: #3e454f;
+}
 
 td {
     border-bottom: 1px solid #ccc;

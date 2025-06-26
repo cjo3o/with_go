@@ -1,5 +1,3 @@
-
-
 .wrap {
     width: 100%;
 }
@@ -10,7 +8,7 @@
 }
 
 .section1 {
-    background-image: url("/with_go/src/images/headerBg.png");
+    background-image: url("/with_go/src/images/headerbg.png");
     width: 100%;
     height: 250px;
     background-repeat: no-repeat;
@@ -122,7 +120,16 @@
     row-gap: 0.5rem;
 }
 
+.keep_reservation_contents_main_box_second{
+    display: flex;
+    justify-content: space-between;
+    /*grid-template-columns: 1fr 1fr 1fr;*/
+    /*column-gap: 2rem;*/
+    row-gap: 0.5rem;
+}
+
 .keep_reservation_contents_main_box_input-box {
+    width: 100%;
     display: flex;
     align-items: center;
     border-bottom: solid 1px black;
@@ -159,6 +166,13 @@
     outline: none;
     border: solid 2px black;
     border-radius: 5px;
+}
+
+.swap{
+    border: none;
+    background-color: white;
+    width: 30px;
+    height: 30px;
 }
 
 .agreement_container {
@@ -374,6 +388,11 @@
     opacity: 0;
 }
 
+.start_location_contents {
+    height: 700px;
+    overflow-y: auto;
+}
+
 .up {
     transform: translateY(0);
     opacity: 1;
@@ -395,8 +414,9 @@
     color: #323232;
 }
 
+.start_location_contents_header { border-bottom: solid 1px #ccc; }
+
 .keep_location_contents_header,
-.start_location_contents_header,
 .arrive_location_contents_header {
     padding-bottom: 1.5rem;
     border-bottom: solid 1px #ccc;
@@ -429,7 +449,7 @@
 }
 
 .card_title > input[type="radio"]:checked {
-    background-image: url("/with_go/src/images/checkBox.png");
+    background-image: url("/src/images/checkBox.png");
     background-repeat: no-repeat;
     background-position: center;
 }

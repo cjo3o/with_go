@@ -240,7 +240,7 @@ document
       // 비밀글인 경우, 비밀번호 확인 없이 바로 삭제
       Swal.fire({
         title: "정말 삭제하시겠습니까?",
-        text: "삭제된 후기는 복구할 수 없습니다.",
+        text: "삭제된 문의는 복구할 수 없습니다.",
         icon: "warning",
         showCancelButton: true,
         confirmButtonText: "삭제",

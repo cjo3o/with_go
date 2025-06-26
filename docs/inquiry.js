@@ -439,7 +439,6 @@ async function loadPage(page) {
     <td>${item.name}</td>
     <td>${localTime.getTime}</td>
     <td>${item.stat}</td>
-    <td>${item.answer ? item.answer : "-"}</td> <!-- ✅ 답변 추가 -->
 `;
     } else if (item.created_at != null) {
       row.innerHTML = `
