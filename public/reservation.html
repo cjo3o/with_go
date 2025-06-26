@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/src/css/reset.css">
+    <link rel="stylesheet" href="/src/css/reservation.css">
+    <link rel="stylesheet" href="/src/css/keep.css">
+    <link rel="stylesheet" href="/src/css/check.css">
+    <link rel="stylesheet" href="/src/css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script>
+        const supabase = window.supabase.createClient(
+            "https://zgrjjnifqoactpuqolao.supabase.co",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpncmpqbmlmcW9hY3RwdXFvbGFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNDc0NTgsImV4cCI6MjA1NjgyMzQ1OH0._Vl-6CRKdMjeDRyNoxlfect7sgusZ7L0N5OYu0a5hT0"
+        );
+
+        async function insertReservation() {
+            const {
+                data: {user},
+            } = await supabase.auth.getUser();
+            const userId = user?.id;
+
+            const params = new URLSearchParams(window.location.search);
+            const paymentKey = params.get("paymentKey");
+            const orderId = params.get("orderId");
+            const amount = params.get("amount");
+
+            // await fetch("http://localhost:4000/toss/confirm", {
+            //     method: "POST",
+            //     headers: { "Content-Type": "application/json" },
+            //     body: JSON.stringify({ paymentKey, orderId, amount })
+            // });
+
+            if (!paymentKey || !orderId || !amount) {
+                // Swal.fire("필수 결제 정보가 누락되었습니다.");
+                return;
+            }
+
+            const reservationData = JSON.parse(localStorage.getItem("reservationData"));
+
+            if (!reservationData) {
+                // Swal.fire("이미 예약이 처리되었거나, 저장된 예약 정보가 없습니다.");
+                return;
+            }
+
+            let insertResult;
+
+            if (reservationData.delivery_start) {
+                // 🚚 배송 예약 처리
+                insertResult = await supabase.from("delivery").insert([{
+                    user_id: userId,
+                    name: reservationData.name,
+                    phone: reservationData.phone,
+                    delivery_date: reservationData.delivery_date,
+                    delivery_start: reservationData.delivery_start,
+                    delivery_arrive: reservationData.delivery_arrive,
+                    detail_adr: reservationData.detail_adr,
+                    under: parseInt(reservationData.under) || 0,
+                    over: parseInt(reservationData.over) || 0,
+                    price: parseInt(reservationData.price) || 0,
+                    // user_email: userEmail,
+                    situation: "접수",
+                }]);
+            } else {
+                // 📦 보관 예약 처리
+                insertResult = await supabase.from("storage").insert([{
+                    user_id: userId,
+                    name: reservationData.name,
+                    phone: reservationData.phone,
+                    storage_start_date: reservationData.dateStart,
+                    storage_end_date: reservationData.dateEnd,
+                    location: reservationData.location,
+                    small: parseInt(reservationData.small) || 0,
+                    medium: parseInt(reservationData.medium) || 0,
+                    large: parseInt(reservationData.large) || 0,
+                    price: parseInt(reservationData.price) || 0,
+                    // user_email: userEmail,
+                    situation: "접수",
+                }]);
+            }
+
+            const {error} = insertResult;
+
+            localStorage.removeItem("reservationData");
+
+            if (error) {
+                console.error("💥 Supabase insert 실패:", error);
+                Swal.fire("오류", "예약 저장 실패", "error");
+            } else {
+
+                sessionStorage.setItem("reservationSaved", "true");
+
+                Swal.fire({
+                    title: "예약이 완료되었습니다!",
+                    text: "홈페이지로 이동합니다.",
+                    icon: "success",
+                    showConfirmButton: true,
+                })
+            }
+        }
+
+        insertReservation(); // ✅ 호출
+
+        function moveTop() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+    </script>
+
+</head>
+
+<body>
+<div class="wrap">
+    <div class="header">
+
+    </div>
+    <div class="contents">
+        <div class="section1">
+            <h1>TRIP WITH EASE</h1>
+        </div>
+        <div class="reservation_infor_container">
+            <div class="reservation_infor">
+                <div class="reservation_infor_text">
+                    <h1>간편한 예약, 스마트한 보관</h1>
+                    <p>짐 걱정 없이 떠나는 완벽한 하루, 지금 예약하세요!</p>
+                </div>
+                <div class="reservation_infor_contents_container">
+                    <div class="reservation_infor_contents" id="storReserve">
+
+                        <div class="reservation_infor_contents_main">
+                            <div class="reservation_infor_contents_main_section">
+                                <div class="reservation_infor_contents_main_section_img">
+                                    <img src="/src/images/pay.svg" alt="">
+                                </div>
+                                <div class="reservation_infor_contents_main_section_text">
+                                    <div class="index">
+                                        1
+                                    </div>
+                                    <p>빠른 보관과 결제</p>
+                                </div>
+                            </div>
+                            <div class="reservation_infor_contents_main_section">
+                                <div class="reservation_infor_contents_main_section_img">
+                                    <img src="src/images/keep.svg" alt="">
+                                </div>
+                                <div class="reservation_infor_contents_main_section_text">
+                                    <div class="index">
+                                        2
+                                    </div>
+                                    <p>보관 맡기기</p>
+                                </div>
+                            </div>
+                            <div class="reservation_infor_contents_main_section">
+                                <div class="reservation_infor_contents_main_section_img">
+                                    <img src="/src/images/travel.svg" alt="">
+                                </div>
+                                <div class="reservation_infor_contents_main_section_text">
+                                    <div class="index">
+                                        3
+                                    </div>
+                                    <p>여행의 시작</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="reservation_infor_contents_btn">
+                            보관 예약
+                        </div>
+                    </div>
+                    <div class="reservation_infor_contents" id="deliverReserve">
+                        <div class="reservation_infor_contents_main">
+                            <div class="reservation_infor_contents_main_section">
+                                <div class="reservation_infor_contents_main_section_img">
+                                    <img src="/src/images/online_reserve.svg" alt="">
+                                </div>
+                                <div class="reservation_infor_contents_main_section_text">
+                                    <div class="index">
+                                        1
+                                    </div>
+                                    <p>온라인 배송 예약</p>
+                                </div>
+                            </div>
+                            <div class="reservation_infor_contents_main_section">
+                                <div class="reservation_infor_contents_main_section_img">
+                                    <img src="/src/images/delivery.svg" alt="">
+                                </div>
+                                <div class="reservation_infor_contents_main_section_text">
+                                    <div class="index">
+                                        2
+                                    </div>
+                                    <p>배송 맡기기</p>
+                                </div>
+                            </div>
+                            <div class="reservation_infor_contents_main_section">
+                                <div class="reservation_infor_contents_main_section_img">
+                                    <img src="/src/images/find.svg" alt="">
+                                </div>
+                                <div class="reservation_infor_contents_main_section_text">
+                                    <div class="index">
+                                        3
+                                    </div>
+                                    <p>짐찾기</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="reservation_infor_contents_btn">
+                            배송 예약
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section2">
+            <div class="check_detail">
+                <div class="check_detail_contents">
+
+                </div>
+                <div class="cancelBtn" style="transition-delay: 0.4s">
+
+                </div>
+            </div>
+            <div class="check_container">
+                <div class="check_contents">
+                    <div class="check_contents_text">
+                        <h1>보관/배송 내역 조회, 쉽고 빠르게</h1>
+                        <p>보관 내역과 배송 현황을 한눈에! 실시간으로 확인하세요.</p>
+                    </div>
+                    <div class="change_btn_container">
+                        <div class="change_btn">
+                            <label class="keep_btn active">
+                                <input type="checkbox" name="" class="keep_btn" id="keep_btn" style="display: none;"
+                                       checked>
+                                보관
+                            </label>
+                            <label class="delivery_btn">
+                                <input type="checkbox" name="" class="delivery_btn" id="delivery_btn"
+                                       style="display: none;">
+                                배송
+                            </label>
+                        </div>
+                    </div>
+                    <div class="view_table_container" style="display: block">
+
+                        <div class="table_container">
+                            <div class="storage_table">
+
+                            </div>
+                            <div class="delivery_table" style="display: block">
+
+                            </div>
+                        </div>
+                        <div class="alert">
+                            <h2 style="color: white">※예약 내역이 존재하지 않습니다.※</h2>
+                        </div>
+
+                    </div>
+                    <div class="search_check" id="search_checkBox">
+                        <!--                        <input type="text" name="" class="phone" id="search_reserveBox" placeholder="연락처를 입력해 주세요.">-->
+                        <!--                        <button onclick="searchReserve()" class="search_check_btn">-->
+                        <!--                            검색-->
+                        <!--                        </button>-->
+                    </div>
+                    <p style=" text-align: center; color: white; display: flex; justify-content: center; margin-top: 2rem; opacity: 0; transform: translateY(100%); animation: slideUp 0.5s forwards; animation-delay: 1.5s"
+                       class="click_infor">※ 클릭하시면 상세정보를 볼 수 있습니다.</p>
+                </div>
+            </div>
+        </div>
+        <div class="section3">
+            <div class="keep_container">
+                <div class="keep_contents">
+                    <h1>편리한 보관, 스마트한 여행</h1>
+                    <p>짐 걱정 없이 가볍게 떠나고, 머무는 곳에서도 편하게 보관하세요!</p>
+                    <div class="keep_search">
+                        <input type="text" name="search" id="storage_input" class="search" placeholder="검색어를 입력해주세요.">
+                        <i class="fa-solid fa-magnifying-glass search_img" id="storage_search"></i>
+                    </div>
+                    <div class="keep_adr_container">
+
+                    </div>
+                    <!--                <div class="keep_board_controler">-->
+                    <!--                    <div class="keep_board_controler_btn">-->
+                    <!--                        <p>1</p>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="keep_board_controler_btn">-->
+                    <!--                        <p>2</p>-->
+                    <!--                    </div>-->
+                    <!--                </div>-->
+                </div>
+            </div>
+            <div class="keep_container">
+                <div class="keep_contents">
+                    <div class="keep_search">
+                        <input type="text" name="search" id="partner_input" class="search" placeholder="검색어를 입력해주세요.">
+                        <i class="fa-solid fa-magnifying-glass search_img" id="partner_search"></i>
+                    </div>
+                    <div class="keep_adr_container">
+                        <!--                        <div class="pagination_container">-->
+                        <!--                            <button class="left">왼쪽</button>-->
+                        <!--                            <button class="right">오른쪽</button>-->
+                        <!--                        </div>-->
+                    </div>
+                    <!--                <div class="keep_board_controler">-->
+                    <!--                    <div class="keep_board_controler_btn">-->
+                    <!--                        <p>1</p>-->
+                    <!--                    </div>-->
+                    <!--                    <div class="keep_board_controler_btn">-->
+                    <!--                        <p>2</p>-->
+                    <!--                    </div>-->
+                    <!--                </div>-->
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="footer">
+
+    </div>
+</div>
+<script src="/storage_place.js"></script>
+<script src="/partner_place.js"></script>
+<script src="/dropdown.js"></script>
+<script src="/change_btn.js"></script>
+<script src="/check-re.js"></script>
+</body>
+
+</html>
