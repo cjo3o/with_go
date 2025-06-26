@@ -8,15 +8,108 @@
     <link rel="stylesheet" href="src/css/reservation.css">
     <link rel="stylesheet" href="src/css/keep.css">
     <link rel="stylesheet" href="src/css/check.css">
+    <link rel="stylesheet" href="src/css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script>
-        const supabaseUrl = "https://zgrjjnifqoactpuqolao.supabase.co";
-        const supabasePassword = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpncmpqbmlmcW9hY3RwdXFvbGFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNDc0NTgsImV4cCI6MjA1NjgyMzQ1OH0._Vl-6CRKdMjeDRyNoxlfect7sgusZ7L0N5OYu0a5hT0";
+        const supabase = window.supabase.createClient(
+            "https://zgrjjnifqoactpuqolao.supabase.co",
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpncmpqbmlmcW9hY3RwdXFvbGFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyNDc0NTgsImV4cCI6MjA1NjgyMzQ1OH0._Vl-6CRKdMjeDRyNoxlfect7sgusZ7L0N5OYu0a5hT0"
+        );
 
-        var supabase = window.supabase.createClient(supabaseUrl, supabasePassword);
+        async function insertReservation() {
+            const {
+                data: {user},
+            } = await supabase.auth.getUser();
+            const userId = user?.id;
+
+            const params = new URLSearchParams(window.location.search);
+            const paymentKey = params.get("paymentKey");
+            const orderId = params.get("orderId");
+            const amount = params.get("amount");
+
+            // await fetch("http://localhost:4000/toss/confirm", {
+            //     method: "POST",
+            //     headers: { "Content-Type": "application/json" },
+            //     body: JSON.stringify({ paymentKey, orderId, amount })
+            // });
+
+            if (!paymentKey || !orderId || !amount) {
+                // Swal.fire("필수 결제 정보가 누락되었습니다.");
+                return;
+            }
+
+            const reservationData = JSON.parse(localStorage.getItem("reservationData"));
+
+            if (!reservationData) {
+                // Swal.fire("이미 예약이 처리되었거나, 저장된 예약 정보가 없습니다.");
+                return;
+            }
+
+            let insertResult;
+
+            if (reservationData.delivery_start) {
+                // 🚚 배송 예약 처리
+                insertResult = await supabase.from("delivery").insert([{
+                    user_id: userId,
+                    name: reservationData.name,
+                    phone: reservationData.phone,
+                    delivery_date: reservationData.delivery_date,
+                    delivery_start: reservationData.delivery_start,
+                    delivery_arrive: reservationData.delivery_arrive,
+                    detail_adr: reservationData.detail_adr,
+                    under: parseInt(reservationData.under) || 0,
+                    over: parseInt(reservationData.over) || 0,
+                    price: parseInt(reservationData.price) || 0,
+                    // user_email: userEmail,
+                    situation: "접수",
+                }]);
+            } else {
+                // 📦 보관 예약 처리
+                insertResult = await supabase.from("storage").insert([{
+                    user_id: userId,
+                    name: reservationData.name,
+                    phone: reservationData.phone,
+                    storage_start_date: reservationData.dateStart,
+                    storage_end_date: reservationData.dateEnd,
+                    location: reservationData.location,
+                    small: parseInt(reservationData.small) || 0,
+                    medium: parseInt(reservationData.medium) || 0,
+                    large: parseInt(reservationData.large) || 0,
+                    price: parseInt(reservationData.price) || 0,
+                    // user_email: userEmail,
+                    situation: "접수",
+                }]);
+            }
+
+            const {error} = insertResult;
+
+            localStorage.removeItem("reservationData");
+
+            if (error) {
+                console.error("💥 Supabase insert 실패:", error);
+                Swal.fire("오류", "예약 저장 실패", "error");
+            } else {
+
+                sessionStorage.setItem("reservationSaved", "true");
+
+                Swal.fire({
+                    title: "예약이 완료되었습니다!",
+                    text: "홈페이지로 이동합니다.",
+                    icon: "success",
+                    showConfirmButton: true,
+                })
+            }
+        }
+
+        insertReservation(); // ✅ 호출
+
+        function moveTop() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
     </script>
+
 </head>
 
 <body>
@@ -159,15 +252,15 @@
                             </div>
                         </div>
                         <div class="alert">
-                            <h2>※조회할 내역이 존재하지 않습니다.※</h2>
+                            <h2 style="color: white">※예약 내역이 존재하지 않습니다.※</h2>
                         </div>
 
                     </div>
                     <div class="search_check" id="search_checkBox">
-                        <input type="text" name="" id="search_reserveBox" placeholder="연락처를 입력해 주세요.">
-                        <button onclick="searchReserve()" class="search_check_btn">
-                            검색
-                        </button>
+                        <!--                        <input type="text" name="" class="phone" id="search_reserveBox" placeholder="연락처를 입력해 주세요.">-->
+                        <!--                        <button onclick="searchReserve()" class="search_check_btn">-->
+                        <!--                            검색-->
+                        <!--                        </button>-->
                     </div>
                     <p style=" text-align: center; color: white; display: flex; justify-content: center; margin-top: 2rem; opacity: 0; transform: translateY(100%); animation: slideUp 0.5s forwards; animation-delay: 1.5s"
                        class="click_infor">※ 클릭하시면 상세정보를 볼 수 있습니다.</p>
