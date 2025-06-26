@@ -1,6 +1,17 @@
-document.addEventListener("DOMContentLoaded", async () => {
-  await loadPostsAndPagination();
-  setupSearch();
+document.addEventListener("DOMContentLoaded", () => {
+  const myListBtn = document.getElementById("myListBtn");
+  if (myListBtn) {
+    myListBtn.addEventListener("click", () => {
+      window.scrollTo(0, 0);
+      loadMyList(1);
+    });
+  }
+});
+
+document.querySelector(".cf_left").addEventListener("click", () => {
+  isMyListMode = false;
+  loadPostsAndPagination();
+  document.querySelector(".pagination").style.display = "";
 });
 
 document.addEventListener("keydown", function (event) {
@@ -546,4 +557,204 @@ async function showPasswordPopup(postId) {
       text: "입력한 비밀번호가 맞지 않습니다.",
     });
   }
+}
+
+const myListBtn = document.getElementById("myListBtn");
+
+document.addEventListener("DOMContentLoaded", async () => {
+  // My List 버튼 노출 제어
+  const myListBtn = document.getElementById("myListBtn");
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session && myListBtn) myListBtn.style.display = "none";
+  if (session && myListBtn) myListBtn.style.display = "";
+
+  await loadPostsAndPagination();
+  setupSearch();
+});
+
+// myList 상태 전역 변수 추가
+let isMyListMode = false;
+let myListResults = [];
+let totalMyListResults = 0;
+
+// My List 불러오기 + 페이지네이션 적용
+async function loadMyList(page = 1) {
+  // 로그인 유저 확인
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+  if (!session) {
+    Swal.fire({
+      icon: "error",
+      title: "로그인이 필요합니다",
+      text: "로그인 후 이용 가능합니다.",
+    });
+    return;
+  }
+  isMyListMode = true;
+
+  const uid = session.user.id;
+
+  // 전체 내 글 불러와서 전역 배열에 저장
+  const { data, error } = await supabase
+    .from("question")
+    .select("*", { count: "exact" })
+    .eq("user_id", uid)
+    .order("created_at", { ascending: false });
+
+  if (error || !data || data.length === 0) {
+    myListResults = [];
+    totalMyListResults = 0;
+    Swal.fire({
+      icon: "info",
+      title: "등록된 게시글이 없습니다.",
+      text: "내가 쓴 글이 없습니다.",
+      confirmButtonText: "확인",
+    });
+  } else {
+    myListResults = data;
+    totalMyListResults = data.length;
+  }
+
+  currentPage = page;
+  renderMyListPage(currentPage);
+  renderMyListPagination();
+}
+
+// My List 한 페이지 분량만 출력
+function renderMyListPage(page) {
+  const offset = (page - 1) * itemsPerPage;
+  const to = page * itemsPerPage - 1;
+  const boardList = document.getElementById("board_list");
+  boardList.innerHTML = "";
+
+  const pageResults = myListResults.slice(offset, to + 1);
+
+  if (pageResults.length === 0) {
+    boardList.innerHTML = `<tr><td colspan="6">등록된 게시글이 없습니다.</td></tr>`;
+    return;
+  }
+
+  let today = new getdate();
+  pageResults.forEach((item) => {
+    const row = document.createElement("tr");
+    let displayTitle = item.secret
+      ? "🔑 비밀글입니다."
+      : item.title || "제목 오류입니다.";
+    const inquiryUrl = `inquirycheck.html?id=${item.text_num}`;
+
+    if (
+      item.created_at != null &&
+      today.fullDate == item.created_at.slice(0, 10)
+    ) {
+      let localTime = new getdate(item.created_at);
+      row.innerHTML = `
+        <td>${item.text_num}</td>
+        <td>${item.type}</td>
+        <td class="title"><a href="${inquiryUrl}">${displayTitle}</a></td>
+        <td>${item.name}</td>
+        <td>${localTime.getTime}</td>
+        <td>${item.stat}</td>
+      `;
+    } else if (item.created_at != null) {
+      row.innerHTML = `
+        <td>${item.text_num}</td>
+        <td>${item.type}</td>
+        <td class="title"><a href="${inquiryUrl}">${displayTitle}</a></td>
+        <td>${item.name}</td>
+        <td>${item.created_at.slice(0, 10)}</td>
+        <td>${item.stat}</td>
+      `;
+    } else {
+      row.innerHTML = `
+        <td>${item.text_num}</td>
+        <td>${item.type}</td>
+        <td class="title"><a href="${inquiryUrl}">${displayTitle}</a></td>
+        <td>${item.name}</td>
+        <td>저장오류</td>
+        <td>${item.stat}</td>
+      `;
+    }
+
+    const titleLink = row.querySelector(".title a");
+    if (item.secret) {
+      titleLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        showPasswordPopup(item.text_num);
+      });
+    }
+    boardList.appendChild(row);
+  });
+
+  // myList에서는 항상 페이지네이션 보이게
+  document.querySelector(".pagination").style.display = "";
+}
+
+function renderMyListPagination() {
+  const pageBtnsContainer = document.getElementById("pageBtns");
+  pageBtnsContainer.innerHTML = "";
+
+  const totalPages = Math.ceil(totalMyListResults / itemsPerPage);
+
+  const prevBtn = document.getElementById("prevBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const leftBtn = document.getElementById("leftBtn");
+  const rightBtn = document.getElementById("rightBtn");
+
+  const currentGroup = Math.floor((currentPage - 1) / groupSize);
+  const startPage = currentGroup * groupSize + 1;
+  let endPage = startPage + groupSize - 1;
+  if (endPage > totalPages) endPage = totalPages;
+
+  leftBtn.disabled = currentGroup === 0;
+  leftBtn.onclick = () => {
+    if (currentGroup > 0) {
+      currentPage = (currentGroup - 1) * groupSize + 1;
+      renderMyListPage(currentPage);
+      renderMyListPagination();
+    }
+  };
+
+  prevBtn.disabled = currentPage === 1;
+  prevBtn.onclick = () => {
+    if (currentPage > 1) {
+      currentPage--;
+      renderMyListPage(currentPage);
+      renderMyListPagination();
+    }
+  };
+
+  for (let i = startPage; i <= endPage; i++) {
+    const pageBtn = document.createElement("button");
+    pageBtn.textContent = i;
+    pageBtn.classList.add("page-btn");
+    if (i === currentPage) pageBtn.classList.add("active");
+
+    pageBtn.onclick = () => {
+      currentPage = i;
+      renderMyListPage(currentPage);
+      renderMyListPagination();
+    };
+    pageBtnsContainer.appendChild(pageBtn);
+  }
+
+  nextBtn.disabled = currentPage === totalPages;
+  nextBtn.onclick = () => {
+    if (currentPage < totalPages) {
+      currentPage++;
+      renderMyListPage(currentPage);
+      renderMyListPagination();
+    }
+  };
+
+  rightBtn.disabled = endPage === totalPages;
+  rightBtn.onclick = () => {
+    if (endPage < totalPages) {
+      currentPage = endPage + 1;
+      renderMyListPage(currentPage);
+      renderMyListPagination();
+    }
+  };
 }

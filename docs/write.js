@@ -11,6 +11,13 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById("name").focus(); // 이름 입력창에 포커스
 });
 
+async function getCurrentUserId() {
+  const { data: { session } } = await supabase.auth.getSession();
+  if (session && session.user) return session.user.id;
+  return null;
+}
+
+
 async function post() {
   const name = document.querySelector("#name").value;
   const pw = document.querySelector("#password").value;
@@ -19,6 +26,7 @@ async function post() {
   const secret = document.querySelector('input[name="secret"]').checked;
   const type = document.querySelector('input[name="type"]:checked');
   const file = document.querySelector("#file").files[0];
+  const userId = await getCurrentUserId();
 
   // 입력값 검증
   if (name.length == 0) {
@@ -87,7 +95,8 @@ async function post() {
     secret,
     question_txt,
     type,
-    fileUrl
+    fileUrl,
+    userId
   );
 
   if (result.success) {
@@ -115,7 +124,8 @@ async function savePost(
   secret,
   question_txt,
   type,
-  fileUrl = ""
+  fileUrl = "",
+  userId = null
 ) {
   const res = await supabase
     .from("question")
@@ -128,11 +138,10 @@ async function savePost(
         secret,
         type: type.value,
         image_url: fileUrl,
+        user_id: userId
       },
     ])
     .select();
-
-  console.log(res);
 
   if (res.error) {
     return {
@@ -168,3 +177,4 @@ passwordtext.addEventListener("input", function (event) {
     passwordtext.value = passwordtext.value.substring(0, 6); // 최대 6자리로 제한
   }
 });
+

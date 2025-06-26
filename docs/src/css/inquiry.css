@@ -205,7 +205,7 @@ th {
     float: right;
 }
 
-.cf_left {
+.cf_left, .cf_left2 {
     float: left;
     padding: 0 30px;
     border-radius: 3px;
@@ -218,14 +218,19 @@ th {
     justify-content: center;
 }
 
-.cf_left {
+.cf_left, .cf_left2 {
     background-color: #0066cc;
     border-color: #0066cc;
 }
 
-.cf_left:hover {
+.cf_left:hover, .cf_left2:hover {
     background-color: #3e454f;
     border-color: #3e454f;
+}
+
+.cf_left2 {
+    margin: 0;
+    margin-left: 10px;
 }
 
 td {
