@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", async function () {
     const res = await supabase.auth.getUser();
-    console.log(res);
     fetch("header.html")
         .then(response => response.text())
         .then(data => {
