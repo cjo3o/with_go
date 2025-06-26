@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>보관 예약 결제</title>
+
+    <!-- Toss SDK -->
+    <script src="https://js.tosspayments.com/v2/standard"></script>
+
+    <!-- 스타일은 예시 -->
+    <style>
+        label { display: block; margin: 10px 0 5px; }
+        input, select { width: 300px; padding: 5px; }
+        button { margin-top: 20px; padding: 10px 20px; }
+    </style>
+</head>
+<body>
+<h2>보관 예약 정보 입력</h2>
+
+<label>이름</label>
+<input type="text" id="name">
+
+<label>전화번호</label>
+<input type="text" id="phone">
+
+<label>이메일</label>
+<input type="email" id="mail">
+
+<label>보관 시작일</label>
+<input type="date" id="dateStart">
+
+<label>보관 종료일</label>
+<input type="date" id="dateEnd">
+
+<label>보관 장소</label>
+<input type="text" id="location_a">
+
+<label>국가</label>
+<select id="country">
+    <option value="korea">대한민국</option>
+    <option value="japan">일본</option>
+    <option value="etc">기타</option>
+</select>
+
+<label>소형 (개)</label>
+<input type="number" id="small" value="0">
+
+<label>중형 (개)</label>
+<input type="number" id="medium" value="0">
+
+<label>대형 (개)</label>
+<input type="number" id="large" value="0">
+
+<label>총 금액 (₩)</label>
+<span id="totalPrice">25000</span>
+
+<br>
+<button onclick="startPayment()">결제진행</button>
+
+<script>
+    const tossPayments = TossPayments("test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm"); // ✅ 반드시 수정
+
+    function startPayment() {
+        const name = document.getElementById("name").value;
+        const phone = document.getElementById("phone").value;
+        const mail = document.getElementById("mail").value;
+        const dateStart = document.getElementById("dateStart").value;
+        const dateEnd = document.getElementById("dateEnd").value;
+        const location = document.getElementById("location_a").value;
+        const country = document.getElementById("country").value;
+        const small = document.getElementById("small").value;
+        const medium = document.getElementById("medium").value;
+        const large = document.getElementById("large").value;
+        const price = Number(document.getElementById("totalPrice").innerText);
+
+        // 1️⃣ 예약 정보 임시 저장 (결제 성공 후 Supabase에 저장 예정)
+        localStorage.setItem("reservationData", JSON.stringify({
+            name, phone, mail, dateStart, dateEnd, location, country,
+            small, medium, large, price
+        }));
+
+        // 2️⃣ 결제창 띄우기
+        tossPayments.requestPayment("카드", {
+            amount: price,
+            orderId: "order_" + new Date().getTime(),
+            orderName: "보관 예약 결제",
+            customerName: name,
+            successUrl: "http://localhost:5500/success.html", // ✅ 개발 중일 땐 localhost 사용
+            failUrl: "http://localhost:5500/fail.html"
+        });
+    }
+</script>
+</body>
+</html>
