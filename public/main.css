@@ -231,7 +231,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url("images/main_section3_img.svg");
+    background-image: url("/images/main_section3_img.svg");
     background-repeat: no-repeat;
     background-position: center center;
     background-size: cover;
