@@ -632,11 +632,6 @@ function renderMyListPage(page) {
 
   const pageResults = myListResults.slice(offset, to + 1);
 
-  if (pageResults.length === 0) {
-    boardList.innerHTML = `<tr><td colspan="6">등록된 게시글이 없습니다.</td></tr>`;
-    return;
-  }
-
   let today = new getdate();
   pageResults.forEach((item) => {
     const row = document.createElement("tr");
