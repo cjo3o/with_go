@@ -13,7 +13,7 @@
 .con_header {
     margin-top: 87px;
     height: 250px;
-    background-image: url(/with_go/src/images/review_bg.png);
+    background-image: url(/src/images/review_bg.png);
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -109,6 +109,21 @@
     /* margin-top: 8px; */
     text-align: left;
     color: #525f7f;
+}
+
+.checkbox1 {
+    cursor: pointer;
+}
+
+.column2 {
+    font-size: 0.9rem;
+    padding-left: 7px;
+    width: 500px;
+    font-weight: bold;
+    /* margin-top: 8px; */
+    text-align: left;
+    color: red;
+    cursor: pointer;
 }
 
 .data {

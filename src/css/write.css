@@ -111,6 +111,21 @@
     color: #525f7f;
 }
 
+.checkbox1 {
+    cursor: pointer;
+}
+
+.column2 {
+    font-size: 0.9rem;
+    padding-left: 7px;
+    width: 500px;
+    font-weight: bold;
+    /* margin-top: 8px; */
+    text-align: left;
+    color: red;
+    cursor: pointer;
+}
+
 .data {
     display: flex;
     justify-content: flex-start;

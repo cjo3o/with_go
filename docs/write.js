@@ -12,11 +12,12 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function getCurrentUserId() {
-  const { data: { session } } = await supabase.auth.getSession();
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
   if (session && session.user) return session.user.id;
   return null;
 }
-
 
 async function post() {
   const name = document.querySelector("#name").value;
@@ -27,13 +28,14 @@ async function post() {
   const type = document.querySelector('input[name="type"]:checked');
   const file = document.querySelector("#file").files[0];
   const userId = await getCurrentUserId();
+  const checkbox = document.getElementById("checkbox");
 
   // 입력값 검증
   if (name.length == 0) {
     await Swal.fire({
       icon: "error",
       title: "등록 실패",
-      text: "이름을 입력해주세요.",
+      text: "작성자를 입력해주세요.",
     });
     return; // 함수 종료
   } else if (pw.length == 0) {
@@ -64,6 +66,13 @@ async function post() {
       text: "내용을 입력하세요.",
     });
     return; // 함수 종료
+  } else if (!checkbox.checked) {
+    await Swal.fire({
+      icon: "error",
+      title: "등록 실패",
+      text: "안내사항을 체크해주세요.",
+    });
+    return;
   }
 
   let fileUrl = "";
@@ -138,7 +147,7 @@ async function savePost(
         secret,
         type: type.value,
         image_url: fileUrl,
-        user_id: userId
+        user_id: userId,
       },
     ])
     .select();
@@ -178,3 +187,23 @@ passwordtext.addEventListener("input", function (event) {
   }
 });
 
+document.addEventListener("DOMContentLoaded", async () => {
+  // 로그인 세션 확인
+  const { data: { session } } = await supabase.auth.getSession();
+  // 안내문 대상 div
+  const checkboxGroup = document.getElementById("checkbox-group1");
+  if (checkboxGroup) {
+      if (session) {
+          // 로그인 상태면 안내문 변경
+          checkboxGroup.innerHTML = `
+              <label class="column">안내사항 <em>*</em></label>
+              <input type="checkbox" name="checkbox" id="checkbox" class="checkbox1"/>
+              <label for="checkbox" class="column2">
+                  비밀번호는 수정, 삭제, 비밀글 열람시 필요하니 꼭! 기억해주세요.
+              </label>
+          `;
+      } else {
+          // 비로그인(원래 안내문 유지) - 아무 것도 안해도 됨
+      }
+  }
+});
