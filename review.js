@@ -43,6 +43,7 @@ async function fetchReviews(page = 1, type = 'all') {
     let query = supabase
     .from("review")
     .select("*", { count: "exact" })
+    .eq("status", "공개")
     .order("is_best", { ascending: false }) 
     .order("created_at", { ascending: false }) 
     .range(from, to);
