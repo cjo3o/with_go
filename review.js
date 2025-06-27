@@ -52,8 +52,6 @@ async function fetchReviews(page = 1, type = "all") {
   
   if (type !== "all") query = query.eq("type", type);
 
-  console.log(query);
-
   const { data, error, count } = await query;
   if (error) {
     console.error("데이터 오류:", error.message);

@@ -43,6 +43,7 @@ async function fetchReviews(page = 1, type = 'all') {
     let query = supabase
     .from("review")
     .select("*", { count: "exact" })
+    .eq("status","공개")
     .order("is_best", { ascending: false }) 
     .order("created_at", { ascending: false }) 
     .range(from, to);
@@ -73,7 +74,7 @@ function renderReviews(reviews) {
         div.innerHTML = `
         <div class="review-content">
             <div class="review-text">
-                ${item.is_best ? `<div class="best-badge"><img src="/with_go/src/images/best.png" alt="BEST" class="best-icon" /></div>` : ''}
+                ${item.is_best ? `<div class="best-badge"><img src="../src/images/best.png" alt="BEST" class="best-icon" /></div>` : ''}
                 <div class="title">
                     <div class="type">[${item.type}]</div>
                     <div class="title-text">${item.title}</div>
@@ -354,4 +355,5 @@ document.getElementById("write-btn")?.addEventListener("click", async (e) => {
 // 초기 실행
 document.addEventListener("DOMContentLoaded", () => {
     fetchReviews(currentPage, currentType);
+    
 });
