@@ -38,16 +38,12 @@ async function loadFAQ() {
         .from("withgo_faqs")
         .select("*")
         .eq("status", "공개")
-        .order("created_at", { ascending: true });
+        .order("id", { ascending: true });
 
     if (error) {
         console.error("FAQ 데이터를 불러오는 중 오류 발생:", error);
         return [];
     }
-    // 받아온 데이터 순서 확인
-    console.log(data.map(f => [f.id, f.status, f.created_at]));
-    // 강제 정렬 (꼬이면)
-    data.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
     return data;
 }
 
