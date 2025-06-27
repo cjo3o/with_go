@@ -98,22 +98,35 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   // 로그인 안 됨: 안내만
   if (!userId) {
-    // 숨길 영역들(검색, 테이블 등)
+    // 조회/검색/테이블 등 숨김
     if ($view_table_container) $view_table_container.style.display = "none";
     if ($search_check) $search_check.style.display = "none";
     if ($search_checkBox) $search_checkBox.style.display = "none";
     if (changeContainer) changeContainer.style.display = "none";
-    // 상세 영역도 숨김
     if ($check_detail) $check_detail.style.display = "none";
 
-    // 안내문구만 표시
-    const section = document.querySelector(".section2 .check_contents");
-    if (section) {
-      section.innerHTML = `
-                <div style="width: 100%; display: flex; justify-content: center; align-items: center; height: 200px;">
-                    <h2 style="color: white; font-size: 1.5rem;">로그인 후 확인 가능합니다.</h2>
-                </div>
-            `;
+    // 안내문구만 check_contents에 추가 (제목/설명은 그대로!)
+    const checkContents = document.querySelector(".check_contents");
+    const checkContentsText = document.querySelector(".check_contents_text");
+
+    // 기존 .check_contents 안에서 .check_contents_text 이외 내용만 제거
+    Array.from(checkContents.children).forEach((child) => {
+      if (!child.classList.contains("check_contents_text")) {
+        child.style.display = "none";
+      }
+    });
+
+    // 안내문구 추가
+    let existNotice = document.getElementById("login_notice");
+    if (!existNotice) {
+      const noticeDiv = document.createElement("div");
+      noticeDiv.id = "login_notice";
+      noticeDiv.innerHTML = `
+            <div style="width: 100%; display: flex; justify-content: center; align-items: center; height: 180px;">
+                <h2 style="color: white; font-size: 1.5rem;">로그인 후 조회 가능합니다.</h2>
+            </div>
+        `;
+      checkContents.appendChild(noticeDiv);
     }
     return;
   }
