@@ -173,8 +173,8 @@ function startPayment(event) {
         orderId: "order_" + new Date().getTime(),
         orderName: "보관 예약 결제",
         customerName: name,
-        successUrl: "http://localhost:5173/reservation.html?from=payment",
-        failUrl: "http://localhost:5173/fail.html"
+        successUrl: "https://cjo3o.github.io/with_go/reservation.html?from=payment",
+        failUrl: "https://cjo3o.github.io/with_go/fail.html"
     });
 }
 
