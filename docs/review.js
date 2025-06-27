@@ -74,7 +74,7 @@ function renderReviews(reviews) {
         div.innerHTML = `
         <div class="review-content">
             <div class="review-text">
-                ${item.is_best ? `<div class="best-badge"><img src="../src/images/best.png" alt="BEST" class="best-icon" /></div>` : ''}
+                ${item.is_best ? `<div class="best-badge"><img src="src/images/best.png" alt="BEST" class="best-icon" /></div>` : ''}
                 <div class="title">
                     <div class="type">[${item.type}]</div>
                     <div class="title-text">${item.title}</div>
@@ -105,7 +105,7 @@ function openModal(review) {
 
     modalBody.innerHTML = `
     <h2>
-        ${review.is_best ? `<img src="../src/images/best.png" alt="BEST" class="best-icon" /> ` : ''}
+        ${review.is_best ? `<img src="src/images/best.png" alt="BEST" class="best-icon" /> ` : ''}
         [${review.type}] ${review.title}
     </h2><br>
     <p><strong>작성자:</strong> ${review.name}</p>
